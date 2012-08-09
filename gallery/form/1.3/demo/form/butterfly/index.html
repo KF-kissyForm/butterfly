@@ -3,13 +3,14 @@
 <head>
     <meta charset="utf-8"/>
     <title>Butterfly—表单美化组件demo</title>
-    <link rel="stylesheet" type="text/css" href="http://bootswatch.com/cerulean/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="http://bootswatch.com/assets/css/bootstrap-responsive.css"/>
-    <link rel="stylesheet" type="text/css" href="http://bootswatch.com/css/docs.css"/>
-    <link rel="stylesheet" type="text/css" href="../../assets/style.css"/>
+    <link rel="shortcut icon" href="http://docs.kissyui.com/kissy-dpl/base/assets/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/docs.css"/>
     <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js" charset="utf-8"></script>
+    <script src="../../assets/feedback.js" charset="utf-8"></script>
 </head>
-<body>
+<body data-spy="scroll" data-target=".subnav" data-offset="50">
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -23,39 +24,34 @@
             <div class="nav-collapse">
 
                 <ul class="nav">
-                    <li><a href="http://news.bootswatch.com">Home</a></li>
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Components <b
+                    <li><a href="http://docs.kissyui.com/kissy-gallery/gallery/form/1.3/demo.html">首页</a></li>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">组件 <b
                             class="caret"></b></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/default">Default</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/amelia">Amelia</a></li>
-                            <li><a href="/cerulean">Cerulean</a></li>
-                            <li><a href="/cyborg">Cyborg</a></li>
-                            <li><a href="/journal">Journal</a></li>
-                            <li><a href="/readable">Readable</a></li>
-                            <li><a href="/simplex">Simplex</a></li>
-                            <li><a href="/slate">Slate</a></li>
-                            <li><a href="/spacelab">Spacelab</a></li>
-                            <li><a href="/spruce">Spruce</a></li>
-                            <li><a href="/superhero">Superhero</a></li>
-                            <li><a href="/united">United</a></li>
+                            <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/uploader/index.html">Uploader</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/limiter/index.html">Limiter</a>
+                            </li>
+                            <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/spinbox/index.html">SpinBox</a>
+                            </li>
+                            <li>
+                                <a href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/auth/index.html">Auth</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/checkbox/index.html">checkbox</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/radio/index.html">radio</a>
+                            </li>
                         </ul>
                     </li>
-                    <li class="divider-vertical"></li>
-                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Download <b
-                            class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a target="_blank" href="bootstrap.min.css">bootstrap.min.css</a></li>
-                            <li><a target="_blank" href="bootstrap.css">bootstrap.css</a></li>
-                            <li class="divider"></li>
-                            <li><a target="_blank" href="variables.less">variables.less</a></li>
-                            <li><a target="_blank" href="bootswatch.less">bootswatch.less</a></li>
-                        </ul>
-                    </li>
+                    <li><a href="https://github.com/kissyteam/kissy-gallery/tree/master/gallery/form">源码</a></li>
+                    <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.3/doc/index.html">API文档</a></li>
                 </ul>
                 <ul class="nav pull-right">
-                    <li><a rel="tooltip" target="_blank" href="http://builtwithbootstrap.com/">kissy gallery</a></li>
+                    <li><a rel="tooltip" target="_blank" href="http://docs.kissyui.com/kissy-gallery/index.html">kissy
+                        gallery</a></li>
                 </ul>
             </div>
         </div>
@@ -64,31 +60,43 @@
 <div class="container">
     <header class="jumbotron subhead" id="overview">
         <h1>Butterfly</h1>
-
         <p class="lead">表单美化组件.</p>
-
-        <div class="subnav">
-            <ul class="nav nav-pills">
-                <li class="active"><a href="#typography">Typography</a></li>
-                <li><a href="#navbar">Navbar</a></li>
-                <li><a href="#buttons">Buttons</a></li>
-                <li><a href="#forms">Forms</a></li>
-                <li><a href="#miscellaneous">Miscellaneous</a></li>
-            </ul>
-        </div>
     </header>
+    <section id="blue-theme">
+        <div class="page-header">
+            <h1>使用默认主题表单</h1>
+        </div>
 
+        <form id="J_DefaultForm" class="form-horizontal" action="#">
+            <fieldset>
+                <legend>退款申请</legend>
+                <div class="control-group">
+                    <label class="control-label" for="username">是否退货</label>
+                    <div class="controls">
+                        <label class="radio inline">
+                            <input type="radio" name="is-return-goods" value="男"/>男
+                        </label>
+                        <label class="radio inline">
+                            <input type="radio" name="is-return-goods" value="女"/>女
+                        </label>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </section>
     <section id="typography">
         <div class="page-header">
             <h1>简单demo</h1>
         </div>
+
         <form id="J_Form1" class="form-horizontal well">
             <fieldset>
                 <legend>注册</legend>
                 <div class="control-group">
-                    <label class="control-label" for="input01">用户名</label>
+                    <label class="control-label" for="username">用户名</label>
                     <div class="controls">
-                        <input type="text" class="input-xlarge" id="input01" placeholder="只能是英文、数字">
+                        <input type="text" class="input-xlarge" id="username" placeholder="只能是英文、数字"
+                               value="test@tb.com" required data-valid="{required:'必填'}">
                     </div>
                 </div>
                 <div class="control-group">
@@ -323,7 +331,7 @@
             ]
         });
         KISSY.use("gallery/form/1.3/butterfly/index", function (S, Butterfly) {
-            var butterfly = new Butterfly('#J_Form1');
+            var butterfly = new Butterfly('#J_DefaultForm');
             butterfly.render();
         });
 
