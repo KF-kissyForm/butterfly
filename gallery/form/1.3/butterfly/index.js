@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Checkbox,Limiter,Uploader,spinbox) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Checkbox,Limiter,Uploader,SpinBox,Auth) {
     var EMPTY = '';
     var $ = Node.all;
     var LOG_PREFIX = '[Butterfly]:';
@@ -32,9 +32,9 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
          * 渲染组件
          */
         render : function(){
-             var self = this,
-                 $target = self.get('target'),
-                 $inputs;
+             var self = this;
+             var $target = self.get('target');
+             var $inputs;
             if(!$target.length){
                 S.log(LOG_PREFIX + '表单目标节点不存在！');
                 return false;
@@ -47,7 +47,11 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
             }
             $inputs.each(function($input){
                 self._renderCom($input)
-            })
+            });
+
+            self._initTextArea();
+            //实例化验证组件
+            self._renderAuth();
         },
         /**
          * 根据表单元素的type实例化对应的表单组件
@@ -59,18 +63,13 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
             var fields = self.get('fields');
             switch (type){
                 case 'radio':
-                   var name = $input.attr('name');
-                    if(name == EMPTY){
-                        S.log(LOG_PREFIX + 'radio缺少name值');
-                    }else{
-                        if(!fields[name]){
-                            $input = $(document.getElementsByName(name));
-                            fields[name] = new Radio($input,{cssUrl:EMPTY});
-                        }
-                    }
+                   self._renderGroupCom($input);
                 break;
                 case 'checkbox':
-                    obj = new Checkbox($input,{cssUrl:EMPTY});
+                    self._renderGroupCom($input);
+                break;
+                case 'spinbox':
+                    self._renderSpinbox($input);
                 break;
                 case 'file':
 
@@ -78,9 +77,97 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
                 case 'button':
                 break;
             }
-            S.each(fields,function(field){
-                field.render();
-            })
+        },
+        /**
+         * 实例化像radio和checkbox的模拟组件（多个input）
+         * @private
+         */
+        _renderGroupCom:function($input){
+            if(!$input || !$input.length) return false;
+            var self = this;
+            var name = $input.attr('name');
+            var type = $input.attr('type');
+            var fields = self.get('fields');
+            var CLASS;
+            if(name == EMPTY){
+                S.log(LOG_PREFIX + type +'缺少name值');
+            }else{
+                if(!fields[name]){
+                    switch (type){
+                        case 'radio':
+                            CLASS =  Radio;
+                        break;
+                        case 'checkbox':
+                            CLASS = Checkbox;
+                        break;
+                    }
+                    $input = $(document.getElementsByName(name));
+                    fields[name] = new CLASS($input,{cssUrl:EMPTY}).render();
+                    self.set('fields',fields);
+                }
+            }
+            return self.get('fields');
+        },
+        /**
+         * 实例化验证组件
+         * @private
+         * @return {Auth}
+         */
+        _renderAuth:function(){
+            var self = this;
+            var authConfig = self.get('authConfig');
+            var auth = EMPTY;
+            auth = new Auth(self.get('target'), {
+                autoBind:true,
+                stopOnError:false,
+                msg:{
+                    tpl:'<div class="msg {prefixCls}"><p class="{style}">{msg}</p></div>',
+                    args:{
+                        prefixCls:'under'
+                    }
+                }
+            });
+            self.set('auth',auth);
+            return auth;
+        },
+        /**
+         * 初始化textarea
+         * @private
+         */
+        _initTextArea:function(){
+            var self = this;
+            var $target = self.get('target');
+            if(!$target.length) return false;
+            var $textAreas = $target.all('textarea');
+            if(!$textAreas.length) return false;
+            $textAreas.each(function($textArea){
+                self._renderLimiter($textArea);
+            });
+        },
+        /**
+         * 运行字数统计组件
+         * @private
+         */
+        _renderLimiter:function($textArea){
+            if(!$textArea || !$textArea.length) return false;
+            var maxLen = $textArea.attr('maxlength');
+            var limiterTarget = $textArea.attr('limiter-target');
+            var $limiterTarget = $(limiterTarget);
+            //不存在字数统计基础配置
+            if(!maxLen || !$limiterTarget.length) return false;
+
+            var textLimiter = new Limiter($textArea,{wrapper:$limiterTarget,max:maxLen});
+            textLimiter.render();
+        },
+        /**
+         * 运行数字增减器
+         * @private
+         */
+        _renderSpinbox:function($input){
+            if(!$input || !$input.length) return false;
+            var spinbox = new SpinBox($input);
+            spinbox.render();
+            return spinbox;
         },
         /**
          * 加载主题css文件
@@ -142,7 +229,13 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
          */
         fields:{
             value:{}
+        },
+        auth:{
+            value:{}
+        },
+        authConfig:{
+            value:{}
         }
     }});
     return Butterfly;
-}, {requires:['base', 'node','gallery/form/1.3/radio/index','gallery/form/1.3/checkbox/index','gallery/form/1.3/limiter/index','gallery/form/1.3/uploader/index','gallery/form/1.3/spinbox/index']});
+}, {requires:['base', 'node','gallery/form/1.3/radio/index','gallery/form/1.3/checkbox/index','gallery/form/1.3/limiter/index','gallery/form/1.3/uploader/index','gallery/form/1.3/spinbox/index','gallery/form/1.3/auth/index']});

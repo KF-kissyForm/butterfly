@@ -37,6 +37,7 @@ KISSY.add('gallery/form/1.3/radio/index', function(S, Node, Base) {
             //事件绑定
             self._bindEvent();
 //            self.fire(self.get('events').RENDER);
+            return self;
         },
         /**
          * 还原Kfbtn为原生的input
