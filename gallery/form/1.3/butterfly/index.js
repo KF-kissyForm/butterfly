@@ -165,7 +165,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
          */
         _renderSpinbox:function($input){
             if(!$input || !$input.length) return false;
-            var spinbox = new SpinBox($input);
+            var spinbox = new SpinBox($input,{cssUrl:''});
             spinbox.render();
             return spinbox;
         },

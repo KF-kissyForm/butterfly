@@ -30,6 +30,12 @@ KISSY.add('gallery/form/1.3/spinbox/index', function(S, Node, Base){
 		render: function(){
 			var self = this,$target = self.get('target');
             if(!$target.length || self._isNativeSpinBox()) return false;
+
+            //增加ks-spinbox样式
+            var boxCls = self.get('cls').init;
+            if(!$target.hasClass(boxCls)) $target.addClass(boxCls);
+
+            self._loadCss();
             self._addHTML();
             self._eventOnChangeNum();
             self._eventOnValide();
@@ -54,7 +60,7 @@ KISSY.add('gallery/form/1.3/spinbox/index', function(S, Node, Base){
 			var self = this, $target = self.get('target'), getCls = this.get('cls'), ariaLabel = self.get('ariaLabel');
 
 			//创建元素
-			$target.each(function(item, index){
+			$target.each(function(item){
 				var $parent = item.parent(),
 					$containerEl = $(D.create('<span class="'+ getCls.container  + '">')),
 					$plusEl = $(D.create('<a href="#!/plus" class="'+ getCls.plus + ' ' + getCls.sign +'">+</a>')),
@@ -118,6 +124,15 @@ KISSY.add('gallery/form/1.3/spinbox/index', function(S, Node, Base){
         	inputValue = min && Math.max(min, value);
 			inputValue = max && Math.min(max, inputValue);
 			$target.val(inputValue.toFixed(2));
+        },
+        /**
+         * 加载css
+         */
+        _loadCss: function() {
+            var self = this;
+            var cssUrl = self.get('cssUrl');
+            //加载css文件
+            if (cssUrl != '')  S.use(cssUrl);
         }
 	},{
 		ATTRS: /** @lends SpinBox.prototype*/{
@@ -150,12 +165,19 @@ KISSY.add('gallery/form/1.3/spinbox/index', function(S, Node, Base){
             },
             /**
              * 无障碍，设置aria-label属性值
-             * @default 出价框，请输入价格
+             * @default ''
              */
             ariaLabel: {
-                value: '出价框，请输入价格'
+                value: ''
+            },
+            /**
+             * css模块路径
+             * @default gallery/form/1.1/radio/themes/default/style2.css
+             */
+            cssUrl: {
+                value: 'gallery/form/1.3/spinbox/index.css'
             }
 		}
 	});
 	return SpinBox;
-},{requires:['node','base','./index.css']});
+},{requires:['node','base']});
