@@ -62,6 +62,9 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
             var self = this,type = $input.attr('type'),obj;
             var fields = self.get('fields');
             switch (type){
+                case 'text':
+                    self._renderLimiter($input);
+                break;
                 case 'radio':
                    self._renderGroupCom($input);
                 break;
