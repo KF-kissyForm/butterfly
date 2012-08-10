@@ -8,7 +8,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
     var LOG_PREFIX = '[Butterfly]:';
     var CSS_URL_PRE = 'gallery/form/1.3/butterfly/themes/';
     var CSS_FILE_NAME = 'style.css';
-
+    var CONFIG_FILE_NAME = 'config.js';
     /**
      *
      * @param target
@@ -39,19 +39,20 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
                 S.log(LOG_PREFIX + '表单目标节点不存在！');
                 return false;
             }
-            self._LoaderCss(self.get('theme'));
-            $inputs = $target.all('input');
-            if(!$inputs.length){
-                S.log(LOG_PREFIX + '不存在需要美化的表单元素！');
-                return false;
-            }
-            $inputs.each(function($input){
-                self._renderCom($input)
-            });
+            self._loadTheme(self.get('theme'),function(){
+                $inputs = $target.all('input');
+                if(!$inputs.length){
+                    S.log(LOG_PREFIX + '不存在需要美化的表单元素！');
+                    return false;
+                }
+                $inputs.each(function($input){
+                    self._renderCom($input)
+                });
 
-            self._initTextArea();
-            //实例化验证组件
-            self._renderAuth();
+                self._initTextArea();
+                //实例化验证组件
+                self._renderAuth();
+            });
         },
         /**
          * 根据表单元素的type实例化对应的表单组件
@@ -74,8 +75,8 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
                 case 'spinbox':
                     self._renderSpinbox($input);
                 break;
-                case 'file':
-
+                case 'image-uploader':
+                    self._renderImageUploader($input);
                 break;
                 case 'button':
                 break;
@@ -173,6 +174,14 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
             return spinbox;
         },
         /**
+         * 运行图片上传组件
+         * @param $input
+         * @private
+         */
+        _renderImageUploader:function($input){
+
+        },
+        /**
          * 加载主题css文件
          * @param url
          * @param callback
@@ -199,6 +208,34 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
                 self.fire(Butterfly.event.AFTER_LOAD_THEME);
             });
             return true;
+        },
+        /**
+         * 读取主题样式和组件配置文件
+         * @param modUrl
+         * @param callback
+         * @return {Boolean}
+         * @private
+         */
+        _loadTheme:function(modUrl,callback){
+            var self = this;
+            var themes = Butterfly.THEMES;
+            var url =  modUrl;
+            S.each(themes,function(t){
+                if(t == modUrl){
+                    url = CSS_URL_PRE+url+'/';
+                    return false;
+                }
+            });
+            var cssUrl = url + CSS_FILE_NAME;
+            var jsUrl = url + CONFIG_FILE_NAME;
+            //加载主题样式
+            S.use(cssUrl);
+            //记载主题组件配置
+            S.use(jsUrl,function(S,configs){
+                self.set('comConfig',configs);
+                callback && callback.call(self,configs);
+            })
+
         }
     }, { ATTRS:/** @lends Butterfly.prototype*/{
         /**
@@ -231,6 +268,14 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
          * @default {}
          */
         fields:{
+            value:{}
+        },
+        /**
+         * 表单组件配置
+         * @type Object
+         * @default {}
+         */
+        comConfig:{
             value:{}
         },
         auth:{
