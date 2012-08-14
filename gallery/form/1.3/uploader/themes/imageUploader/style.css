@@ -140,6 +140,13 @@ button::-moz-focus-inner {
   max-width: 120px;
   max-height: 120px;
 }
+.imageUploader-queue .status-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  margin-top: -6px;
+}
 .imageUploader-queue .tb-pic120 {
   *overflow: hidden;
   display: table;
@@ -173,12 +180,12 @@ button::-moz-focus-inner {
   cursor: pointer;
 }
 .imageUploader-queue .ks-progress-bar {
-  height: 12px;
-  width: 90px;
-  margin: 6px 0 0 10px;
+  height: 8px;
+  width: 100px;
+  margin: 0 auto;
 }
 .imageUploader-queue .ks-progress-bar .ks-progress-bar-value {
-  background: #db0869;
+  background: #75b9f0;
 }
 .imageUploader-queue .ks-progress-bar .status-wrapper .status {
   text-align: center;

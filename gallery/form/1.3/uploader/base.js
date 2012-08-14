@@ -166,6 +166,7 @@ KISSY.add('gallery/form/1.3/uploader/base', function (S, Base, Node, UrlsInput, 
             if (self.get('type') == Uploader.type.FLASH) {
                 S.mix(serverConfig, {swfUploader:button.get('swfUploader')});
             }
+            serverConfig.fileDataName = self.get('name') ;
             //实例化上传方式类
             uploadType = new UploadType(serverConfig);
             //监听上传器上传完成事件

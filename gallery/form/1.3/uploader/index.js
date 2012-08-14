@@ -123,9 +123,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, RenderUploader) {
          * @return {Uploader}
          */
         _initUploader:function(){
-            var self = this, uploaderConfig = self.get('uploaderConfig'),
-                name = self.get('name');
-            S.mix(uploaderConfig.serverConfig,{'fileDataName':name});
+            var self = this, uploaderConfig = self.get('uploaderConfig');
             //配置增加按钮实例和队列实例
             S.mix(uploaderConfig, {target:self.get('buttonTarget')});
             var uploader = new Uploader(uploaderConfig);
