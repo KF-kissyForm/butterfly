@@ -68,43 +68,41 @@
         </header>
 
         <h2>简单demo</h2>
-        <article id="doc">
-            <form action="#">
-                <div class="grid">
+        <form action="#" style="font-size:12px;">
+            <div class="grid">
 
-                    <script type="text/uploader-restore" id="J_ImageUploaderRestore">
-                        [
-                        {"name":"icon_evil.gif",
-                        "size":1446,
-                        "type":"image/gif",
-                        "result":{
-                        "status":1,
-                        "data":{
-                        "name":"icon_evil.gif",
-                        "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
-                        "item_id":"42458"
-                        }
-                        }
-                        }
-                        ]
-                    </script>
+                <script type="text/uploader-restore" id="J_ImageUploaderRestore">
+                    [
+                    {"name":"icon_evil.gif",
+                    "size":1446,
+                    "type":"image/gif",
+                    "result":{
+                    "status":1,
+                    "data":{
+                    "name":"icon_evil.gif",
+                    "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
+                    "item_id":"42458"
+                    }
+                    }
+                    }
+                    ]
+                </script>
 
-                    <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片"
-                           action="upload.php" postData='{"username":"minghe"}' urlsInputName="imageUrls"
-                           required maxSize="500" max="4" allowExts="jpg,jpeg,png,gif,bmp"
-                           restoreHook="#J_ImageUploaderRestore"
-                            >
+                <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片"
+                       action="upload.php" postData='{"username":"minghe"}' urlsInputName="imageUrls"
+                       required maxSize="500" max="4" allowExts="jpg,jpeg,png,gif,bmp"
+                       restoreHook="#J_ImageUploaderRestore"
+                        >
 
-                    <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
-                    <input type="hidden" name="imageUrls">
+                <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
+                <input type="hidden" name="imageUrls">
 
-                    <div class="g-u upload-count-wrapper">您还可以上传<em id="J_UploadCount">5</em>张图片</div>
-                </div>
-                <ul id="J_UploaderQueue" class="grid">
+                <div class="g-u upload-count-wrapper">您还可以上传<em id="J_UploadCount">5</em>张图片</div>
+            </div>
+            <ul id="J_UploaderQueue" class="grid">
 
-                </ul>
-            </form>
-        </article>
+            </ul>
+        </form>
 
     </div>
     <script>
