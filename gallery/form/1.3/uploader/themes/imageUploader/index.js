@@ -257,17 +257,17 @@ KISSY.add(function (S, Node, Theme) {
          */
         fileTpl:{value:
             '<li id="queue-file-{id}" class="g-u" data-name="{name}">' +
-                '<div class="tb-pic120">' +
+                '<div class="pic">' +
                     '<a href="javascript:void(0);"><img class="J_Pic_{id}" src="" /></a>' +
                 '</div>' +
                 '<div class=" J_Mask_{id} pic-mask"></div>' +
                 '<div class="status-wrapper J_FileStatus">' +
-                    '<div class="status waiting-status tips-upload-waiting"><p class="tips-text">等待上传，请稍候</p></div>' +
-                    '<div class="status start-status progress-status success-status tips-uploading">' +
+                    '<div class="status waiting-status"><p>等待上传，请稍候</p></div>' +
+                    '<div class="status start-status progress-status success-status">' +
                         '<div class="J_ProgressBar_{id}"><s class="loading-icon"></s>上传中...</div>' +
                     '</div>' +
-                    '<div class="status error-status tips-upload-error">' +
-                        '<p class="J_ErrorMsg_{id} tips-text">上传失败，请重试！</p></div>' +
+                    '<div class="status error-status">' +
+                        '<p class="J_ErrorMsg_{id}">上传失败，请重试！</p></div>' +
                 '</div>' +
                 '<a class="J_Del_{id} del-pic" href="#">删除</a>' +
             '</li>'

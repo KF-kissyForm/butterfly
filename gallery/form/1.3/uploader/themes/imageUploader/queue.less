@@ -4,21 +4,23 @@
 
     li {
         border: solid 1px #e0e0e0;
-        background: #fff;
         margin: 0 10px 10px 0;
         width: 120px;
         height: 120px;
         position: relative;
+
+        .border-radius(4px);
         background-color: #fff;
+        .box-shadow(inset 0 1px 2px rgba(0, 0, 0, 0.1));
     }
 
-    li.clear {
-        clear: both;
-        height: 0px;
-        width: 0px;
-        overflow: hidden;
-        font-size: 0px;
-        line-height: 0px;
+    li.error{
+        border-color:#red;
+    }
+
+    li.start,
+    li.upload{
+        border-color:#369BD7;
     }
 
     li .wrapper {
@@ -26,47 +28,60 @@
         z-index: 10;
     }
 
-    li .pic-mask {
-        width: 120px;
-        height: 120px;
-        position: absolute;
-        z-index: 10;
-        top: 0;
-        left: 0;
-        opacity: 0.7;
-        background: #fff;
-        filter: ~"ms:alpha(opacity = 70)";
-    }
 
     li .del-pic {
-        background-position: -257px -101px;
         color: #676767;
         display: none;
-        height: 24px;
-        left: 31px;
-        padding-top: 4px;
-        position: absolute;
-        text-decoration: none;
-        text-indent: 18px;
-        top: 50px;
         width: 60px;
+        height: 24px;
+        line-height: 24px;
+        position: absolute;
+        top: 50px;
+        left:50px;
+        margin-left:-30px;
+        text-decoration: none;
         z-index: 11;
+        border: 1px solid #ddd;
+        background-color: #fff;
+        .border-radius(3px);
+        text-align: center;
     }
-
-    li a img {
-        max-width: 120px;
-        max-height: 120px;
-    }
-
     .status-wrapper{
         position: absolute;
         top:50%;
         left:0;
         width:100%;
         margin-top:-6px;
+        z-index: 30;
+
+        .status{
+            margin-left:2px;
+        }
+        .waiting-status{
+            color: #369BD7;
+            background-color: #fff;
+        }
+
+        .error-status{
+            color: red;
+            background-color: #fff;
+        }
     }
 
-    .tb-pic120 {
+
+    //遮罩层
+    .pic-mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 120px;
+        height: 120px;
+        .opacity(10);
+        background: #333;
+        z-index: 7;
+    }
+
+    .pic {
         *overflow: hidden;
         display: table;
         text-align: center;
@@ -76,11 +91,14 @@
             display:none;
             border:none;
             vertical-align: middle;
+            max-width: 116px;
+            max-height: 116px;
         }
 
         a {
-            width: 120px;
-            height: 120px;
+            width: 118px;
+            height: 118px;
+            padding:1px;
             display: table-cell; /*非IE、IE8、IE9的主流浏览器识别的垂直居中的方法*/
             vertical-align: middle;
         /*text-align: center;*/

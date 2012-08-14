@@ -232,6 +232,13 @@ KISSY.add('gallery/form/1.3/uploader/theme', function (S, Node, Base) {
             $status = $statusWrapper.children('.status');
             $status.hide();
             $statusWrapper.children('.' + status + '-status').show();
+
+            var $target = file.target;
+            var statuses = ['waiting','start','uploading','progress','error','success'];
+            S.each(statuses,function(status){
+                $target.removeClass(status);
+            });
+            $target.addClass(status);
         },
         /**
          * 当队列添加完文件数据后向队列容器插入文件信息DOM结构

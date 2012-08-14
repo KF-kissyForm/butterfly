@@ -2,14 +2,20 @@
      background: @spiritUrl no-repeat scroll @left @top transparent;
 }
 .imageUploader-button{
-    display: block;
     width: @btnWidth;
     height: @btnHeight;
+    line-height: @btnHeight;
     margin-right: 6px;
-    .spirit(0,-40px);
     overflow: hidden;
-    text-indent: -9999px;
     position: relative;
+
+    border: 1px solid #ddd;
+    font-size: 12px;
+    cursor: pointer;
+    color: #333333;
+    text-align: center;
+    .gradient(#FDFCFC,#EEEEEE);
+    .border-radius(3px);
 
     .file-input-wrapper{
         width: @btnWidth;
@@ -18,9 +24,15 @@
 }
 
 .imageUploader-button:hover {
-    background-position: @btnHoverBgPos;
+    color: #333333;
+    text-decoration: none;
+    border:1px solid #369BD7;
+    .gradient(#FDFCFC,#E2F1FC);
 }
-
+.imageUploader-button:active{
+    .gradient(#E2F1FC,#E2F1FC);
+    outline: 0 none;
+}
 .upload-count-wrapper{
     margin-top:4px;
     color:#ccc;
