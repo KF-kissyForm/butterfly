@@ -341,6 +341,10 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                  */
                 require:[false, '必须至少上传一个文件！'],
                 /**
+                 * 是否必须上传个文件
+                 */
+                required:[false, '必须至少上传一个文件！'],
+                /**
                  * 允许的最大上传数
                  */
                 max:[3, '每次最多上传{max}个文件！'],
