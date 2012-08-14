@@ -1,0 +1,31 @@
+.spirit(@left:0,@top:0){
+     background: @spiritUrl no-repeat scroll @left @top transparent;
+}
+.imageUploader-button{
+    display: block;
+    width: @btnWidth;
+    height: @btnHeight;
+    margin-right: 6px;
+    .spirit(0,-40px);
+    overflow: hidden;
+    text-indent: -9999px;
+    position: relative;
+
+    .file-input-wrapper{
+        width: @btnWidth;
+        height: @btnHeight;
+    }
+}
+
+.imageUploader-button:hover {
+    background-position: @btnHoverBgPos;
+}
+
+.upload-count-wrapper{
+    margin-top:4px;
+    color:#ccc;
+    em{
+        color:#999999;
+        font-style: normal;
+    }
+}

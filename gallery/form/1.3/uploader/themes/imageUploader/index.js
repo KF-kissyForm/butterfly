@@ -2,7 +2,7 @@
  * @fileoverview 图片上传主题（带图片预览），第一版由紫英同学完成，苏河同学做了大量优化，明河整理优化
  * @author 苏河、紫英、明河
  **/
-KISSY.add('gallery/form/1.3/uploader/themes/imageUploader/index', function (S, Node, Theme) {
+KISSY.add(function (S, Node, Theme) {
     var EMPTY = '', $ = Node.all;
 
     /**
@@ -256,7 +256,7 @@ KISSY.add('gallery/form/1.3/uploader/themes/imageUploader/index', function (S, N
          * @default ""
          */
         fileTpl:{value:
-            '<li id="queue-file-{id}" class="clearfix" data-name="{name}">' +
+            '<li id="queue-file-{id}" class="g-u" data-name="{name}">' +
                 '<div class="tb-pic120">' +
                     '<a href="javascript:void(0);"><img class="J_Pic_{id}" src="" /></a>' +
                 '</div>' +

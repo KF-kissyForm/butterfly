@@ -625,6 +625,24 @@ KISSY.add('gallery/form/1.3/uploader/base', function (S, Base, Node, UrlsInput, 
          */
         serverConfig:{value:{action:EMPTY, data:{}, dataType:'json'}},
         /**
+         * 服务器处理上传的路径
+         * @type String
+         * @default ''
+         */
+        action:{
+            value:EMPTY,
+            getter:function(v){
+              return self.get('serverConfig').action;
+            },
+            setter:function(v){
+                if(S.isString(v)){
+                    var self = this;
+                    self.set('serverConfig',S.mix(self.get('serverConfig'),{action:v}));
+                }
+                return v;
+            }
+        },
+        /**
          * 此配置用于动态修改post给服务器的数据，会覆盖serverConfig的data配置
          * @type Object
          * @default {}
@@ -643,7 +661,7 @@ KISSY.add('gallery/form/1.3/uploader/base', function (S, Base, Node, UrlsInput, 
             setter:function(v){
                 if(S.isObject(v)){
                     var self = this,uploadType = self.get('uploadType');
-                    if(uploadType){
+                    if(S.isFunction(uploadType)){
                         uploadType.set('data',v);
                         self.set('serverConfig',S.mix(self.get('serverConfig'),{data:v}));
                     }

@@ -1,0 +1,104 @@
+.imageUploader-queue  {
+    margin:0;
+    margin-top:10px;
+
+    li {
+        border: solid 1px #e0e0e0;
+        background: #fff;
+        margin: 0 10px 10px 0;
+        width: 120px;
+        height: 120px;
+        position: relative;
+        background-color: #fff;
+    }
+
+    li.clear {
+        clear: both;
+        height: 0px;
+        width: 0px;
+        overflow: hidden;
+        font-size: 0px;
+        line-height: 0px;
+    }
+
+    li .wrapper {
+        position: relative;
+        z-index: 10;
+    }
+
+    li .pic-mask {
+        width: 120px;
+        height: 120px;
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        left: 0;
+        opacity: 0.7;
+        background: #fff;
+        filter: ~"ms:alpha(opacity = 70)";
+    }
+
+    li .del-pic {
+        background-position: -257px -101px;
+        color: #676767;
+        display: none;
+        height: 24px;
+        left: 31px;
+        padding-top: 4px;
+        position: absolute;
+        text-decoration: none;
+        text-indent: 18px;
+        top: 50px;
+        width: 60px;
+        z-index: 11;
+    }
+
+    li a img {
+        max-width: 120px;
+        max-height: 120px;
+    }
+
+    .tb-pic120 {
+        *overflow: hidden;
+        display: table;
+        text-align: center;
+        table-layout: fixed;
+
+        img{
+            display:none;
+            border:none;
+            vertical-align: middle;
+        }
+
+        a {
+            width: 120px;
+            height: 120px;
+            display: table-cell; /*非IE、IE8、IE9的主流浏览器识别的垂直居中的方法*/
+            vertical-align: middle;
+        /*text-align: center;*/
+            *display: block;
+            *font-family: Arial; /*防止非utf-8引起的hack失效问题，如gbk编码*/
+            *line-height: 1; /* 避免行高导致垂直居中有误 */
+            *font-size: 105px;
+        }
+
+    }
+
+    .drop-wrapper{
+        cursor:pointer;
+    }
+
+    .ks-progress-bar {
+        height: @progressBarHeight;
+        width: @progressBarWidth;
+        margin: 6px 0 0 10px;
+
+        .ks-progress-bar-value {
+            background: @progressBarBgColor;
+        }
+
+        .status-wrapper .status {
+            text-align: center;
+        }
+    }
+}
