@@ -9,6 +9,9 @@
     <link rel="stylesheet" type="text/css" href="../../assets/docs.css"/>
     <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js" charset="utf-8"></script>
     <script src="../../assets/feedback.js" charset="utf-8"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" charset="utf-8"></script>
+    <script src="../../assets/bootstrap.min.js" charset="utf-8"></script>
+    <script src="../../assets/app.js" charset="utf-8"></script>
 </head>
 <body data-spy="scroll" data-target=".subnav" data-offset="50">
 <div class="navbar navbar-fixed-top">
@@ -57,15 +60,12 @@
         </div>
     </div>
 </div>
-<div class="container">
+<div id="content" class="container">
     <header class="jumbotron subhead" id="overview">
         <h1>Butterfly</h1>
     </header>
     <section>
-        <div class="page-header">
-            <h1>使用默认主题表单</h1>
-        </div>
-
+        <h2>使用默认主题表单</h2>
         <form id="J_DefaultForm" class="form-horizontal" action="#">
             <fieldset>
                 <legend>让表单更美，更简单！</legend>
@@ -145,11 +145,38 @@
                     <label class="control-label" for="disabledInput">照片</label>
 
                     <div class="controls">
-                        <input type="image-uploader" value="上传照片" name="images" action="imageUpload.php" post-data='{"username":"minghe"}'
-                               urls-target-name="imageUrls" >
+                        <div class="grid">
+                            <script type="text/uploader-restore" id="J_ImageUploaderRestore">
+                                [
+                                {"name":"icon_evil.gif",
+                                "size":1446,
+                                "type":"image/gif",
+                                "result":{
+                                "status":1,
+                                "data":{
+                                "name":"icon_evil.gif",
+                                "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
+                                "item_id":"42458"
+                                }
+                                }
+                                }
+                                ]
+                            </script>
 
-                        <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
-                        <input type="hidden" name="imageUrls">
+                            <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传照片" queueTarget="#J_UploaderQueue"
+                                   action="upload.php" postData='{"username":"minghe"}' urlsInputName="imageUrls"
+                                   required maxSize="500" max="4" allowExts="jpg,jpeg,png,gif,bmp"
+                                   restoreHook="#J_ImageUploaderRestore"
+                                    >
+
+                            <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
+                            <input type="hidden" name="imageUrls">
+
+                            <div class="g-u upload-count-wrapper">您还可以上传<em id="J_UploadCount">4</em>张照片</div>
+                        </div>
+                        <ul id="J_UploaderQueue" class="grid">
+
+                        </ul>
                     </div>
                 </div>
             </fieldset>

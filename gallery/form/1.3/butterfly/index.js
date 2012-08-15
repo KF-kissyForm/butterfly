@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Checkbox,Limiter,Uploader,SpinBox,Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Checkbox,Limiter,ImageUploader,SpinBox,Auth) {
     var EMPTY = '';
     var $ = Node.all;
     var LOG_PREFIX = '[Butterfly]:';
@@ -179,7 +179,10 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
          * @private
          */
         _renderImageUploader:function($input){
-
+            if(!$input || !$input.length) return false;
+            var imageUploader = new ImageUploader($input);
+            imageUploader.render();
+            return imageUploader;
         },
         /**
          * 加载主题css文件
@@ -286,4 +289,4 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Radio,Chec
         }
     }});
     return Butterfly;
-}, {requires:['base', 'node','gallery/form/1.3/radio/index','gallery/form/1.3/checkbox/index','gallery/form/1.3/limiter/index','gallery/form/1.3/uploader/index','gallery/form/1.3/spinbox/index','gallery/form/1.3/auth/index']});
+}, {requires:['base', 'node','gallery/form/1.3/radio/index','gallery/form/1.3/checkbox/index','gallery/form/1.3/limiter/index','gallery/form/1.3/uploader/imageUploader','gallery/form/1.3/spinbox/index','gallery/form/1.3/auth/index']});
