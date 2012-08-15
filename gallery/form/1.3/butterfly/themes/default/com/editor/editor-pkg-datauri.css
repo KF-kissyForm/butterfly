@@ -370,10 +370,13 @@
 
 .ke-editor-wrap {
     background: white;
-    border: 1px solid #ced5e0;
+    border: 1px solid #ccc;
     font-size: 13px;
     line-height: 1.2;
     _font-size: 12px
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
 }
 
 .ke-textarea-wrap {
@@ -389,16 +392,16 @@
     background: -webkit-gradient(linear, left top, left bottom, from(#FDFCFC), to(#EEEEEE));
     background: -moz-linear-gradient(center top, #FDFCFC, #EEEEEE) repeat scroll 0 0 transparent;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#FDFCFC', endColorstr = '#EEEEEE');
-    border-bottom: 1px solid #EEEEEE;
+    border-bottom: 1px solid #ccc;
     zoom: 1
 }
 
 .ke-editor-status {
-    background-color: #ebeef2;
-    background: -webkit-gradient(linear, left top, left bottom, from(#e7e9ed), to(#f1f4f7));
-    background: -moz-linear-gradient(center top, #e7e9ed, #f1f4f7) repeat scroll 0 0 transparent;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#e7e9ed', endColorstr = '#f1f4f7');
-    border-top: 1px solid #ced5e0;
+    background-color: #FDFCFC;
+    background: -webkit-gradient(linear, left top, left bottom, from(#FDFCFC), to(#EEEEEE));
+    background: -moz-linear-gradient(center top, #FDFCFC, #EEEEEE) repeat scroll 0 0 transparent;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#FDFCFC', endColorstr = '#EEEEEE');
+    border-top: 1px solid #ccc;
     height: 22px;
     padding: 2px 0;
     position: relative
