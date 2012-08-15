@@ -238,6 +238,13 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                     });
                 },
                 /**
+                 *
+                 * @private
+                 */
+                _renderSelect:function(){
+
+                },
+                /**
                  * 加载主题css文件
                  * @param url
                  * @param callback
