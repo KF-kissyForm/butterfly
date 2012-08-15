@@ -142,7 +142,7 @@
                 </div>
 
                 <div class="control-group">
-                    <label class="control-label" for="disabledInput">照片</label>
+                    <label class="control-label">照片</label>
 
                     <div class="controls">
                         <div class="grid">
@@ -177,6 +177,18 @@
                         <ul id="J_UploaderQueue" class="grid">
 
                         </ul>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">吐槽</label>
+
+                    <div class="controls">
+                        <div id="editor">
+                            <textarea id="J_Editor" type="editor" name="tweet" maxlength="800" limiter-target="#J_TweetLimiter" rows="8" width="500" >这是一个富编辑器</textarea>
+                        </div>
+                        <!--字数统计器-->
+                        <div id="J_TweetLimiter"></div>
                     </div>
                 </div>
             </fieldset>
