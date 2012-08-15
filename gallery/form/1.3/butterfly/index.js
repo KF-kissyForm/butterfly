@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Auth) {
         var EMPTY = '';
         var $ = Node.all;
         var LOG_PREFIX = '[Butterfly]:';
@@ -54,7 +54,6 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Radio, Ch
                         self._initTextArea();
                         //实例化验证组件
                         self._renderAuth();
-                        self._renderEditor();
                     });
 
 
@@ -150,7 +149,12 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Radio, Ch
                     var $textAreas = $target.all('textarea');
                     if (!$textAreas.length) return false;
                     $textAreas.each(function ($textArea) {
-                        self._renderLimiter($textArea);
+                        //实例化富编辑器
+                        if($textArea.attr('type') == 'editor'){
+                            self._renderEditor($textArea);
+                        }else{
+                            self._renderLimiter($textArea);
+                        }
                     });
                 },
                 /**
@@ -159,14 +163,24 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Radio, Ch
                  */
                 _renderLimiter:function ($textArea) {
                     if (!$textArea || !$textArea.length) return false;
+                    var self = this;
+                    //最大允许输入长度
                     var maxLen = $textArea.attr('maxlength');
+                    //统计文案的目标元素
                     var limiterTarget = $textArea.attr('limiter-target');
+                    var type = $textArea.attr('type');
                     var $limiterTarget = $(limiterTarget);
+                    //获取配置
+                    var config = self.get('uiConfig').limiter || {};
                     //不存在字数统计基础配置
                     if (!maxLen || !$limiterTarget.length) return false;
+                    S.mix(config,{wrapper:$limiterTarget, max:maxLen});
+                    //富编辑器，将html标签排除掉
+                    if(type == 'editor') S.mix(config,{isRejectTag:true});
 
-                    var textLimiter = new Limiter($textArea, {wrapper:$limiterTarget, max:maxLen});
+                    var textLimiter = new Limiter($textArea, config);
                     textLimiter.render();
+                    return textLimiter;
                 },
                 /**
                  * 运行数字增减器
@@ -195,114 +209,30 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Radio, Ch
                  * @private
                  */
                 _renderEditor:function ($target) {
-                    //if(!$target || !$target.length) return false;
-                    var cssUrl = S.UA.ie<8 && 'gallery/form/1.3/butterfly/themes/default/com/editor/editor-pkg-sprite.css' || 'gallery/form/1.3/butterfly/themes/default/com/editor/editor-pkg-datauri.css';
+                    if(!$target || !$target.length) return false;
+                    var self = this;
+                    var uiConfig = self.get('uiConfig');
+                    var config = uiConfig.editor;
+                    var cssUrl = config.cssUrl;
+                    cssUrl = S.UA.ie<8 && cssUrl + 'editor-pkg-sprite.css' || cssUrl + 'editor-pkg-datauri.css';
                     S.use(cssUrl);
                     S.use('editor', function (S, Editor) {
-                        var config = {
-                            "image":{
-                                upload:{
-                                    serverUrl:EMPTY,
-                                    surfix:"png,jpg,jpeg,gif",
-                                    fileInput:"imgFiledata",
-                                    sizeLimit:3000
-                                }
-                            },
-                            "font-bold":false,
-                            "font-italic":false,
-                            "font-size":{
-                                items:[
-                                    {
-                                        value:"14px",
-                                        attrs:{
-                                            style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                                        },
-                                        name:"" +
-                                            " <span style='font-size:14px'>标准</span>" +
-                                            "<span style='position:absolute;top:1px;right:3px;'>14px</span>"
-                                    },
-                                    {
-                                        value:"16px",
-                                        attrs:{
-                                            style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                                        },
-                                        name:"" +
-                                            " <span style='font-size:16px'>大</span>" +
-                                            "<span style='position:absolute;top:1px;right:3px;'>16px</span>"
-                                    },
-                                    {
-                                        value:"18px",
-                                        attrs:{
-                                            style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                                        },
-                                        name:"" +
-                                            " <span style='font-size:18px'>特大</span>" +
-                                            "<span style='position:absolute;top:1px;right:3px;'>18px</span>"
-                                    },
-                                    {
-                                        value:"20px",
-                                        attrs:{
-                                            style:'position: relative; border: 1px solid #DDDDDD; margin: 2px; padding: 2px;'
-                                        },
-                                        name:"" +
-                                            " <span style='font-size:20px'>极大</span>" +
-                                            "<span style='position:absolute;top:1px;right:3px;'>20px</span>"
-                                    }
-                                ],
-                                width:"115px"
-                            }, "font-family":{
-                                items:[
-                                    {name:"宋体", value:"SimSun"},
-                                    {name:"黑体", value:"SimHei"},
-                                    {name:"楷体", value:"KaiTi_GB2312"},
-                                    {name:"微软雅黑", value:"Microsoft YaHei"},
-                                    {name:"Times New Roman", value:"Times New Roman"},
-                                    {name:"Arial", value:"Arial"},
-                                    {name:"Verdana", value:"Verdana"}
-                                ]
-                            }, "video":{
-                                urlCfg:[
-                                    {
-                                        reg:/tudou\.com/i,
-                                        url:"http://bangpai." + (location.host.indexOf('taobao.com') === -1 ? 'daily.taobao.net' : 'taobao.com') + "/json/getTudouVideo.htm?" +
-                                            "url=@url@&callback=@callback@"//"&rand=@rand@"
-                                    }
-                                ]
-                            },
-                            "draft":{
-                                interval:5,
-                                limit:10,
-                                helpHtml:"<div " +
-                                    "style='width:200px;'>" +
-                                    "<div style='padding:5px;'>草稿箱能够自动保存您最新编辑的内容," +
-                                    "如果发现内容丢失" +
-                                    "请选择恢复编辑历史</div></div>"
-                            },
-                            "resize":{
-                                direction:["y"]
-                            },
-                            "font-strikeThrough":{
-                                style:{
-                                    element:'strike',
-                                    overrides:[
-                                        {element:'span', attributes:{ style:'text-decoration: line-through;' }},
-                                        { element:'s' },
-                                        { element:'del' }
-                                    ]
-                                }
-                            }
-
-                        };
-                        var editor = new Editor('#J_Editor', config).use("separator," +
-                            "undo,separator,removeformat,format,font,color,separator," +
-                            "list,indent,justify,separator," +
-                            "link," +
-                            "image," +
-                            "separator,table,resize,draft,separator",
-                            function () {
-
-                            });
+                        var editor = new Editor($target.getDOMNode(), config).use("undo,separator,removeformat,format,font,color,separator,list,indent,justify,separator,link,separator,table,resize,draft");
                         editor.ready(function () {
+                            //运行字数统计
+                            var limiter = self._renderLimiter($target);
+                            //编辑器容器
+                            var $wrapper = editor.editorWrap;
+                            var width = $target.attr('width');
+                           // var height = $target.attr('height');
+                            //获取width和height属性设置容器宽高
+                            width && $wrapper.width(Number(width));
+                            //height && $wrapper.height(Number(height));
+                            Event.on(editor.document, "keyup", function (ev) {
+                                var val= editor.getData();
+                                $target.val(val);
+                                limiter.count();
+                            });
 
                         });
                     });
@@ -358,7 +288,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Radio, Ch
                     S.use(cssUrl);
                     //记载主题组件配置
                     S.use(jsUrl, function (S, configs) {
-                        self.set('comConfig', configs);
+                        self.set('uiConfig', configs);
                         callback && callback.call(self, configs);
                     })
 
@@ -404,7 +334,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Radio, Ch
                      * @type Object
                      * @default {}
                      */
-                    comConfig:{
+                    uiConfig:{
                         value:{
                         }
                     },
@@ -423,7 +353,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Radio, Ch
         return Butterfly;
     },
     {
-        requires:['base', 'node', 'gallery/form/1.3/radio/index', 'gallery/form/1.3/checkbox/index', 'gallery/form/1.3/limiter/index', 'gallery/form/1.3/uploader/imageUploader', 'gallery/form/1.3/spinbox/index', 'gallery/form/1.3/auth/index']
+        requires:['base', 'node', 'event','gallery/form/1.3/radio/index', 'gallery/form/1.3/checkbox/index', 'gallery/form/1.3/limiter/index', 'gallery/form/1.3/uploader/imageUploader', 'gallery/form/1.3/spinbox/index', 'gallery/form/1.3/auth/index']
     }
 )
 ;
