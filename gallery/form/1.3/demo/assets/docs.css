@@ -66,6 +66,9 @@ body img{
 .index-body  #header h1{
     font-size: 100px;
 }
+#content{
+    margin-bottom:20px;
+}
 /* Space out sub-sections more
 -------------------------------------------------- */
 section {
@@ -989,6 +992,25 @@ h4{
 }
 
 /*------反馈入口 END------*/
+/*------事件面板 START------*/
+
+.event-panel {
+    border: 1px solid #ccc;
+    margin-top: 20px;
+    width: 600px;
+    height: 300px;
+    overflow-y: scroll;
+    font-size: 12px;
+}
+
+.event-panel p {
+    padding:5px 10px;
+}
+.event-panel p:nth-child(2n+1){
+    background-color: #E2F1FC;
+}
+/*------事件面板 END------*/
+
 /* LARGE DESKTOP SCREENS */
 @media (min-width: 1210px) {
 

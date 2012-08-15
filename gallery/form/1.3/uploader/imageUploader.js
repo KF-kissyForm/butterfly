@@ -58,7 +58,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
         /**
          * 监听的uploader事件
          */
-        events:['render','select','start','progress','complete','success','uploadFiles','cancel','error','restore'],
+        events:['select','start','progress','complete','success','uploadFiles','cancel','error','restore'],
         /**
          * 监听queue事件
          */
@@ -105,6 +105,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                         self._bindEvents(uploader);
                         // 抓取restoreHook容器内的数据，生成文件DOM
                         uploader.restore();
+                        self.fire('render', {uploader:uploader,button:uploader.get('button'),queue:uploader.get('queue'),auth:uploader.get('auth')});
                     });
                 });
             }
