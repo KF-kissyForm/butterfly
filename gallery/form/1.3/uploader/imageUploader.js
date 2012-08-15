@@ -82,6 +82,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             var  theme = self.get('theme');
             var uploader;
 
+            self._setQueueTarget();
             self._setConfig();
             self._replaceBtn();
 
@@ -110,6 +111,21 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                 });
             }
             return self;
+        },
+        /**
+         * 设置队列目标元素
+         * @private
+         */
+        _setQueueTarget:function(){
+            var self = this;
+            var $queue = self.get('queueTarget');
+            var $btn = $(self.get('buttonTarget'));
+            if(!$queue || !$queue.length){
+                var queueTarget = $btn.attr('queueTarget');
+                if(queueTarget != EMPTY){
+                    self.set('queueTarget',$(queueTarget));
+                }
+            }
         },
         /**
          * 监听uploader的各个事件
