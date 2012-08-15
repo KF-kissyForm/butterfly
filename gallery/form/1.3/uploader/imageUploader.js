@@ -16,7 +16,7 @@ KISSY.add('gallery/form/1.3/uploader/imageUploader',function (S, Base, Node, Ren
     /**
      * @name ImageUploader
      * @class 异步文件上传入口文件，会从按钮的data-config='{}' 伪属性中抓取组件配置
-     * @version 1.2
+     * @version 1.3
      * @constructor
      * @param {String | HTMLElement} buttonTarget *，上传按钮目标元素
      * @param {String | HTMLElement} queueTarget 文件队列目标元素，再不需要显示文件信息的情况下这个参数可以设置为null
@@ -54,16 +54,16 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
         self.set('queueTarget', queueTarget);
         self.set('uploaderConfig', config);
     }
-    /**
-     * @name ImageUploader#init
-     * @desc 上传组件完全初始化成功后触发，对uploader的操作务必先监听init事件
-     * @event
-     * @param {Uploader} ev.uploader   Uploader的实例
-     * @param {Button} ev.button   Button的实例
-     * @param {Queue} ev.queue   Queue的实例
-     * @param {Auth} ev.auth   Auth的实例
-     */
-
+    S.mix(ImageUploader, /** @lends ImageUploader*/{
+        /**
+         * 监听的uploader事件
+         */
+        events:['render','select','start','progress','complete','success','uploadFiles','cancel','error','restore'],
+        /**
+         * 监听queue事件
+         */
+        queueEvents:['add','remove','statusChange','clear']
+    });
     S.extend(ImageUploader, RenderUploader, /** @lends ImageUploader.prototype*/{
         /**
          * 删除父类的自动初始化函数
@@ -74,6 +74,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
         },
         /**
          * 初始化组件
+         * @return {ImageUploader}
          */
         render:function () {
             var self = this;
@@ -89,7 +90,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                 uploader = self._initUploader();
                 self.set('button', uploader.get('button'));
                 S.later(function(){
-                    self.fire('init', {uploader:uploader,button:uploader.get('button'),queue:uploader.get('queue'),auth:uploader.get('auth')});
+                    self.fire('render', {uploader:uploader,button:uploader.get('button'),queue:uploader.get('queue'),auth:uploader.get('auth')});
                 },500);
             }else{
                 self._initThemes(function (theme) {
@@ -101,12 +102,36 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                     theme.set('auth',uploader.get('auth'));
                     theme._UploaderRender(function(){
                         theme.afterUploaderRender(uploader);
+                        self._bindEvents(uploader);
                         // 抓取restoreHook容器内的数据，生成文件DOM
                         uploader.restore();
-                        self.fire('init', {uploader:uploader});
                     });
                 });
             }
+            return self;
+        },
+        /**
+         * 监听uploader的各个事件
+         * @param {Uploader} uploader
+         * @private
+         */
+        _bindEvents:function(uploader){
+            if(!uploader) return false;
+            var self = this;
+            var events = ImageUploader.events;
+            var queueEvents = ImageUploader.queueEvents;
+            var queue = uploader.get('queue');
+            var extEventObj =  {uploader:uploader,queue:queue};
+            S.each(events,function(event){
+                uploader.on(event,function(ev){
+                    self.fire(event, S.mix(ev,extEventObj));
+                })
+            });
+            S.each(queueEvents,function(event){
+                queue.on(event,function(ev){
+                    self.fire(event, S.mix(ev,extEventObj));
+                })
+            })
         },
         /**
          * 初始化文件验证
