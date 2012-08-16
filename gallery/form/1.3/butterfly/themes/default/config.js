@@ -11,6 +11,12 @@ KISSY.add(function (S) {
             isRejectTag:false
         },
         /**
+         * 选择框配置
+         */
+        select:{
+
+        },
+        /**
          * 图片上传
          */
         imageUploader:{

@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Radio, Checkbox, Limiter, ImageUploader, SpinBox,Select, Auth) {
         var EMPTY = '';
         var $ = Node.all;
         var LOG_PREFIX = '[Butterfly]:';
@@ -52,11 +52,36 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                         });
 
                         self._initTextArea();
+                        self._initSelect();
                         //实例化验证组件
                         self._renderAuth();
                     });
 
 
+                },
+                /**
+                 * 获取组件配置，会合并html属性中的配置
+                  * @param $target
+                 * @param uiName
+                 * @param attrs
+                 * @return {*}
+                 */
+                getUiConfig:function($target,uiName,attrs){
+                    if(!$target || !$target.length) return false;
+                    var self = this;
+                    var config = self.get('uiConfig')[uiName] || {};
+                    var tagConfig={};
+                    if(S.isArray(attrs)){
+                        S.each(attrs,function(attr){
+                            var val = $target.attr(attr);
+                            if(val) tagConfig[attr] = val;
+                        })
+                    }
+                    else if(S.isString(attrs)){
+                        var val = $target.attr(attrs);
+                        if(val) tagConfig[attrs] = val;
+                    }
+                    return S.merge(config,tagConfig);
                 },
                 /**
                  * 根据表单元素的type实例化对应的表单组件
@@ -156,6 +181,21 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                             self._renderLimiter($textArea);
                         }
                     });
+                },
+                /**
+                 * 初始化模拟选择框
+                 * @private
+                 */
+                _initSelect:function(){
+                    var self = this;
+                    var $target = self.get('target');
+                    if (!$target.length) return false;
+                    var $selects = $target.all('select');
+                    $selects.each(function($select){
+                        var config = self.getUiConfig($select,'select','width');
+                        var select = new Select($select,config);
+                        select.render();
+                    })
                 },
                 /**
                  * 运行字数统计组件
@@ -360,7 +400,14 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
         return Butterfly;
     },
     {
-        requires:['base', 'node', 'event','gallery/form/1.3/radio/index', 'gallery/form/1.3/checkbox/index', 'gallery/form/1.3/limiter/index', 'gallery/form/1.3/uploader/imageUploader', 'gallery/form/1.3/spinbox/index', 'gallery/form/1.3/auth/index']
+        requires:['base', 'node', 'event',
+            'gallery/form/1.3/radio/index',
+            'gallery/form/1.3/checkbox/index',
+            'gallery/form/1.3/limiter/index',
+            'gallery/form/1.3/uploader/imageUploader',
+            'gallery/form/1.3/spinbox/index',
+            'gallery/form/1.3/select/index',
+            'gallery/form/1.3/auth/index']
     }
 )
 ;

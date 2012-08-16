@@ -2,7 +2,7 @@
  * @fileoverview  解决IE6下模拟绝对定位层无法遮盖input的bug
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.0/select/iframeShade',function(S,Node,Base){
+KISSY.add('gallery/form/1.3/select/iframeShade',function(S,Node,Base){
         var EMPTY = '',$ = Node.all;
         /**
          * @name IframeShade
