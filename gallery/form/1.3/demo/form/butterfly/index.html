@@ -231,6 +231,9 @@
     });
     KISSY.use("gallery/form/1.3/butterfly/index", function (S, Butterfly) {
         var butterfly = new Butterfly('#J_DefaultForm');
+        butterfly.on('render',function(){
+            butterfly.validate('username');
+        });
         butterfly.render();
     });
 
