@@ -4,6 +4,17 @@ KISSY.add(function (S) {
      */
     return {
         /**
+         * 验证配置
+         */
+        auth:{
+            autoBind:true,
+            stopOnError:false,
+            msg:{
+                tpl:'<div class="msg {prefixCls}"><p class="{style}">{msg}</p></div>',
+                args:{ prefixCls:'under' }
+            }
+        },
+        /**
          * 字数统计
          */
         limiter:{

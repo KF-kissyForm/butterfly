@@ -66,11 +66,11 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                  * @param attrs
                  * @return {*}
                  */
-                getUiConfig:function($target,uiName,attrs){
-                    if(!$target || !$target.length) return false;
+                getUiConfig:function(uiName,$target,attrs){
                     var self = this;
                     var config = self.get('uiConfig')[uiName] || {};
                     var tagConfig={};
+                    if(!$target || !$target.length) return config;
                     if(S.isArray(attrs)){
                         S.each(attrs,function(attr){
                             var val = $target.attr(attr);
@@ -148,18 +148,10 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                  */
                 _renderAuth:function () {
                     var self = this;
-                    var authConfig = self.get('authConfig');
-                    var auth = EMPTY;
-                    auth = new Auth(self.get('target'), {
-                        autoBind:true,
-                        stopOnError:false,
-                        msg:{
-                            tpl:'<div class="msg {prefixCls}"><p class="{style}">{msg}</p></div>',
-                            args:{
-                                prefixCls:'under'
-                            }
-                        }
-                    });
+                    var $target = self.get('target');
+                    if(!$target.length) return false;
+                    var config = self.getUiConfig('auth');
+                    var auth = new Auth($target, config);
                     self.set('auth', auth);
                     return auth;
                 },
@@ -192,7 +184,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                     if (!$target.length) return false;
                     var $selects = $target.all('select');
                     $selects.each(function($select){
-                        var config = self.getUiConfig($select,'select','width');
+                        var config = self.getUiConfig('select',$select,'width');
                         var select = new Select($select,config);
                         select.render();
                     })
@@ -379,10 +371,6 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                         }
                     },
                     auth:{
-                        value:{
-                        }
-                    },
-                    authConfig:{
                         value:{
                         }
                     }
