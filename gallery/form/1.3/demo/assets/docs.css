@@ -66,13 +66,16 @@ body img{
 .index-body  #header h1{
     font-size: 100px;
 }
-#content{
-    margin-bottom:20px;
+.container{
+    margin-bottom:40px;
+}
+header{
+    margin-top:40px;
 }
 /* Space out sub-sections more
 -------------------------------------------------- */
 section {
-    padding-top: 60px;
+    padding-top: 30px;
 }
 
 /* Faded out hr */
