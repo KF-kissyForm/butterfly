@@ -68,7 +68,7 @@
         </h1>
     </header>
 
-    <h2>简单demo</h2>
+    <h2>使用标签属性配置的demo</h2>
 
     <form action="#" style="font-size:12px;">
         <div class="grid">
@@ -134,6 +134,24 @@
                 <input type="hidden" name="imageUrls3">
             </div>
             <ul id="J_UploaderQueue3" class="grid">
+
+            </ul>
+        </div>
+        <div class="span6">
+
+        </div>
+    </div>
+    <h2>使用其他主题的demo</h2>
+    <div class="row">
+        <div class="span6">
+            <p>使用<code>refundUploader</code>主题</p>
+            <div class="grid">
+                <input class="g-u" id="J_RefundUploaderBtn" name="Filedata" type="image-uploader" value="上传图片"
+                       theme="refundUploader" queueTarget="#J_RefundUploaderQueue"
+                       action="upload.php" urlsInputName="imageUrls2" maxSize="500" max="4">
+                <input type="hidden" name="imageUrls2">
+            </div>
+            <ul id="J_RefundUploaderQueue" class="grid">
 
             </ul>
         </div>
@@ -222,6 +240,9 @@
 
         var imageUploader3 = new ImageUploader('#J_UploaderBtn3', '#J_UploaderQueue3');
         imageUploader3.render();
+
+        var refundUploader = new ImageUploader('#J_RefundUploaderBtn');
+        refundUploader.render();
     })
 </script>
 

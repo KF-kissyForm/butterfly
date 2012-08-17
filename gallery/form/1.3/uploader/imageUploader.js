@@ -3,16 +3,7 @@
  * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
  **/
 KISSY.add('gallery/form/1.3/uploader/imageUploader',function (S, Base, Node, RenderUploader,Auth) {
-    var EMPTY = '', $ = Node.all, LOG_PREFIX = '[ImageUploader]:',
-        dataName = {
-            CONFIG:'data-config',
-            BUTTON_CONFIG : 'data-button-config',
-            THEME_CONFIG : 'data-theme-config'
-        },
-        //所支持的内置主题
-        THEMES = ['default','imageUploader', 'ershouUploader','uploadify'],
-        //内置主题路径前缀
-        THEME_PREFIX='gallery/form/1.3/uploader/themes/';
+    var EMPTY = '', $ = Node.all;
     /**
      * @name ImageUploader
      * @class 异步文件上传入口文件，会从按钮的data-config='{}' 伪属性中抓取组件配置
@@ -78,6 +69,9 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
          */
         render:function () {
             var self = this;
+            var $target =$(self.get('buttonTarget'));
+            if(!$target.length) return false;
+            if($target.attr('theme')) self.set('theme',$target.attr('theme'));
             //主题路径
             var  theme = self.get('theme');
             var uploader;

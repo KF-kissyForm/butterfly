@@ -1,26 +1,26 @@
 /**
- * @fileoverview 图片上传主题（带图片预览），第一版由紫英同学完成，苏河同学做了大量优化，明河整理优化
- * @author 苏河、紫英、明河
+ * @fileoverview 图片上传主题（带图片预览）
+ * @author 明河
  **/
 KISSY.add(function (S, Node, Theme) {
     var EMPTY = '', $ = Node.all;
 
     /**
-     * @name ImageUploader
-     * @class 图片上传主题（带图片预览），第一版由紫英同学完成，苏河同学做了大量优化，明河整理优化
+     * @name RefundUploader
+     * @class 图片上传主题（带图片预览）
      * @constructor
      * @extends Theme
      * @requires Theme
      * @requires  ProgressBar
-     * @author 苏河、紫英、明河
+     * @author 明河
      */
-    function ImageUploader(config) {
+    function RefundUploader(config) {
         var self = this;
         //调用父类构造函数
-        ImageUploader.superclass.constructor.call(self, config);
+        RefundUploader.superclass.constructor.call(self, config);
     }
 
-    S.extend(ImageUploader, Theme, /** @lends ImageUploader.prototype*/{
+    S.extend(RefundUploader, Theme, /** @lends RefundUploader.prototype*/{
         /**
          * 在上传组件运行完毕后执行的方法（对上传组件所有的控制都应该在这个函数内）
          * @param {Uploader} uploader
@@ -83,7 +83,7 @@ KISSY.add(function (S, Node, Theme) {
          * 文件处于等待上传状态时触发
          */
         _waitingHandler:function (ev) {
-            var self = this;
+             var self = this;
             var  uploader = ev.uploader;
             //上传方式
             var uploadType = uploader.get('type');
@@ -250,19 +250,19 @@ KISSY.add(function (S, Node, Theme) {
                 $img.attr('src',url);
             }
         }
-    }, {ATTRS:/** @lends ImageUploader.prototype*/{
+    }, {ATTRS:/** @lends RefundUploader.prototype*/{
         /**
          *  主题名（文件名），此名称跟样式息息相关
          * @type String
-         * @default "imageUploader"
+         * @default "refundUploader"
          */
-        name:{value:'imageUploader'},
+        name:{value:'refundUploader'},
         /**
          * css模块路径
          * @type String
-         * @default "gallery/form/1.3/uploader/themes/imageUploader/style.css"
+         * @default "gallery/form/1.3/uploader/themes/refundUploader/style.css"
          */
-        cssUrl:{value:'gallery/form/1.3/uploader/themes/imageUploader/style.css'},
+        cssUrl:{value:'gallery/form/1.3/uploader/themes/refundUploader/style.css'},
         /**
          * 队列使用的模板
          * @type String
@@ -291,7 +291,7 @@ KISSY.add(function (S, Node, Theme) {
          * @default ['preview','progressBar','filedrop'] 图片预览、进度条、文件拖拽
          */
         plugins:{
-          value:['progressBar','filedrop','preview']
+          value:['progressBar','preview']
         },
         /**
          * 统计上传张数的容器
@@ -306,5 +306,5 @@ KISSY.add(function (S, Node, Theme) {
          */
         isMaxHideBtn:{value:true}
     }});
-    return ImageUploader;
+    return RefundUploader;
 }, {requires:['node', '../../theme']});
