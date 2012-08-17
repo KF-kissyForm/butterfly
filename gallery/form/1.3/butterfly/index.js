@@ -69,6 +69,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Ra
                     var auth = self.get('auth');
                     if(!auth){
                         S.log(LOG_PREFIX+'不存在Auth的实例！');
+                        return false;
                     }
                     //验证指定表单字段的合法性
                     if(S.isString(field)){
@@ -81,6 +82,24 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Ra
                         auth.validate();
                     }
                     return auth.get('result');
+                },
+                /**
+                 * 向表单追加一个域
+                 * @param field {Field|string|htmlElement} 表单域对象或html表单元素
+                 * @param authConfig {object} 验证时使用的配置
+                 */
+                add:function(field,authConfig){
+                    if(!field){
+                        S.log(LOG_PREFIX + '缺少第一个field参数！');
+                        return false;
+                    }
+                    var auth = self.get('auth');
+                    if(!auth){
+                        S.log(LOG_PREFIX+'不存在Auth的实例！');
+                        return false;
+                    }
+                    auth.add(field,authConfig);
+
                 },
                 /**
                  * 获取组件配置，会合并html属性中的配置

@@ -232,7 +232,20 @@
     KISSY.use("gallery/form/1.3/butterfly/index", function (S, Butterfly) {
         var butterfly = new Butterfly('#J_DefaultForm');
         butterfly.on('render',function(){
+            //立即验证用户名
             butterfly.validate('username');
+
+            butterfly.add('#interest', {
+                rules:{
+                    moreselect: {
+                        error:'必须选择超过1个'
+                    }
+                },
+                style:{
+                    error:'error'
+                }
+            });
+
         });
         butterfly.render();
     });
