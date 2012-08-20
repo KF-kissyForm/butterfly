@@ -172,6 +172,9 @@ KISSY.add('gallery/form/1.3/uploader/base', function (S, Base, Node, UrlsInput, 
             uploadType = new UploadType(serverConfig);
             //监听上传器上传完成事件
             uploadType.on(uploaderTypeEvent.SUCCESS, self._uploadCompleteHanlder, self);
+            uploadType.on(uploaderTypeEvent.ERROR, function(ev){
+                self.fire(event.ERROR, {status:ev.status, result:ev.result});
+            }, self);
             //监听上传器上传进度事件
             if (uploaderTypeEvent.PROGRESS) uploadType.on(uploaderTypeEvent.PROGRESS, self._uploadProgressHandler, self);
             //监听上传器上传停止事件
