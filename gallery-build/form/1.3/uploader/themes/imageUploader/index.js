@@ -83,7 +83,20 @@ KISSY.add(function (S, Node, Theme) {
          * 文件处于等待上传状态时触发
          */
         _waitingHandler:function (ev) {
-
+            var self = this;
+            var  uploader = ev.uploader;
+            //上传方式
+            var uploadType = uploader.get('type');
+            //chrome和firefox下支持图片预览
+            if(uploadType == 'ajax'){
+                var Preview = self.get('oPlugin').preview;
+                var file = ev.file;
+                var id= file.id;
+                var $img = $('.J_Pic_' + id);
+                $img.show();
+                var p = new Preview();
+                p.show(file.data,$img);
+            }
         },
         /**
          * 文件处于开始上传状态时触发
@@ -278,7 +291,7 @@ KISSY.add(function (S, Node, Theme) {
          * @default ['preview','progressBar','filedrop'] 图片预览、进度条、文件拖拽
          */
         plugins:{
-          value:['progressBar','filedrop']
+          value:['progressBar','filedrop','preview']
         },
         /**
          * 统计上传张数的容器

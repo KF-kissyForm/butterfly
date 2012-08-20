@@ -8,15 +8,14 @@
     overflow: hidden;
     position: relative;
 
-    border: 1px solid #C4DAED;
-    line-height: 24px;
+    border: 1px solid @borderColor;
     margin-right: 10px;
     text-decoration: none;
     font-size: 12px;
     cursor: pointer;
-    color:#404040;
+    color:@fontColor;
     text-align: center;
-    .gradient(#FDFEFE,#DFE7EF);
+    .gradient(@gradientShallow,@gradientDeep);
     .file-input-wrapper{
         width: @btnWidth;
         height: @btnHeight;
@@ -26,7 +25,7 @@
 .refundUploader-button:hover {
     color: #404040;
     text-decoration: none;
-    .gradient(#DFE7EF,#FDFEFE);
+    .gradient(@gradientDeep,@gradientShallow);
 }
 .refundUploader-button:active{
     .gradient(#E2F1FC,#E2F1FC);
