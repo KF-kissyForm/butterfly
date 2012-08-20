@@ -144,11 +144,31 @@
     <h2>使用其他主题的demo</h2>
     <div class="row">
         <div class="span6">
-            <p>使用<code>refundUploader</code>主题</p>
+            <p>使用<code>refundUploader</code>主题，增加个属性<code>theme="refundUploader"</code>，该主题是从淘宝退款的上传凭证提炼出来的。</p>
+
+            <script type="text/uploader-restore" id="J_RefundImageRestore">
+                [
+                {"name":"icon_evil.gif",
+                "size":1446,
+                "type":"image/gif",
+                "result":{
+                "status":1,
+                "data":{
+                "name":"icon_evil.gif",
+                "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
+                "item_id":"42458"
+                }
+                }
+                }
+                ]
+            </script>
+
             <div class="grid">
-                <input class="g-u" id="J_RefundUploaderBtn" name="Filedata" type="image-uploader" value="上传图片"
+                <input class="g-u" id="J_RefundUploaderBtn" name="Filedata" type="image-uploader" value="上传凭证"
                        theme="refundUploader" queueTarget="#J_RefundUploaderQueue"
-                       action="upload.php" urlsInputName="imageUrls2" maxSize="500" max="4">
+                       action="upload.php" urlsInputName="imageUrls2" maxSize="500" max="4"
+                       restoreHook="#J_RefundImageRestore"
+                        >
                 <input type="hidden" name="imageUrls2">
             </div>
             <ul id="J_RefundUploaderQueue" class="grid">

@@ -118,7 +118,7 @@ KISSY.add('gallery/form/1.3/uploader/plugins/progressBar/progressBar',function(S
         /**
          * 进度条宽度
          */
-        width : { value:100 },
+        width : { value:'auto' },
         /**
          * 当前进度
          */
