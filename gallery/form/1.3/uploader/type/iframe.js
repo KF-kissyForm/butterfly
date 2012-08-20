@@ -131,16 +131,8 @@ KISSY.add('gallery/form/1.3/uploader/type/iframe',function(S, Node, UploadType) 
                 self.fire(errorEvent, {msg : '服务器端返回数据有问题！'});
                 return false;
             }
-            result = doc.body.innerHTML;
-            S.log(LOG_PREFIX + '服务器端输出:'+result);
-            //如果不存在json结果集，直接退出
-            if (result == EMPTY) return false;
-            try {
-                result = JSON.parse(result);
-            } catch(err) {
-                S.log(LOG_PREFIX + 'json数据格式不合法！');
-                self.fire(errorEvent, {msg : '数据：' + result + '不是合法的json数据'});
-            }
+            var response = doc.body.innerHTML;
+            result = self._processResponse(response);
             self.fire(IframeType.event.SUCCESS, {result : result});
             self._remove();
         },

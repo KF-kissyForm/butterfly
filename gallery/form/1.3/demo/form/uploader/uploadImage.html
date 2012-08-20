@@ -262,6 +262,15 @@
         imageUploader3.render();
 
         var refundUploader = new ImageUploader('#J_RefundUploaderBtn');
+        refundUploader.on('render',function(ev){
+            var uploader = ev.uploader;
+            uploader.set('filter',function(data){
+                data = S.JSON.parse(data);
+                //unicode自动转换测试
+                data.author = '\u660e\u6cb3';
+                return data;
+            })
+        });
         refundUploader.render();
     })
 </script>

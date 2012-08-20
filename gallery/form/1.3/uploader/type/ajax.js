@@ -74,12 +74,7 @@ KISSY.add('gallery/form/1.3/uploader/type/ajax',function(S, Node, UploadType) {
                 self.fire(AjaxType.event.PROGRESS, { 'loaded': ev.loaded, 'total': ev.total });
             });
             xhr.onload = function(ev){
-                var result = {};
-                try{
-                    result = S.JSON.parse(xhr.responseText);
-                }catch(e){
-                    S.log(LOG_PREFIX + 'ajax返回结果集responseText格式不合法！');
-                }
+                var result = self._processResponse(xhr.responseText);
                 self.fire(AjaxType.event.SUCCESS, {result : result});
             };
             xhr.open("POST", action, true);
