@@ -3,15 +3,13 @@
     margin-top:10px;
 
     li {
-        border: solid 1px #e0e0e0;
+        border: 1px solid #C4DAED;
         margin: 0 10px 10px 0;
-        width: 120px;
-        height: 120px;
+        width: @liWidth;
+        height: @liHeight;
         position: relative;
 
-        .border-radius(4px);
         background-color: #fff;
-        .box-shadow(inset 0 1px 2px rgba(0, 0, 0, 0.1));
     }
 
     li.error{
@@ -32,18 +30,19 @@
     li .del-pic {
         color: #676767;
         display: none;
-        width: 60px;
-        height: 24px;
-        line-height: 24px;
+        width: @delBtnWidth;
+        height: @delBtnHeight;
+        line-height: @delBtnHeight;
+        font-size:12px;
         position: absolute;
-        top: 50px;
-        left:50px;
-        margin-left:-20px;
+        top: 50%;
+        left:50%;
+        margin-left: -@delBtnWidth / 2;
+        margin-top: -@delBtnHeight / 2;
         text-decoration: none;
         z-index: 11;
         border: 1px solid #ddd;
         background-color: #fff;
-        .border-radius(3px);
         text-align: center;
     }
     .status-wrapper{
@@ -74,8 +73,8 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 120px;
-        height: 120px;
+        width: @liWidth;
+        height: @liHeight;
         .opacity(10);
         background: #333;
         z-index: 7;
@@ -91,13 +90,13 @@
             display:none;
             border:none;
             vertical-align: middle;
-            max-width: 116px;
-            max-height: 116px;
+            max-width: @liWidth - 4;
+            max-height: @liHeight - 4;
         }
 
         a {
-            width: 118px;
-            height: 118px;
+            width: @liWidth - 2;
+            height: @liHeight - 2;
             padding:1px;
             display: table-cell; /*非IE、IE8、IE9的主流浏览器识别的垂直居中的方法*/
             vertical-align: middle;
