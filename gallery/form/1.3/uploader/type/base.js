@@ -94,7 +94,7 @@ KISSY.add('gallery/form/1.3/uploader/type/base',function(S, Node, Base) {
                 result = self._fromUnicode(responseText);
             }
             S.log('服务器端输出：' + S.JSON.stringify(result));
-            return result
+            return result;
         },
         /**
          * 将unicode的中文转换成正常显示的文字，（为了修复flash的中文乱码问题）
@@ -108,7 +108,7 @@ KISSY.add('gallery/form/1.3/uploader/type/base',function(S, Node, Base) {
                     if(S.isObject(data[k])){
                         _each(data[k]);
                     }else{
-                        data[k] = S.isString(v) && S.fromUnicode(v);
+                        data[k] = S.isString(v) && S.fromUnicode(v) || v;
                     }
                 });
             }
