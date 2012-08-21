@@ -1890,16 +1890,22 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             }
 
             var configkeys = ['name','urlsInputName','autoUpload','postData','action','multiple','multipleLen','uploadType','disabled','restoreHook'];
+            var serverConfig = {};
             S.each(configkeys,function(key){
                 var htmlKey = key;
                 var value = $btn.attr(htmlKey);
                 if(key == 'postData'){
                     key = 'data';
                     value = value && S.JSON.parse(value);
+                    serverConfig.data = value;
+                }
+                if(key == 'action'){
+                    serverConfig.action = value;
                 }
                 if(key == 'uploadType') key = 'type';
                 htmlConfig[key] = value;
             });
+            htmlConfig.serverConfig = serverConfig;
             uploaderConfig = S.merge(htmlConfig,uploaderConfig);
             self.set('uploaderConfig',uploaderConfig);
             self.set('name',uploaderConfig.name);
