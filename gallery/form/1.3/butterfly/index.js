@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Select, Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Collection,Model, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Select, Auth) {
         var EMPTY = '';
         var $ = Node.all;
         var LOG_PREFIX = '[Butterfly]:';
@@ -37,21 +37,14 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Ra
                 render:function () {
                     var self = this;
                     var $target = self.get('target');
-                    var $inputs;
                     if (!$target.length) {
                         S.log(LOG_PREFIX + '表单目标节点不存在！');
                         return false;
                     }
+                    //实例化表单数据集合
+                    self.set('collection',new Collection());
                     self._loadTheme(self.get('theme'), function () {
-                        $inputs = $target.all('input');
-                        if (!$inputs.length) {
-                            S.log(LOG_PREFIX + '不存在需要美化的表单元素！');
-                            return false;
-                        }
-                        $inputs.each(function ($input) {
-                            self._renderCom($input)
-                        });
-
+                        self._initInput();
                         self._initTextArea();
                         self._initSelect();
                         //实例化验证组件
@@ -89,6 +82,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Ra
                  * @param authConfig {object} 验证时使用的配置
                  */
                 add:function(field,authConfig){
+                    var self = this;
                     if(!field){
                         S.log(LOG_PREFIX + '缺少第一个field参数！');
                         return false;
@@ -100,6 +94,27 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Ra
                     }
                     auth.add(field,authConfig);
 
+                },
+                /**
+                 * 获取指定的域Model
+                 * @param name
+                 * @return Model
+                 *
+                 */
+                field:function(name,data){
+                    var self = this;
+                    var collection = self.get('collection');
+                    if(collection == EMPTY || !S.isString(name)) return false;
+                    var field = collection.getByCid(name);
+                    if(S.isString(data)){
+                        field.set('value',data);
+                    }
+                    else if(S.isObject(data)){
+                        S.each(data,function(v,k){
+                            field.set(k,v);
+                        })
+                    }
+                    return field;
                 },
                 /**
                  * 获取组件配置，会合并html属性中的配置
@@ -126,32 +141,89 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Ra
                     return S.merge(config, tagConfig);
                 },
                 /**
-                 * 根据表单元素的type实例化对应的表单组件
-                 * @param {NodeList} $input 表单元素
+                 * 向collection添加表单域数据
+                 * @public
                  */
-                _renderCom:function ($input) {
-                    if (!$input || !$input.length) return false;
-                    var self = this, type = $input.attr('type'), obj;
-                    var fields = self.get('fields');
-                    switch (type) {
-                        case 'text':
-                            self._renderLimiter($input);
-                            break;
-                        case 'radio':
-                            self._renderGroupCom($input);
-                            break;
-                        case 'checkbox':
-                            self._renderGroupCom($input);
-                            break;
-                        case 'spinbox':
-                            self._renderSpinbox($input);
-                            break;
-                        case 'image-uploader':
-                            self._renderImageUploader($input);
-                            break;
-                        case 'button':
-                            break;
+                addModel:function($filed,isGroup){
+                    var self = this;
+                    var field;
+                    var type = $filed.attr('type');
+                    var name = $filed.attr('name');
+                    var value = $filed.val();
+                    var collection = self.get('collection');
+                    var data = {type : type,name:name,value:value,isGroup:isGroup,group:[]};
+                    if(isGroup){
+                        var groupFiled = collection.getByCid(name);
+                        if(!groupFiled){
+                            groupFiled = new Model(data);
+                            groupFiled.set('clientId',name);
+                            collection.add(groupFiled);
+                        }
+                        var group = groupFiled.get('group');
+                        group.push(value);
+                        groupFiled.set('group',group);
+                        var isSelect = $filed.prop('checked');
+                        if(isSelect) groupFiled.set('value',value);
+
+                        field = groupFiled;
+                    }else{
+                        field = new Model(data);
+                        collection.add(field)
                     }
+                    return field;
+                },
+                /**
+                 * 表单域绑定数据更新事件
+                 * @private
+                 */
+                _fieldBindEvent:function($input){
+                    if(!$input || !$input.length) return false;
+                    var self = this;
+                    var name = $input.attr('name');
+                    $input.on('blur',function(ev){
+                        var val = $input.val();
+                        self.field(name,val);
+                    });
+                },
+                /**
+                 * 根据input的type实例化对应的表单组件
+                 */
+                _initInput:function () {
+                    var self = this;
+                    var $target = self.get('target');
+                    var $inputs = $target.all('input');
+                    if (!$inputs.length) return false;
+                    var noGroupTypes = ['text','spinbox'];
+                    var groupTypes=['radio','checkbox'];
+                    //遍历input
+                    $inputs.each(function ($input) {
+                        var type = $input.attr('type');
+                        //添加field的model
+                        if(S.inArray(type,noGroupTypes)){
+                            self.addModel($input);
+                        }else if(S.inArray(type,groupTypes)){
+                            self.addModel($input,true);
+                        }
+                        switch (type) {
+                            case 'text':
+                                self._renderLimiter($input);
+                                break;
+                            case 'radio':
+                                self._renderGroupCom($input);
+                                break;
+                            case 'checkbox':
+                                self._renderGroupCom($input);
+                                break;
+                            case 'spinbox':
+                                self._renderSpinbox($input);
+                                break;
+                            case 'image-uploader':
+                                self._renderImageUploader($input);
+                                break;
+                            case 'button':
+                                break;
+                        }
+                    });
                 },
                 /**
                  * 实例化像radio和checkbox的模拟组件（多个input）
@@ -394,6 +466,9 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Ra
                             return v;
                         }
                     },
+                    collection:{
+                        value:EMPTY
+                    },
                     /**
                      * 表单组件的实例集合
                      * @type Object
@@ -426,6 +501,8 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Ra
     },
     {
         requires:['base', 'node', 'event',
+            './collection',
+            './model',
             'gallery/form/1.3/radio/index',
             'gallery/form/1.3/checkbox/index',
             'gallery/form/1.3/limiter/index',
