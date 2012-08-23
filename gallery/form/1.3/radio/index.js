@@ -17,6 +17,7 @@ KISSY.add('gallery/form/1.3/radio/index', function(S, Node, Base) {
      */
     function Radio(target, config) {
         var self = this;
+        
         config = S.merge({
             target: target
         }, config);
