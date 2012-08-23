@@ -63,7 +63,7 @@ KISSY.add('gallery/form/1.3/uploader/plugins/preview/preview', function(S, D, E)
 			imgElem.src = _transparentImg;
 			if(data){
 				data = data.replace(/[)'"%]/g, function(s){
-					return escape(escape(s)); 
+					return escape(escape(s));
 				});
 				imgElem.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale',src='" + data + "')";
 				imgElem.zoom = 1;
@@ -90,7 +90,32 @@ KISSY.add('gallery/form/1.3/uploader/plugins/preview/preview', function(S, D, E)
 	}
 	
 	S.augment(Preview, S.EventTarget, {
-		
+        /**
+         * 显示预览图片，不支持IE
+         * @author 明河
+         * @since 1.3
+         */
+        show:function(file,$img){
+            if(_mode != 'html5' || !$img || !$img.length) return false;
+            var self = this;
+            var reader = new FileReader();
+            reader.onload = function(e){
+                var data = self.data = e.target.result;
+                self.fire(_eventList.getData, {
+                    data: data,
+                    mode: _mode
+                });
+                $img.attr('src',data);
+                self.fire(_eventList.showed, {
+                    img: data
+                });
+            };
+            reader.onerror = function(e){
+                S.log(LOG_PRE + 'File Reader Error. Your browser may not fully support html5 file api', 'warning');
+                self.fire(_eventList.error);
+            };
+                reader.readAsDataURL(file);
+        },
 		/**
 		 * 预览函数
 		 * @param {HTMLElement} fileInput 文件上传的input
@@ -175,7 +200,7 @@ KISSY.add('gallery/form/1.3/uploader/plugins/preview/preview', function(S, D, E)
 			
 			return self.data;
 		}
-	})
+	});
 	
 	return Preview;
 	

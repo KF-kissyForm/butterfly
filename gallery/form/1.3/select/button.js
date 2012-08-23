@@ -3,7 +3,7 @@
  * @author: 剑平（明河）<minghe36@126.com>
  *
  **/
-KISSY.add('gallery/form/1.0/select/button', function(S, DOM, Event, Base) {
+KISSY.add('gallery/form/1.3/select/button', function(S, DOM, Event, Base) {
     var EMPTY = '', LOG_PREFIX = '[nice-select-button]:';
 
     /**

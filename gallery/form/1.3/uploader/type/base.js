@@ -70,7 +70,51 @@ KISSY.add('gallery/form/1.3/uploader/type/base',function(S, Node, Base) {
          */
         stop : function(){
             
+        },
+        /**
+         * 处理服务器端返回的结果集
+         * @private
+         */
+        _processResponse:function(responseText){
+            var self = this;
+            var filter = self.get('filter');
+            var result = {};
+            if(filter != EMPTY) responseText = filter.call(self,responseText);
+            //格式化成json数据
+            if(S.isString(responseText)){
+                try{
+                    result = S.JSON.parse(responseText);
+                    result = self._fromUnicode(result);
+                }catch(e){
+                    var msg = responseText + '，返回结果集responseText格式不合法！';
+                    S.log(msg);
+                    self.fire('error',{status:-1, result:{msg:msg}});
+                }
+            }else if(S.isObject(responseText)){
+                result = self._fromUnicode(responseText);
+            }
+            S.log('服务器端输出：' + S.JSON.stringify(result));
+            return result
+        },
+        /**
+         * 将unicode的中文转换成正常显示的文字，（为了修复flash的中文乱码问题）
+         * @private
+         */
+        _fromUnicode:function(data){
+            if(!S.isObject(data)) return data;
+            _each(data);
+            function _each(data){
+                S.each(data,function(v,k){
+                    if(S.isObject(data[k])){
+                        _each(data[k]);
+                    }else{
+                        data[k] = S.isString(v) && S.fromUnicode(v);
+                    }
+                });
+            }
+            return data;
         }
+
     }, {ATTRS : /** @lends UploadType.prototype*/{
         /**
          * 服务器端路径
@@ -83,7 +127,15 @@ KISSY.add('gallery/form/1.3/uploader/type/base',function(S, Node, Base) {
          * @type Object
          * @default {}
          */
-        data : {value : {}}
+        data : {value : {}},
+        /**
+         * 服务器端返回的数据的过滤器
+         * @type Function
+         * @default ''
+         */
+        filter:{
+            value:EMPTY
+        }
     }});
 
     return UploadType;

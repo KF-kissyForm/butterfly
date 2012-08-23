@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Select, Auth) {
         var EMPTY = '';
         var $ = Node.all;
         var LOG_PREFIX = '[Butterfly]:';
@@ -26,7 +26,8 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
         S.mix(Butterfly, /** @lends Butterfly*/{
             THEMES:['default'],
             event:{
-                AFTER_LOAD_THEME:'afterLoadTheme'
+                AFTER_LOAD_THEME:'afterLoadTheme',
+                RENDER:'render'
             }
         });
         S.extend(Butterfly, Base, /** @lends Butterfly.prototype*/{
@@ -52,11 +53,77 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                         });
 
                         self._initTextArea();
+                        self._initSelect();
                         //实例化验证组件
                         self._renderAuth();
+                        self.fire('render');
                     });
+                },
+                /**
+                 * 当不传参时候，验证整个表单的合法性，当参数为字符串时候，验证指定表单字段的合法性，当参数为数组时候，验证多个字段的合法性
+                 * @param {String|Array} field 字段名
+                 * @return {Boolean} 是否通过
+                 */
+                validate:function (field) {
+                    var self = this;
+                    var auth = self.get('auth');
+                    if(!auth){
+                        S.log(LOG_PREFIX+'不存在Auth的实例！');
+                        return false;
+                    }
+                    //验证指定表单字段的合法性
+                    if(S.isString(field)){
+                        return auth.getField(field).validate();
+                    }
+                    else if(S.isArray(field)){
 
+                    }
+                    else{
+                        auth.validate();
+                    }
+                    return auth.get('result');
+                },
+                /**
+                 * 向表单追加一个域
+                 * @param field {Field|string|htmlElement} 表单域对象或html表单元素
+                 * @param authConfig {object} 验证时使用的配置
+                 */
+                add:function(field,authConfig){
+                    if(!field){
+                        S.log(LOG_PREFIX + '缺少第一个field参数！');
+                        return false;
+                    }
+                    var auth = self.get('auth');
+                    if(!auth){
+                        S.log(LOG_PREFIX+'不存在Auth的实例！');
+                        return false;
+                    }
+                    auth.add(field,authConfig);
 
+                },
+                /**
+                 * 获取组件配置，会合并html属性中的配置
+                 * @param $target
+                 * @param uiName
+                 * @param attrs
+                 * @return {*}
+                 */
+                getUiConfig:function (uiName, $target, attrs) {
+                    var self = this;
+                    var config = self.get('uiConfig')[uiName] || {};
+                    var tagConfig = {};
+                    if (!$target || !$target.length) return config;
+                    if (S.isArray(attrs)) {
+                        S.each(attrs, function (attr) {
+                            var val = $target.attr(attr);
+                            if (val) tagConfig[attr] = val;
+                        })
+                    }
+                    else if (S.isString(attrs)) {
+                        var val = $target.attr(attrs);
+                        if (val) tagConfig[attrs] = val;
+                    }
+                    return S.merge(config, tagConfig);
                 },
                 /**
                  * 根据表单元素的type实例化对应的表单组件
@@ -123,18 +190,10 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                  */
                 _renderAuth:function () {
                     var self = this;
-                    var authConfig = self.get('authConfig');
-                    var auth = EMPTY;
-                    auth = new Auth(self.get('target'), {
-                        autoBind:true,
-                        stopOnError:false,
-                        msg:{
-                            tpl:'<div class="msg {prefixCls}"><p class="{style}">{msg}</p></div>',
-                            args:{
-                                prefixCls:'under'
-                            }
-                        }
-                    });
+                    var $target = self.get('target');
+                    if (!$target.length) return false;
+                    var config = self.getUiConfig('auth');
+                    var auth = new Auth($target, config);
                     self.set('auth', auth);
                     return auth;
                 },
@@ -150,12 +209,27 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                     if (!$textAreas.length) return false;
                     $textAreas.each(function ($textArea) {
                         //实例化富编辑器
-                        if($textArea.attr('type') == 'editor'){
+                        if ($textArea.attr('type') == 'editor') {
                             self._renderEditor($textArea);
-                        }else{
+                        } else {
                             self._renderLimiter($textArea);
                         }
                     });
+                },
+                /**
+                 * 初始化模拟选择框
+                 * @private
+                 */
+                _initSelect:function () {
+                    var self = this;
+                    var $target = self.get('target');
+                    if (!$target.length) return false;
+                    var $selects = $target.all('select');
+                    $selects.each(function ($select) {
+                        var config = self.getUiConfig('select', $select, 'width');
+                        var select = new Select($select, config);
+                        select.render();
+                    })
                 },
                 /**
                  * 运行字数统计组件
@@ -174,9 +248,9 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                     var config = self.get('uiConfig').limiter || {};
                     //不存在字数统计基础配置
                     if (!maxLen || !$limiterTarget.length) return false;
-                    S.mix(config,{wrapper:$limiterTarget, max:maxLen});
+                    S.mix(config, {wrapper:$limiterTarget, max:maxLen});
                     //富编辑器，将html标签排除掉
-                    if(type == 'editor') S.mix(config,{isRejectTag:true});
+                    if (type == 'editor') S.mix(config, {isRejectTag:true});
 
                     var textLimiter = new Limiter($textArea, config);
                     textLimiter.render();
@@ -209,12 +283,12 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                  * @private
                  */
                 _renderEditor:function ($target) {
-                    if(!$target || !$target.length) return false;
+                    if (!$target || !$target.length) return false;
                     var self = this;
                     var uiConfig = self.get('uiConfig');
                     var config = uiConfig.editor;
                     var cssUrl = config.cssUrl;
-                    cssUrl = S.UA.ie<8 && cssUrl + 'editor-pkg-sprite.css' || cssUrl + 'editor-pkg-datauri.css';
+                    cssUrl = S.UA.ie < 8 && cssUrl + 'editor-pkg-sprite.css' || cssUrl + 'editor-pkg-datauri.css';
                     S.use(cssUrl);
                     S.use('editor', function (S, Editor) {
                         var editor = new Editor($target.getDOMNode(), config).use("undo,separator,removeformat,format,font,color,separator,list,indent,justify,separator,link,separator,table,resize,draft");
@@ -224,25 +298,18 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                             //编辑器容器
                             var $wrapper = editor.editorWrap;
                             var width = $target.attr('width');
-                           // var height = $target.attr('height');
+                            // var height = $target.attr('height');
                             //获取width和height属性设置容器宽高
                             width && $wrapper.width(Number(width));
                             //height && $wrapper.height(Number(height));
                             Event.on(editor.document, "keyup", function (ev) {
-                                var val= editor.getData();
+                                var val = editor.getData();
                                 $target.val(val);
                                 limiter.count();
                             });
 
                         });
                     });
-                },
-                /**
-                 *
-                 * @private
-                 */
-                _renderSelect:function(){
-
                 },
                 /**
                  * 加载主题css文件
@@ -345,14 +412,12 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
                         value:{
                         }
                     },
-                    auth:{
-                        value:{
-                        }
-                    },
-                    authConfig:{
-                        value:{
-                        }
-                    }
+                    /**
+                     * 验证组件实例
+                     * @type Auth
+                     * @default ''
+                     */
+                    auth:{ value:EMPTY }
                 }
             }
         )
@@ -360,7 +425,14 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node,Event, Rad
         return Butterfly;
     },
     {
-        requires:['base', 'node', 'event','gallery/form/1.3/radio/index', 'gallery/form/1.3/checkbox/index', 'gallery/form/1.3/limiter/index', 'gallery/form/1.3/uploader/imageUploader', 'gallery/form/1.3/spinbox/index', 'gallery/form/1.3/auth/index']
+        requires:['base', 'node', 'event',
+            'gallery/form/1.3/radio/index',
+            'gallery/form/1.3/checkbox/index',
+            'gallery/form/1.3/limiter/index',
+            'gallery/form/1.3/uploader/imageUploader',
+            'gallery/form/1.3/spinbox/index',
+            'gallery/form/1.3/select/index',
+            'gallery/form/1.3/auth/index']
     }
 )
 ;

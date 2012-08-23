@@ -4,11 +4,28 @@ KISSY.add(function (S) {
      */
     return {
         /**
+         * 验证配置
+         */
+        auth:{
+            autoBind:true,
+            stopOnError:false,
+            msg:{
+                tpl:'<div class="msg {prefixCls}"><p class="{style}">{msg}</p></div>',
+                args:{ prefixCls:'under' }
+            }
+        },
+        /**
          * 字数统计
          */
         limiter:{
             //算字数时是否排除html标签（富编辑器一般需要把html标签所占的字数去掉）
             isRejectTag:false
+        },
+        /**
+         * 选择框配置
+         */
+        select:{
+
         },
         /**
          * 图片上传

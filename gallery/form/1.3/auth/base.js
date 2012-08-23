@@ -1,10 +1,9 @@
 ﻿/**
- * @fileoverview
+ * @fileoverview 表单验证类
  * @author czy88840616 <czy88840616@gmail.com>
  *
  */
-KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field,
-                                                  Factory, Utils, undefined) {
+KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field, Factory, Utils, undefined) {
 
     /**
      * 默认配置
@@ -21,7 +20,7 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field,
     };
 
     /**
-     * @name RenderUploader
+     * @name Auth
      * @class Auth组件入口，表明
      * @version 1.2
      * @param el {selector|htmlElement} form元素
@@ -47,7 +46,7 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field,
         return self;
     };
 
-    S.extend(Auth, Base,/** @lends Auth.prototype*/ {
+    S.extend(Auth, Base, /** @lends Auth.prototype*/ {
         /**
          * 初始化auth
          * @param el
@@ -60,7 +59,7 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field,
 
             if (forms && forms.length) {
                 S.each(forms, function (el, idx) {
-                    var filedConfig = S.merge(config, {event:config.autoBind ? Utils.getEvent(el):'none'});
+                    var filedConfig = S.merge(config, {event:config.autoBind ? Utils.getEvent(el) : 'none'});
                     var f = new Field(el, filedConfig);
                     f.addTarget(self);
                     f.publish('validate', {
@@ -75,7 +74,7 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field,
             self.AuthConfig = config;
 
             //如果是form模式，需要屏蔽html5本身的校验，放在最后是为了html5的校验能生效
-            if(self.mode === AUTH_MODE.FORM) {
+            if (self.mode === AUTH_MODE.FORM) {
                 S.one(el).attr('novalidate', 'novalidate');
             }
 
@@ -100,7 +99,7 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field,
                 el = S.one(field);
                 if (el) {
                     key = S.one(el).attr('id') || S.one(el).attr('name');
-                    var filedConfig = S.merge(self.AuthConfig, {event:self.AuthConfig.autoBind ? Utils.getEvent(el):'none'}, config);
+                    var filedConfig = S.merge(self.AuthConfig, {event:self.AuthConfig.autoBind ? Utils.getEvent(el) : 'none'}, config);
                     self._storages[key || Utils.guid()] = new Field(el, filedConfig);
                 }
             }
@@ -138,7 +137,7 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field,
                 currentField = field;
 
                 //stop on error
-                if(self.AuthConfig.stopOnError && !result) {
+                if (self.AuthConfig.stopOnError && !result) {
                     return false;
                 }
             });

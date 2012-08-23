@@ -341,4 +341,4 @@ KISSY.add('gallery/form/1.3/select/index', function (S, DOM, Event, Base, Anim, 
             }
         });
     return Select;
-}, {requires:['dom', 'event', 'base', 'anim', './button', '../list/base']});
+}, {requires:['dom', 'event', 'base', 'anim', './button', '../list/index']});

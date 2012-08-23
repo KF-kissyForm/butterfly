@@ -12,6 +12,13 @@
     <!--合并源码文件，排除模板js-->
     <target name="concat">
         <concat destfile="index-pkg.js" encoding="${charset}" outputencoding="${charset}" overwrite="true">
+            <fileset dir="${src.dir}" includes="**/*.js" excludes="demo/**/*.js,themes/**/*.js,imageUploader.js"/>
+            <filterchain>
+                <deletecharacters chars="&#xFEFF;"/>
+            </filterchain>
+        </concat>
+
+        <concat destfile="imageUploader-pkg.js" encoding="${charset}" outputencoding="${charset}" overwrite="true">
             <fileset dir="${src.dir}" includes="**/*.js" excludes="demo/**/*.js,themes/**/*.js"/>
             <filterchain>
                 <deletecharacters chars="&#xFEFF;"/>
@@ -21,6 +28,7 @@
     <!--移动合并后源文件到build目录下-->
     <target name="move">
         <move file="index-pkg.js" tofile="${uploader.build.dir}/index.js"/>
+        <move file="imageUploader-pkg.js" tofile="${uploader.build.dir}/imageUploader.js"/>
     </target>
     <target name="dircheck">
         <condition property="uploader.build.dir.exists">
@@ -30,7 +38,7 @@
     <!--删除build目录下的所有文件-->
     <target name="clean-build" if="${uploader.build.dir.exists}" depends="dircheck">
         <delete >
-            <fileset dir="${uploader.build.dir}" includes="**/*.js,**/*.css,**/*.swf"/>
+            <fileset dir="${uploader.build.dir}" includes="**/*.js,**/*.css,**/*.swf,**/*.less"/>
         </delete>
     </target>
     <target name="mkdir">
