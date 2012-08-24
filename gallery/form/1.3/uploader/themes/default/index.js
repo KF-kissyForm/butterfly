@@ -58,7 +58,7 @@ KISSY.add('gallery/form/1.3/uploader/themes/default/index', function (S, Node, T
             if(uploadType == 'ajax' || uploadType == 'flash'){
                 var ProgressBar = self.get('oPlugin').progressBar,progressBar;
                 if(ProgressBar){
-                    progressBar = new ProgressBar($progressBar);
+                    progressBar = new ProgressBar($progressBar,{width:self.get('progressBarWidth')});
                     progressBar.on('change',function(ev){
                         //百分百进度隐藏进度条
                         if(ev.value == 100){
@@ -157,7 +157,13 @@ KISSY.add('gallery/form/1.3/uploader/themes/default/index', function (S, Node, T
          */
         plugins:{
             value:['progressBar']
-        }
+        },
+        /**
+         * 进度条宽度
+         * @type Number
+         * @default 100
+         */
+        progressBarWidth:{value:100}
     }});
     return DefaultTheme;
 }, {requires:['node', '../../theme']});
