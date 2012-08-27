@@ -121,6 +121,13 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
             return isHasUrls;
         },
         /**
+         * 检验是否必须上传一个文件
+         * @return {Boolean}
+         */
+        testRequired:function(){
+            return this.testRequire();
+        },
+        /**
          * 测试是否是允许的文件上传类型
          * @param {Object} file 文件对象
          * @return {Boolean} 是否通过
@@ -288,8 +295,8 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                 params = {status:-1,rule:ruleName},
                 index = -1;
             if(file){
-                S.mix(params,{file:file});
                 index = queue.getFileIndex(params.file.id);
+                S.mix(params,{file:file,index:index});
             }
             //result是为了与uploader的error事件保持一致
             if(rule) S.mix(params,{msg : rule[1],value : rule[0],result:{}});
@@ -2118,6 +2125,13 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
             return isHasUrls;
         },
         /**
+         * 检验是否必须上传一个文件
+         * @return {Boolean}
+         */
+        testRequired:function(){
+            return this.testRequire();
+        },
+        /**
          * 测试是否是允许的文件上传类型
          * @param {Object} file 文件对象
          * @return {Boolean} 是否通过
@@ -2285,8 +2299,8 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                 params = {status:-1,rule:ruleName},
                 index = -1;
             if(file){
-                S.mix(params,{file:file});
                 index = queue.getFileIndex(params.file.id);
+                S.mix(params,{file:file,index:index});
             }
             //result是为了与uploader的error事件保持一致
             if(rule) S.mix(params,{msg : rule[1],value : rule[0],result:{}});
