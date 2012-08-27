@@ -8,9 +8,9 @@
     -moz-border-radius: @radius;
 }
 .gradient(@from:#FAFAFA,@to:#E5E5E5){
+    background-color: @from;
     background: -webkit-gradient(linear, left top, left bottom, from(@from), to(@to));
     background: -moz-linear-gradient(top, @from, @to);
-    //filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr = '#FAFAFA', endColorstr = '#E5E5E5')";
 }
 .linear-grad(@from:#f5f5f5,@to:#f9f9f9){
     background-image: -moz-linear-gradient(top, @from, @to);

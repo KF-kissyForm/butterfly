@@ -110,13 +110,13 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
             var self = this,uploader = self.get('uploader'),
                 urlsInput = uploader.get('urlsInput'),
                 urls = urlsInput.get('urls'),
-                rule = self.getRule('require'),
+                rule = self.getRule('required') || self.getRule('require'),
                 isRequire = rule ? rule[0] : false,
                 isHasUrls = urls.length > 0;
             if(!isRequire) return true;
             if(!isHasUrls){
                 S.log(LOG_PREFIX + rule[1]);
-                self._fireUploaderError('require',rule);
+                self._fireUploaderError('required',rule);
             }
             return isHasUrls;
         },
@@ -336,10 +336,6 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                     {desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"},
                     '不支持{ext}格式的文件上传！'
                 ],
-                /**
-                 * 是否必须上传个文件
-                 */
-                require:[false, '必须至少上传一个文件！'],
                 /**
                  * 是否必须上传个文件
                  */

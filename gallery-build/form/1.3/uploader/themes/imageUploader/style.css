@@ -73,6 +73,7 @@ button::-moz-focus-inner {
   cursor: pointer;
   color: #333333;
   text-align: center;
+  background-color: #fdfcfc;
   background: -webkit-gradient(linear, left top, left bottom, from(#fdfcfc), to(#eeeeee));
   background: -moz-linear-gradient(top, #fdfcfc, #eeeeee);
   border-radius: 3px;
@@ -87,10 +88,12 @@ button::-moz-focus-inner {
   color: #333333;
   text-decoration: none;
   border: 1px solid #369BD7;
+  background-color: #fdfcfc;
   background: -webkit-gradient(linear, left top, left bottom, from(#fdfcfc), to(#e2f1fc));
   background: -moz-linear-gradient(top, #fdfcfc, #e2f1fc);
 }
 .imageUploader-button:active {
+  background-color: #e2f1fc;
   background: -webkit-gradient(linear, left top, left bottom, from(#e2f1fc), to(#e2f1fc));
   background: -moz-linear-gradient(top, #e2f1fc, #e2f1fc);
   outline: 0 none;
