@@ -22,9 +22,26 @@ KISSY.add('gallery/form/1.3/butterfly/model',function (S, Base, Node,mvc) {
         Model.superclass.constructor.apply(this, arguments);
     }
     S.extend(Model, mvc.Model,{ATTRS:{
+        target:{
+            value:EMPTY,
+            getter:function(v){
+                return S.Node.all(v);
+            }
+        },
         type:{value:EMPTY},
         name:{value:EMPTY},
-        value:{value:EMPTY},
+        value:{
+            value:EMPTY,
+            setter:function(v){
+                debugger;
+                var self = this;
+                var target = self.get('target');
+                if(target && target.length > 0){
+                    target.val(v);
+                }
+                return v;
+            }
+        },
         isGroup:{value:false},
         group:{value:[]}
     }});

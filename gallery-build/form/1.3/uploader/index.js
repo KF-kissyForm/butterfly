@@ -295,7 +295,7 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                 params = {status:-1,rule:ruleName},
                 index = -1;
             if(file){
-                index = queue.getFileIndex(params.file.id);
+                index = queue.getFileIndex(file.id);
                 S.mix(params,{file:file,index:index});
             }
             //result是为了与uploader的error事件保持一致

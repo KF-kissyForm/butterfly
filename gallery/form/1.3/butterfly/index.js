@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Collection,Model, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Select, Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Collection, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Select, Auth) {
         var EMPTY = '';
         var $ = Node.all;
         var LOG_PREFIX = '[Butterfly]:';
@@ -105,16 +105,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                     var self = this;
                     var collection = self.get('collection');
                     if(collection == EMPTY || !S.isString(name)) return false;
-                    var field = collection.getByCid(name);
-                    if(S.isString(data)){
-                        field.set('value',data);
-                    }
-                    else if(S.isObject(data)){
-                        S.each(data,function(v,k){
-                            field.set(k,v);
-                        })
-                    }
-                    return field;
+                    return collection.field(name,data);
                 },
                 /**
                  * 获取组件配置，会合并html属性中的配置
@@ -144,20 +135,18 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                  * 向collection添加表单域数据
                  * @public
                  */
-                addModel:function($filed,isGroup){
+                addField:function($filed,isGroup){
                     var self = this;
                     var field;
                     var type = $filed.attr('type');
                     var name = $filed.attr('name');
                     var value = $filed.val();
                     var collection = self.get('collection');
-                    var data = {type : type,name:name,value:value,isGroup:isGroup,group:[]};
+                    var data = {target : $filed, type : type,name:name,value:value,isGroup:isGroup,group:[]};
                     if(isGroup){
-                        var groupFiled = collection.getByCid(name);
+                        var groupFiled = collection.field(name);
                         if(!groupFiled){
-                            groupFiled = new Model(data);
-                            groupFiled.set('clientId',name);
-                            collection.add(groupFiled);
+                            groupFiled = collection.add(data);
                         }
                         var group = groupFiled.get('group');
                         group.push(value);
@@ -167,8 +156,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
 
                         field = groupFiled;
                     }else{
-                        field = new Model(data);
-                        collection.add(field)
+                        field = collection.add(data);
                     }
                     return field;
                 },
@@ -200,9 +188,9 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                         var type = $input.attr('type');
                         //添加field的model
                         if(S.inArray(type,noGroupTypes)){
-                            self.addModel($input);
+                            self.addField($input);
                         }else if(S.inArray(type,groupTypes)){
-                            self.addModel($input,true);
+                            self.addField($input,true);
                         }
                         switch (type) {
                             case 'text':
@@ -502,7 +490,6 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
     {
         requires:['base', 'node', 'event',
             './collection',
-            './model',
             'gallery/form/1.3/radio/index',
             'gallery/form/1.3/checkbox/index',
             'gallery/form/1.3/limiter/index',

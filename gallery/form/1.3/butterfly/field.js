@@ -1,27 +1,22 @@
 /**
- * 快速构建表单工具
- * @module butterfly
- */
-
-/**
- *  模块名：gallery/form/1.3/butterfly/model，表单数据层模块，当数据发生变化时会自动更新表单视图
+ *  模块名：gallery/form/1.3/butterfly/field，表单数据层模块，当数据发生变化时会自动更新表单视图
  *
  * @module butterfly
  * @submodule butterfly-model
  */
 
-KISSY.add('gallery/form/1.3/butterfly/model',function (S, Base, Node,mvc) {
+KISSY.add('gallery/form/1.3/butterfly/field',function (S, Base, Node) {
     var EMPTY = '';
     /**
      * 表单field的数据模块
-     * @class Model
+     * @class Field
      * @constructor
-     * @extends mvc.Model
+     * @extends mvc.Field
      */
-    function Model(){
-        Model.superclass.constructor.apply(this, arguments);
+    function Field(config){
+        Field.superclass.constructor.apply(this, config);
     }
-    S.extend(Model, mvc.Model,{ATTRS:{
+    S.extend(Field, Base,{ATTRS:{
         target:{
             value:EMPTY,
             getter:function(v){
@@ -42,8 +37,14 @@ KISSY.add('gallery/form/1.3/butterfly/model',function (S, Base, Node,mvc) {
                 return v;
             }
         },
+        test:{value:false,
+            setter:function(v){
+                alert(2);
+                return v;
+            }
+        },
         isGroup:{value:false},
         group:{value:[]}
     }});
-    return Model;
-},{requires:['base', 'node','mvc']});
+    return Field;
+},{requires:['base', 'node']});

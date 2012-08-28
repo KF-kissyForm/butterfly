@@ -217,7 +217,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                 }
             });
             if(!authConfig['allowExts']){
-                authConfig['allowExts'] = self._setAllowExts(defaultAllowExts);
+                authConfig['allowExts'] = [self._setAllowExts(defaultAllowExts),msgs['allowExts'] || ''];
             }
             return authConfig;
         },

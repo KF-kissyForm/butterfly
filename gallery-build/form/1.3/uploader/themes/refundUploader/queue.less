@@ -64,6 +64,14 @@
         .error-status{
             color: red;
             background-color: #fff;
+            font-size: 12px;
+            position: absolute;
+            top:-24px;
+            left:-2px;
+            z-index:300;
+            padding:5px;
+            width:@liWidth -5;
+            height:@liHeight -5;
         }
     }
 
@@ -92,6 +100,8 @@
             vertical-align: middle;
             max-width: @liWidth - 4;
             max-height: @liHeight - 4;
+            margin:0;
+            padding:0;
         }
 
         a {

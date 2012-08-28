@@ -295,7 +295,7 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                 params = {status:-1,rule:ruleName},
                 index = -1;
             if(file){
-                index = queue.getFileIndex(params.file.id);
+                index = queue.getFileIndex(file.id);
                 S.mix(params,{file:file,index:index});
             }
             //result是为了与uploader的error事件保持一致
@@ -1888,6 +1888,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             var uploaderConfig = self.get('uploaderConfig');
             var htmlConfig = {};
             var authConfig = self._getAuthConfig();
+            self.set('authConfig',authConfig);
             if(!S.isEmptyObject(authConfig)){
                   self.set('authConfig', S.mix(authConfig,self.get('authConfig')));
             }
@@ -1923,6 +1924,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             var $btn = $(self.get('buttonTarget'));
             if(!$btn.length) return false;
             var authConfig = {};
+            var defaultAllowExts = self.get('allowExts');
             var authRules = ['required','max','allowExts','maxSize'];
             var msgs = self.get('authMsg');
             if(!$btn.length) return false;
@@ -1933,6 +1935,9 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                     authConfig[rule] = [value,msgs[rule] || ''];
                 }
             });
+            if(!authConfig['allowExts']){
+                authConfig['allowExts'] = [self._setAllowExts(defaultAllowExts),msgs['allowExts'] || ''];
+            }
             return authConfig;
         },
         /**
@@ -1979,17 +1984,21 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
              */
             theme:{value:'imageUploader' },
             /**
+             * 默认的文件格式过滤器
+             */
+            allowExts:{value:'jpg,jpeg,png,gif,bmp'},
+            /**
              * 验证消息
              * @type Object
              * @default {}
              */
             authMsg:{
                 value:{
-                    max:'每次最多上传{max}个文件！',
-                    maxSize:'文件大小为{size}，文件太大！',
+                    max:'每次最多上传{max}个图片！',
+                    maxSize:'图片大小超为{size}',
                     required:'至少上传一张图片！',
                     require:'至少上传一张图片！',
-                    allowExts:'不支持{ext}格式的文件上传！'
+                    allowExts:'不支持{ext}格式图片！'
                 }
             },
             /**
@@ -2299,7 +2308,7 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                 params = {status:-1,rule:ruleName},
                 index = -1;
             if(file){
-                index = queue.getFileIndex(params.file.id);
+                index = queue.getFileIndex(file.id);
                 S.mix(params,{file:file,index:index});
             }
             //result是为了与uploader的error事件保持一致
