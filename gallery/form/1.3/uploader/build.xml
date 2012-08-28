@@ -19,7 +19,7 @@
         </concat>
 
         <concat destfile="imageUploader-pkg.js" encoding="${charset}" outputencoding="${charset}" overwrite="true">
-            <fileset dir="${src.dir}" includes="**/*.js" excludes="demo/**/*.js,themes/**/*.js"/>
+            <fileset dir="${src.dir}" includes="**/*.js" excludes="demo/**/*.js,themes/**/*.js,index-pkg.js"/>
             <filterchain>
                 <deletecharacters chars="&#xFEFF;"/>
             </filterchain>
