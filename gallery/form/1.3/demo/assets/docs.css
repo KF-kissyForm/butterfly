@@ -869,12 +869,26 @@ form.well {
 }
 
 #header {
-    background: none;
-    margin: 20px auto;
+    background-color: #174059;
+    margin:0;
+    margin-top:-10px;
+    height:160px;
+    color:#fff;
 }
-
-#header h1 {
-    font-size: 54px;
+#header  .header-content{
+     margin:0 auto;
+    width:1170px;
+}
+#header .header-content  h1 {
+    font-size: 48px;
+    color:#ffffff;
+    margin-bottom: 20px;
+    padding-top:40px;
+}
+#header .header-content  .header-dec{
+    font-size:20px;
+    color:#ffffff;
+    font-weight: bold;
 }
 
 ul li {
@@ -919,9 +933,6 @@ ul li {
 .subnav .nav li a{
     font-size: 14px;
     font-weight: normal;
-}
-#header .title-h1{
-    margin-bottom: 30px;
 }
 .authors .span2{
     width:44px;
@@ -1022,4 +1033,156 @@ h4{
         width: 1168px; /* 2px less to account for left/right borders being removed when in fixed mode */
     }
 
+}
+/* Sidenav for Docs
+-------------------------------------------------- */
+
+/* prevent column from collapsing when affixing */
+.span3 {
+    min-height: 1px;
+}
+
+.bs-docs-sidenav {
+    width: 258px;
+    padding: 0;
+    background-color: #fff;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    -webkit-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    -moz-box-shadow: 0 1px 4px rgba(0,0,0,.065);
+    box-shadow: 0 1px 4px rgba(0,0,0,.065);
+}
+.bs-docs-sidenav > li > a {
+    display: block;
+    *width: 190px;
+    margin: 0 0 -1px;
+    padding: 8px 14px;
+    border: 1px solid #e5e5e5;
+    font-size:14px;
+    font-weight: normal;
+}
+.bs-docs-sidenav > li:first-child > a {
+    -webkit-border-radius: 6px 6px 0 0;
+    -moz-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+.bs-docs-sidenav > li:last-child > a {
+    -webkit-border-radius: 0 0 6px 6px;
+    -moz-border-radius: 0 0 6px 6px;
+    border-radius: 0 0 6px 6px;
+}
+.bs-docs-sidenav > .active > a {
+    position: relative;
+    z-index: 2;
+    padding: 9px 15px;
+    border: 0;
+    text-shadow: 0 1px 0 rgba(0,0,0,.15);
+    -webkit-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+    -moz-box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+    box-shadow: inset 1px 0 0 rgba(0,0,0,.1), inset -1px 0 0 rgba(0,0,0,.1);
+}
+/* Chevrons */
+.bs-docs-sidenav .icon-chevron-right {
+    float: right;
+    margin-top: 2px;
+    margin-right: -6px;
+    opacity: .25;
+}
+.bs-docs-sidenav > li > a:hover {
+    background-color: #f5f5f5;
+}
+.bs-docs-sidenav a:hover .icon-chevron-right {
+    opacity: .5;
+}
+.bs-docs-sidenav .active .icon-chevron-right,
+.bs-docs-sidenav .active a:hover .icon-chevron-right {
+    background-image: url(http://img03.taobaocdn.com/tps/i3/T1CuPIXm8gXXcIVv2D-469-159.png);
+    opacity: 1;
+}
+.bs-docs-sidenav.affix {
+    top: 40px;
+}
+.bs-docs-sidenav.affix-bottom {
+    position: absolute;
+    top: auto;
+    bottom: 270px;
+}
+[class^="icon-"],[class*=" icon-"]{
+    background-image: url(http://img03.taobaocdn.com/tps/i3/T1CuPIXm8gXXcIVv2D-469-159.png);
+}
+.bs-docs-sidebar{
+    margin-top:20px;
+}
+
+/* Bootstrap code examples
+-------------------------------------------------- */
+
+/* Base class */
+.bs-docs-example {
+    position: relative;
+    margin: 15px 0;
+    padding: 39px 19px 14px;
+    *padding-top: 19px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+
+/* Echo out a label for the example */
+.bs-docs-example:after {
+    content: "Demo";
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    padding: 3px 7px;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    color: #9da0a4;
+    -webkit-border-radius: 4px 0 4px 0;
+    -moz-border-radius: 4px 0 4px 0;
+    border-radius: 4px 0 4px 0;
+}
+
+/* Remove spacing between an example and it's code */
+.bs-docs-example + .prettyprint {
+    margin-top: -20px;
+    padding-top: 15px;
+}
+
+/* Tweak examples
+------------------------- */
+.bs-docs-example > p:last-child {
+    margin-bottom: 0;
+}
+.bs-docs-example .table,
+.bs-docs-example .progress,
+.bs-docs-example .well,
+.bs-docs-example .alert,
+.bs-docs-example .hero-unit,
+.bs-docs-example .pagination,
+.bs-docs-example .navbar,
+.bs-docs-example > .nav,
+.bs-docs-example blockquote {
+    margin-bottom: 5px;
+}
+.bs-docs-example .pagination {
+    margin-top: 0;
+}
+
+code{
+    margin:0 5px;
+}
+h4{
+    border-bottom: 1px solid #CCC;
+    padding-bottom: 10px;
+    margin:20px 0;
+}
+.alert{
+    line-height: 24px;
+    margin-top:20px;
 }

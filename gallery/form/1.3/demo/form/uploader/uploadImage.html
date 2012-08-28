@@ -61,123 +61,205 @@
         </div>
     </div>
 </div>
+<header id="header" class="jumbotron subhead">
+    <div class="header-content">
+        <h1 class="title-h1">ImageUploader </h1>
+        <p class="header-dec">图片上传组件</p>
+    </div>
+</header>
 <div id="content" class="container">
-    <header id="header" class="jumbotron subhead">
-        <h1 class="title-h1">ImageUploader
-            <small>图片上传组件</small>
-        </h1>
-    </header>
-
-    <h2>使用标签属性配置的demo</h2>
-
-    <form action="#" style="font-size:12px;">
-        <div class="grid">
-
-            <script type="text/uploader-restore" id="J_ImageUploaderRestore">
-                [
-                {"name":"icon_evil.gif",
-                "size":1446,
-                "type":"image/gif",
-                "result":{
-                "status":1,
-                "data":{
-                "name":"icon_evil.gif",
-                "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
-                "item_id":"42458"
-                }
-                }
-                }
-                ]
-            </script>
-
-            <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue"
-                   action="upload.php" postData='{"username":"minghe"}' urlsInputName="imageUrls"
-                   maxSize="500" max="4" restoreHook="#J_ImageUploaderRestore"
-                    >
-
-            <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
-            <input type="hidden" name="imageUrls">
-
-            <div class="g-u upload-count-wrapper">您还可以上传<em id="J_UploadCount">5</em>张图片</div>
-        </div>
-        <ul id="J_UploaderQueue" class="grid">
-
-        </ul>
-    </form>
-    <h2>事件演示</h2>
-
     <div class="row">
-        <div class="span6">
-            <div class="grid">
-                <input class="g-u" id="J_UploaderBtn2" name="Filedata" type="image-uploader" value="上传图片"
-                       action="upload.php" urlsInputName="imageUrls2" maxSize="500" max="4">
-                <input type="hidden" name="imageUrls2">
-            </div>
-            <ul id="J_UploaderQueue2" class="grid">
-
+        <div class="span3 bs-docs-sidebar">
+            <ul class="nav nav-list bs-docs-sidenav">
+                <li><a href="#init"><i class="icon-chevron-right"></i>3种方式初始化组件</a></li>
+                <li><a href="#transitions"><i class="icon-chevron-right"></i> 验证</a></li>
+                <li><a href="#modals"><i class="icon-chevron-right"></i> IE无法上传问题</a></li>
+                <li><a href="#dropdowns"><i class="icon-chevron-right"></i>主题</a></li>
+                <li><a href="#scrollspy"><i class="icon-chevron-right"></i>事件</a></li>
+                <li><a href="#tabs"><i class="icon-chevron-right"></i> 属性</a></li>
+                <li><a href="#tooltips"><i class="icon-chevron-right"></i>方法</a></li>
             </ul>
         </div>
-        <div class="span6">
-            <div id="J_Panel" class="event-panel">
+        <div class="span9">
+            <h2 id="init">3种方式初始化组件</h2>
+
+            <h3>1.使用标签属性配置初始化</h3>
+            <div class="bs-docs-example">
+                <form action="#" style="font-size:12px;">
+                    <div class="grid">
+
+                        <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue"
+                               action="upload.php" urlsInputName="imageUrls">
+
+                        <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
+                        <input type="hidden" name="imageUrls">
+                    </div>
+                    <ul id="J_UploaderQueue" class="grid">
+
+                    </ul>
+                </form>
 
             </div>
-        </div>
-    </div>
-    <h2>接口控制演示</h2>
+            <h4>1) 需要个input标签（type="image-uploader"）</h4>
+             <pre class='brush: xml; '>
+                <input type="image-uploader" class="g-u" id="J_UploaderBtn" name="Filedata" value="上传图片">
+             </pre>
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th style="width: 200px;">属性</th>
+                    <th>描述</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td><code>type="image-uploader"</code></td>
+                    <td>此属性为了配合Butterfly使用，表明此input为图片上传专用组件</td>
+                </tr>
+                <tr>
+                    <td><code>id="J_UploaderBtn"</code></td>
+                    <td>脚本实例化上传组件时使用的钩子</td>
+                </tr><tr>
+                    <td><code>name="Filedata"</code></td>
+                    <td>非常重要，文件上传域name名，服务器端通过name来获取和处理上传数据</td>
+                </tr>
+                <tr>
+                    <td><code>value="上传图片"</code></td>
+                    <td>上传按钮上的文案</td>
+                </tr>
+                </tbody>
+            </table>
 
-    <div class="row">
-        <div class="span6">
-            <div class="grid">
-                <input class="g-u" id="J_UploaderBtn3" name="Filedata" type="image-uploader" value="上传图片"
-                       action="upload.php" urlsInputName="imageUrls3" maxSize="500" max="4">
-                <input type="hidden" name="imageUrls3">
+            <h4>2) 创建一个input（hidden）用于存放服务器端返回的url</h4>
+             <pre class='brush: xml; '>
+                    <input type="hidden" name="imageUrls">
+             </pre>
+            <p>给上传按钮input加上<code>urlsInputName="imageUrls"</code>属性，这样当上传成功后图片url会被加入到这个隐藏域中（多个图片路径以逗号隔开）。</p>
+            <h4>3) 创建一个空的图片队列</h4>
+             <pre class='brush: xml; '>
+                    <ul id="J_UploaderQueue" class="grid"></ul>
+             </pre>
+            <p>给上传按钮input加上<code>queueTarget="#J_UploaderQueue"</code>属性，将上传按钮和上传队列关联起来，当选择完图片后，自动显示图片。</p>
+            <h4>4) 配置服务器端参数</h4>
+
+            <p>上传组件必须有服务器端脚本配合，所以需要个服务器端路径。可以使用<code>action</code>属性。</p>
+
+            <p>可能你还需要向服务器post一些参数，比如用户名，商品id等，可以使使用<code>postData='{"author":"明河"}'</code>。</p>
+
+            <h4>5) demo中完整的html结构</h4>
+            <pre class='brush: xml; '>
+                    <div class="grid">
+                        <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue" action="upload.php" urlsInputName="imageUrls">
+                        <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
+                        <input type="hidden" name="imageUrls">
+                    </div>
+                    <ul id="J_UploaderQueue" class="grid">
+
+                    </ul>
+            </pre>
+            <h4>6) 初始化ImageUploader</h4>
+
+            <p>配置下gallery包路径（为了利用淘宝cdn，可以快速引用butterfly库，所以将代码托管在kissy gallery下）。</p>
+            <pre class='brush: js; '>
+                var S = KISSY,
+                      path = "http://a.tbcdn.cn/s/kissy/";
+                KISSY.config({
+                    packages:[
+                        {
+                            name:"gallery",
+                            path:path,
+                            charset:"utf-8"
+                        }
+                    ]
+                });
+            </pre>
+            <p>初始化ImageUploader：</p>
+            <pre class='brush: js; '>
+            KISSY.use('gallery/form/1.3/uploader/imageUploader', function (S, ImageUploader) {
+                new ImageUploader('#J_UploaderBtn').render();
+            })
+            </pre>
+            <div class="alert alert-info">
+                当实例化ImageUploader时，组件会自动加载主题js和css文件，比如没用<code>theme</code>属性时，加载默认主题<code>theme="imageUploader"</code>，<code>gallery/form/1.3/uploader/themes/imageUploader/index-min.js</code> 和<code>gallery/form/1.3/uploader/themes/imageUploader/style.css</code>。
             </div>
-            <ul id="J_UploaderQueue3" class="grid">
+            <h2>事件演示</h2>
 
-            </ul>
-        </div>
-        <div class="span6">
+            <div class="row">
+                <div class="span6">
+                    <div class="grid">
+                        <input class="g-u" id="J_UploaderBtn2" name="Filedata" type="image-uploader" value="上传图片"
+                               action="upload.php" urlsInputName="imageUrls2" maxSize="500" max="4">
+                        <input type="hidden" name="imageUrls2">
+                    </div>
+                    <ul id="J_UploaderQueue2" class="grid">
 
-        </div>
-    </div>
-    <h2>使用其他主题的demo</h2>
-    <div class="row">
-        <div class="span6">
-            <p>使用<code>refundUploader</code>主题，增加个属性<code>theme="refundUploader"</code>，该主题是从淘宝退款的上传凭证提炼出来的。</p>
+                    </ul>
+                </div>
+                <div class="span6">
+                    <div id="J_Panel" class="event-panel">
 
-            <script type="text/uploader-restore" id="J_RefundImageRestore">
-                [
-                {"name":"icon_evil.gif",
-                "size":1446,
-                "type":"image/gif",
-                "result":{
-                "status":1,
-                "data":{
-                "name":"icon_evil.gif",
-                "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
-                "item_id":"42458"
-                }
-                }
-                }
-                ]
-            </script>
-
-            <div class="grid">
-                <input class="g-u" id="J_RefundUploaderBtn" name="Filedata" type="image-uploader" value="上传凭证"
-                       theme="refundUploader" queueTarget="#J_RefundUploaderQueue"
-                       action="upload.php" urlsInputName="refundImageUrls" maxSize="500" max="4"
-                       restoreHook="#J_RefundImageRestore"
-                        >
-                <input type="hidden" name="refundImageUrls">
+                    </div>
+                </div>
             </div>
-            <ul id="J_RefundUploaderQueue" class="grid">
+            <h2>接口控制演示</h2>
 
-            </ul>
-        </div>
-        <div class="span6">
+            <div class="row">
+                <div class="span6">
+                    <div class="grid">
+                        <input class="g-u" id="J_UploaderBtn3" name="Filedata" type="image-uploader" value="上传图片"
+                               action="upload.php" urlsInputName="imageUrls3" maxSize="500" max="4">
+                        <input type="hidden" name="imageUrls3">
+                    </div>
+                    <ul id="J_UploaderQueue3" class="grid">
+
+                    </ul>
+                </div>
+                <div class="span6">
+
+                </div>
+            </div>
+            <h2>使用其他主题的demo</h2>
+            <div class="row">
+                <div class="span6">
+                    <p>使用<code>refundUploader</code>主题，增加个属性<code>theme="refundUploader"</code>，该主题是从淘宝退款的上传凭证提炼出来的。</p>
+
+                    <script type="text/uploader-restore" id="J_RefundImageRestore">
+                        [
+                        {"name":"icon_evil.gif",
+                        "size":1446,
+                        "type":"image/gif",
+                        "result":{
+                        "status":1,
+                        "data":{
+                        "name":"icon_evil.gif",
+                        "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
+                        "item_id":"42458"
+                        }
+                        }
+                        }
+                        ]
+                    </script>
+
+                    <div class="grid">
+                        <input class="g-u" id="J_RefundUploaderBtn" name="Filedata" type="image-uploader" value="上传凭证"
+                               theme="refundUploader" queueTarget="#J_RefundUploaderQueue"
+                               action="upload.php" urlsInputName="refundImageUrls" maxSize="500" max="4"
+                               restoreHook="#J_RefundImageRestore"
+                                >
+                        <input type="hidden" name="refundImageUrls">
+                    </div>
+                    <ul id="J_RefundUploaderQueue" class="grid">
+
+                    </ul>
+                </div>
+                <div class="span6">
+
+                </div>
+            </div>
 
         </div>
     </div>
+
 </div>
 <script>
     var S = KISSY,
