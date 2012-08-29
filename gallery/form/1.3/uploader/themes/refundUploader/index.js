@@ -36,18 +36,9 @@ KISSY.add(function (S, Node, Theme) {
          * @param {Object} ev 类似{index:0,file:{},target:$target}
          */
         _addFileHandler:function(ev){
-            var self = this,file = ev.file,$target = file.target,$delBtn = $('.J_Del_'+file.id),
-                $mask = $('.J_Mask_' + file.id) ;
-            //显示/隐藏删除按钮
-            $target.on('mouseover mouseout',function(ev){
-                if(ev.type == 'mouseover'){
-                    $delBtn.show();
-                    $mask.show();
-                }else{
-                    $delBtn.hide();
-                    $mask.hide();
-                }
-            });
+            var self = this,
+                file = ev.file,
+                $delBtn = $('.J_Del_'+file.id) ;
             $delBtn.data('data-file',file);
             //点击删除按钮
             $delBtn.on('click',self._delHandler,self);
@@ -58,7 +49,7 @@ KISSY.add(function (S, Node, Theme) {
          * @return {KISSY.NodeList}
          */
         _getStatusWrapper:function (target) {
-            return target && target.children('.J_FileStatus') || $('');
+            return target && target.all('.J_FileStatus') || $('');
         },
         /**
          * 运行文件拖拽插件
@@ -108,7 +99,10 @@ KISSY.add(function (S, Node, Theme) {
                 queue = self.get('queue'),
                 //上传方式
                 uploadType = uploader.get('type'),
+                file = ev.file,
                 $progressBar = $('.J_ProgressBar_' + ev.id);
+            var $mask = $('.J_Mask_'+ev.id);
+            $mask.show();
             //如果是ajax或flash异步上传，加入进度条
             if(uploadType == 'ajax' || uploadType == 'flash'){
                 var ProgressBar = self.get('oPlugin').progressBar,progressBar;
@@ -118,7 +112,9 @@ KISSY.add(function (S, Node, Theme) {
                         //百分百进度隐藏进度条
                         if(ev.value == 100){
                             progressBar.hide();
-                            self._setDisplayMsg(false,ev.file);
+                            self._setDisplayMask(false,file);
+                            //隐藏状态层
+                            file.statusWrapper.hide();
                         }
                     });
                     progressBar.render();
@@ -159,13 +155,13 @@ KISSY.add(function (S, Node, Theme) {
             //不存在进度条直接予以隐藏
             if(!progressBar){
                 $('.J_ProgressBar_'+id).hide();
-                self._setDisplayMsg(false,ev.file);
+                self._setDisplayMask(false,ev.file);
+                file.statusWrapper.hide();
                 return false;
             }else{
                 //处理进度
                 progressBar.set('value',100);
             }
-            $('.J_Mask_'+id).hide();
         },
          /**
          * 文件处于上传错误状态时触发
@@ -173,9 +169,13 @@ KISSY.add(function (S, Node, Theme) {
         _errorHandler:function (ev) {
             var self = this,msg = ev.msg,
                 id = ev.id;
+             var queue = self.get('queue');
             //打印错误消息
-            $('.J_ErrorMsg_' + id).html(msg);
-             self._setDisplayMsg(true,ev.file);
+            $('.J_ErrorMsg_' + id).html('上传失败');
+             S.later(function(){
+                 alert(msg);
+                 queue.remove(id);
+             },1000);
              //向控制台打印错误消息
              S.log(msg);
         },
@@ -198,7 +198,7 @@ KISSY.add(function (S, Node, Theme) {
         /**
          * 显示/隐藏遮罩层（遮罩层在出现状态消息的时候出现）
          */
-        _setDisplayMsg:function(isShow,data){
+        _setDisplayMask:function(isShow,data){
             if(!data) return false;
             var $mask = $('.J_Mask_' + data.id);
             $mask[isShow && 'show' || 'hide']();
@@ -270,19 +270,24 @@ KISSY.add(function (S, Node, Theme) {
          */
         fileTpl:{value:
             '<li id="queue-file-{id}" class="g-u" data-name="{name}">' +
-                '<div class="pic">' +
-                    '<a href="javascript:void(0);"><img class="J_Pic_{id}" src="" /></a>' +
-                '</div>' +
-                '<div class=" J_Mask_{id} pic-mask"></div>' +
-                '<div class="status-wrapper J_FileStatus">' +
-                    '<div class="status waiting-status"><p>等待上传，请稍候</p></div>' +
-                    '<div class="status start-status progress-status success-status">' +
-                        '<div class="J_ProgressBar_{id}"><s class="loading-icon"></s>上传中...</div>' +
+                '<div class="pic-wrapper">' +
+                    '<div class="pic">' +
+                        '<span><img class="J_Pic_{id}" src="" /></span>' +
                     '</div>' +
-                    '<div class="status error-status">' +
-                        '<p class="J_ErrorMsg_{id}">上传失败，请重试！</p></div>' +
+                    '<div class=" J_Mask_{id} pic-mask"></div>' +
+                    '<div class="status-wrapper J_FileStatus">' +
+                        '<div class="status waiting-status"><p>等待上传</p></div>' +
+                        '<div class="status start-status progress-status success-status">' +
+                            '<div class="J_ProgressBar_{id}"></div>' +
+                            '<div>上传中</div>' +
+                        '</div>' +
+                        '<div class="status error-status">' +
+                            '<p class="J_ErrorMsg_{id}">上传失败，请重试！</p></div>' +
+                    '</div>' +
+                '</div>'+
+                '<div>' +
+                    '<a class="J_Del_{id} del-pic" href="#">删除</a>' +
                 '</div>' +
-                '<a class="J_Del_{id} del-pic" href="#">删除</a>' +
             '</li>'
         },
         /**
