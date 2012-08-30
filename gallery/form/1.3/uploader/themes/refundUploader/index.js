@@ -162,7 +162,7 @@ KISSY.add(function (S, Node, Theme) {
              var queue = self.get('queue');
              //向控制台打印错误消息
              S.log(msg);
-             if(ev.rule == 'max') return false;
+             if(ev.rule == 'max' || ev.rule == 'required') return false;
             //打印错误消息
             $('.J_ErrorMsg_' + id).html('上传失败');
              S.later(function(){
