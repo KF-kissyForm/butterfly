@@ -26,10 +26,17 @@ KISSY.add(function (S, Node, Theme) {
          * @param {Uploader} uploader
          */
         afterUploaderRender:function () {
-            var self = this,
-                queue = self.get('queue');
-            self._renderFiledrop();
+            var self = this;
+            var queue = self.get('queue');
             queue.on('add',self._addFileHandler,self);
+            //当移除文件后改变按钮上的文案
+            queue.on('remove',function(){
+                self._changeText();
+            });
+            //获取下按钮上的文案
+            var button = self.get('button');
+            var text = $(button.get('target')).text();
+            self.set('defaultText',text);
         },
         /**
          * 在完成文件dom插入后执行的方法
@@ -50,25 +57,6 @@ KISSY.add(function (S, Node, Theme) {
          */
         _getStatusWrapper:function (target) {
             return target && target.all('.J_FileStatus') || $('');
-        },
-        /**
-         * 运行文件拖拽插件
-         * @return {Filedrop}
-         */
-        _renderFiledrop:function(){
-            //文件拖拽支持
-            var self = this,button = self.get('button'),
-                target = button.get('target'),
-                Filedrop = self.get('oPlugin').filedrop,
-                filedrop;
-            if(!Filedrop) return false;
-            filedrop = new Filedrop({
-                target:target,
-                uploader:this.get('uploader'),
-                tpl:{supportDrop:'<div class="drop-wrapper"></div>' }
-            });
-            filedrop.render();
-            return filedrop;
         },
         /**
          * 文件处于等待上传状态时触发
@@ -111,10 +99,12 @@ KISSY.add(function (S, Node, Theme) {
                     progressBar.on('change',function(ev){
                         //百分百进度隐藏进度条
                         if(ev.value == 100){
-                            progressBar.hide();
-                            self._setDisplayMask(false,file);
-                            //隐藏状态层
-                            file.statusWrapper.hide();
+                            S.later(function(){
+                                progressBar.hide();
+                                self._setDisplayMask(false,file);
+                                //隐藏状态层
+                                file.statusWrapper.hide();
+                            },500);
                         }
                     });
                     progressBar.render();
@@ -149,9 +139,9 @@ KISSY.add(function (S, Node, Theme) {
                 //服务器端返回的数据
                 result = file.result,
                 progressBar = file.progressBar;
-            self._setCount();
             //获取服务器返回的图片路径写入到src上
             if(result) self._changeImageSrc(ev.id,result);
+            self._changeText();
             //不存在进度条直接予以隐藏
             if(!progressBar){
                 $('.J_ProgressBar_'+id).hide();
@@ -170,30 +160,15 @@ KISSY.add(function (S, Node, Theme) {
             var self = this,msg = ev.msg,
                 id = ev.id;
              var queue = self.get('queue');
+             //向控制台打印错误消息
+             S.log(msg);
+             if(ev.rule == 'max') return false;
             //打印错误消息
             $('.J_ErrorMsg_' + id).html('上传失败');
              S.later(function(){
                  alert(msg);
                  queue.remove(id);
              },1000);
-             //向控制台打印错误消息
-             S.log(msg);
-        },
-        /**
-         * 显示“你还可以上传几张图片”
-         */
-        _setCount:function(){
-            var self = this,
-                //用于显示上传数的容器
-                elCount = $(self.get('elCount')),
-                len = self.getFilesLen(),
-                auth = self.get('auth') ;
-            if(!auth) return false;
-            var rules = auth.get('rules'),
-                //max的值类似[5, '最多上传{max}个文件！']
-                max = rules.max;
-            if(!max) return false;
-            if(elCount.length) elCount.text(max[0]-len);
         },
         /**
          * 显示/隐藏遮罩层（遮罩层在出现状态消息的时候出现）
@@ -219,8 +194,6 @@ KISSY.add(function (S, Node, Theme) {
              if(status == 'start' || status == 'progress'){
                  uploader.cancel(index);
              }
-            //统计允许上传文件个数
-            self._setCount();
         },
         /**
          * 获取成功上传的图片张数，不传参的情况获取成功上传的张数
@@ -248,6 +221,30 @@ KISSY.add(function (S, Node, Theme) {
             if($img.attr('src') == EMPTY){
                 $img.show();
                 $img.attr('src',url);
+            }
+        },
+        /**
+         * 改变按钮上的文案
+         * @private
+         */
+        _changeText:function(){
+            var self = this;
+            var len = self.getFilesLen();
+            var auth = self.get('auth') ;
+            var btn = self.get('button');
+            var $text = btn.get('target').children('span');
+            var maxText = self.get('maxText');
+            var defaultText = self.get('defaultText');
+            if(!auth) return false;
+            var rules = auth.get('rules'),
+            //max的值类似[5, '最多上传{max}个文件！']
+                max = rules.max;
+            if(!max) return false;
+            if(max[0] == len){
+                //改变按钮文案
+                $text.text(S.substitute(maxText,{max:max[0]}));
+            }else{
+                $text.text(defaultText);
             }
         }
     }, {ATTRS:/** @lends RefundUploader.prototype*/{
@@ -299,17 +296,17 @@ KISSY.add(function (S, Node, Theme) {
           value:['progressBar','preview']
         },
         /**
-         * 统计上传张数的容器
-         * @type KISSY.NodeList
-         * @default '#J_UploadCount'
+         * 按钮上的默认文案（只读）
+         * @type String
+         * @default ''
          */
-        elCount:{value:'#J_UploadCount'},
+        defaultText:{value:EMPTY},
         /**
-         * 达到最大数是否隐藏
-         * @type Boolean
-         * @default true
+         * 当达到最大上传数时按钮上改变的文案
+         * @type String
+         * @default '您已上传满{max}张图片'
          */
-        isMaxHideBtn:{value:true}
+        maxText:{value:'您已上传满{max}张图片'}
     }});
     return RefundUploader;
 }, {requires:['node', '../../theme']});

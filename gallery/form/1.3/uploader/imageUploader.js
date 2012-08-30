@@ -286,7 +286,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
              * 模拟上传按钮样式
              */
             btnTpl:{
-                value:'<a href="javascript:void(0)" class="g-u ks-uploader-button">{text}</a>'
+                value:'<a href="javascript:void(0)" class="g-u ks-uploader-button"><span class="btn-text">{text}</span></a>'
             }
         }
     });
