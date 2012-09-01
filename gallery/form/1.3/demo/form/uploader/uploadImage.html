@@ -75,7 +75,7 @@
                 <li><a href="#demos"><i class="icon-chevron-right"></i>demo汇总</a></li>
                 <li><a href="#themes"><i class="icon-chevron-right"></i>组件内置的主题</a></li>
                 <li><a href="#init"><i class="icon-chevron-right"></i>3种方式初始化组件</a></li>
-                <li><a href="#transitions"><i class="icon-chevron-right"></i> 验证</a></li>
+                <li><a href="#auth"><i class="icon-chevron-right"></i> 上传验证控制</a></li>
                 <li><a href="#modals"><i class="icon-chevron-right"></i> IE无法上传问题</a></li>
                 <li><a href="#dropdowns"><i class="icon-chevron-right"></i>主题</a></li>
                 <li><a href="#scrollspy"><i class="icon-chevron-right"></i>事件</a></li>
@@ -315,6 +315,56 @@ new ImageUploader('#J_JsUploaderBtn','#J_JsUploaderQueue',{
             <div class="alert alert-info">
                 当实例化ImageUploader时，组件会自动加载主题js和css文件，比如没用<code>theme</code>属性时，加载默认主题<code>theme="imageUploader"</code>，<code>gallery/form/1.3/uploader/themes/imageUploader/index-min.js</code> 和<code>gallery/form/1.3/uploader/themes/imageUploader/style.css</code>。
             </div>
+            <h2 id="auth">上传验证控制</h2>
+            <div class="bs-docs-example">
+                <form action="#" style="font-size:12px;">
+                    <div class="grid">
+                        <input type="image-uploader" class="g-u" id="J_AuthBtn" name="Filedata" value="上传图片" maxSize="500" max="4" allowExts="png" required >
+                    </div>
+                    <ul id="J_AuthQueue" class="grid">
+
+                    </ul>
+                    <p>组件的验证配置信息：<span class="J_AuthMsg"></span></p>
+
+                    <p><input class="btn btn-primary" id="J_TestRequired" value="验证是否上传了一个文件" type="button"><input class="btn btn-primary" id="J_TestMax" value="验证是否达到最大上传数" type="button"></p>
+                </form>
+            </div>
+            <pre class='brush: xml; '>
+<div class="grid">
+  <input type="image-uploader" class="g-u" id="J_AuthBtn" name="Filedata" value="上传图片" maxSize="500" max="4" allowExts="png" required >
+</div>
+<ul id="J_AuthQueue" class="grid">
+
+</ul>
+<p>组件的验证配置信息：<span class="J_AuthMsg"></span></p>
+
+<p><input class="btn btn-primary" id="J_TestRequired" value="验证是否上传了一个文件" type="button"><input class="btn btn-primary" id="J_TestMax" value="验证是否达到最大上传数" type="button"></p>
+            </pre>
+            <pre class='brush: js; '>
+var authImageUploader = new ImageUploader('#J_AuthBtn','#J_AuthQueue',{
+    action:"upload.php",
+    urlsInputName:"authImageUrls"
+});
+authImageUploader.on('render',function(ev){
+    var uploader = ev.uploader;
+    var max = uploader.get('max');
+    var required = uploader.get('required');
+    var allowExts = uploader.get('allowExts');
+    var maxSize = uploader.get('maxSize');
+    $('.J_AuthMsg').text('max:'+max + ',required:' + required + ',allowExts:' + allowExts + ',maxSize:' + maxSize);
+
+    $('#J_TestRequired').on('click',function(ev){
+        var isPass = uploader.testRequired();
+        alert(isPass);
+    });
+
+    $('#J_TestMax').on('click',function(ev){
+        var isPass = uploader.testMax();
+        alert(isPass);
+    });
+});
+authImageUploader.render();
+            </pre>
             <h2>事件演示</h2>
 
             <div class="row">
@@ -408,6 +458,8 @@ new ImageUploader('#J_JsUploaderBtn','#J_JsUploaderQueue',{
         ]
     });
 
+    var $ = S.Node.all;
+
     /**
      * 向事件面板添加消息
      * @param evt
@@ -433,6 +485,31 @@ new ImageUploader('#J_JsUploaderBtn','#J_JsUploaderQueue',{
         }).render();
 
         new ImageUploader('#J_UploaderBtn').render();
+
+
+        var authImageUploader = new ImageUploader('#J_AuthBtn','#J_AuthQueue',{
+            action:"upload.php",
+            urlsInputName:"authImageUrls"
+        });
+        authImageUploader.on('render',function(ev){
+            var uploader = ev.uploader;
+            var max = uploader.get('max');
+            var required = uploader.get('required');
+            var allowExts = uploader.get('allowExts');
+            var maxSize = uploader.get('maxSize');
+            $('.J_AuthMsg').text('max:'+max + ',required:' + required + ',allowExts:' + allowExts + ',maxSize:' + maxSize);
+
+            $('#J_TestRequired').on('click',function(ev){
+                var isPass = uploader.testRequired();
+                alert(isPass);
+            });
+
+            $('#J_TestMax').on('click',function(ev){
+                var isPass = uploader.testMax();
+                alert(isPass);
+            });
+        });
+        authImageUploader.render();
 
         //事件演示demo
         var imageUploader2 = new ImageUploader('#J_UploaderBtn2', '#J_UploaderQueue2');

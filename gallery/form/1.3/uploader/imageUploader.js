@@ -206,13 +206,30 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             if(!$btn.length) return false;
             var authConfig = {};
             var defaultAllowExts = self.get('allowExts');
-            var authRules = ['required','max','allowExts','maxSize'];
+            var authRules = ['required','max','allowExts','maxSize','allowRepeat'];
             var msgs = self.get('authMsg');
             if(!$btn.length) return false;
             S.each(authRules,function(rule){
                 var value = $btn.attr(rule);
                 if(value){
                     if(rule == 'allowExts') value = self._setAllowExts(value);
+                    switch (rule){
+                        case 'allowExts':
+                            value = self._setAllowExts(value);
+                        break;
+                        case 'max':
+                            value = Number(value);
+                        break;
+                        case 'maxSize':
+                            value = Number(value);
+                            break;
+                        case  'required':
+                            value = true;
+                        break;
+                        case 'allowRepeat':
+                            value = true;
+                        break;
+                    }
                     authConfig[rule] = [value,msgs[rule] || ''];
                 }
             });
@@ -266,8 +283,13 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             theme:{value:'imageUploader' },
             /**
              * 默认的文件格式过滤器
+             * @type String
+             * @default 'jpg,jpeg,png,gif,bmp'
              */
             allowExts:{value:'jpg,jpeg,png,gif,bmp'},
+            max:{
+
+            },
             /**
              * 验证消息
              * @type Object
