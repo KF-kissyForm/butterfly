@@ -240,7 +240,7 @@ KISSY.add(function (S, Node, Theme) {
             //max的值类似[5, '最多上传{max}个文件！']
                 max = rules.max;
             if(!max) return false;
-            if(max[0] == len){
+            if(Number(max[0]) <= len){
                 //改变按钮文案
                 $text.text(S.substitute(maxText,{max:max[0]}));
             }else{

@@ -260,7 +260,7 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                 isFlashType = self.isUploaderType('flash');
             if (!isFlashType || !S.isArray(allowExts)) return false;
             //设置文件过滤
-            button.set('fileFilters', allowExts[0]);
+            if(button) button.set('fileFilters', allowExts[0]);
             return self;
         },
         /**
@@ -312,14 +312,16 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
             var self = this,
                 uploader = self.get('uploader'),
                 queue = uploader.get('queue');
-            var curFileIndex = uploader.get('curUploadIndex');
-            var files = queue.get('files');
-            uploader.stop();
-            S.each(files,function(file,index){
-                if(index>= curFileIndex){
-                    queue.remove(file.id);
-                }
-            })
+            S.later(function(){
+                var curFileIndex = uploader.get('curUploadIndex');
+                var files = queue.get('files');
+                uploader.stop();
+                S.each(files,function(file,index){
+                    if(index >= curFileIndex){
+                        queue.remove(index);
+                    }
+                })
+            },200);
         }
     }, {ATTRS:/** @lends Auth.prototype*/{
         /**
