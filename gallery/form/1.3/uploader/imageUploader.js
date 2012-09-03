@@ -205,32 +205,42 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             var $btn = $(self.get('buttonTarget'));
             if(!$btn.length) return false;
             var authConfig = {};
-            var defaultAllowExts = self.get('allowExts');
+            //默认增加图片格式验证
+            var defaultAllowExts = self.get('defaultAllowExts');
+            //所有的验证规则
             var authRules = ['required','max','allowExts','maxSize','allowRepeat'];
+            //验证消息
             var msgs = self.get('authMsg');
             if(!$btn.length) return false;
             S.each(authRules,function(rule){
-                var value = $btn.attr(rule);
-                if(value){
-                    if(rule == 'allowExts') value = self._setAllowExts(value);
-                    switch (rule){
-                        case 'allowExts':
-                            value = self._setAllowExts(value);
-                        break;
-                        case 'max':
-                            value = Number(value);
-                        break;
-                        case 'maxSize':
-                            value = Number(value);
-                            break;
-                        case  'required':
-                            value = true;
-                        break;
-                        case 'allowRepeat':
-                            value = true;
-                        break;
+                //js配置验证
+                if(self.get(rule)){
+                    authConfig[rule] = [self.get(rule),msgs[rule] || ''];
+                }else{
+                   //拉取属性的验证配置
+                    var value = $btn.attr(rule);
+                    if(value){
+                        if(rule == 'allowExts') value = self._setAllowExts(value);
+                        switch (rule){
+                            case 'allowExts':
+                                value = self._setAllowExts(value);
+                                break;
+                            case 'max':
+                                value = Number(value);
+                                break;
+                            case 'maxSize':
+                                value = Number(value);
+                                break;
+                            case  'required':
+                                value = true;
+                                break;
+                            case 'allowRepeat':
+                                value = true;
+                                break;
+                        }
+                        authConfig[rule] = [value,msgs[rule] || ''];
                     }
-                    authConfig[rule] = [value,msgs[rule] || ''];
+
                 }
             });
             if(!authConfig['allowExts']){
@@ -286,10 +296,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
              * @type String
              * @default 'jpg,jpeg,png,gif,bmp'
              */
-            allowExts:{value:'jpg,jpeg,png,gif,bmp'},
-            max:{
-
-            },
+            defaultAllowExts:{value:'jpg,jpeg,png,gif,bmp'},
             /**
              * 验证消息
              * @type Object

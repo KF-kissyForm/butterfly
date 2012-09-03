@@ -377,8 +377,8 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
             var self = this,
                 uploader = self.get('uploader'),
                 queue = uploader.get('queue');
-            S.later(function(){
                 var curFileIndex = uploader.get('curUploadIndex');
+                if(curFileIndex == EMPTY) return false;
                 var files = queue.get('files');
                 uploader.stop();
                 S.each(files,function(file,index){
@@ -386,7 +386,6 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                         queue.remove(index);
                     }
                 })
-            },200);
         }
     }, {ATTRS:/** @lends Auth.prototype*/{
         /**
