@@ -218,7 +218,7 @@ KISSY.add(function (S, Node, Theme) {
                 $img = $('.J_Pic_' + id);
             if(!S.isObject(data)) return false;
             url = data.sUrl || data.url;
-            if($img.attr('src') == EMPTY){
+            if($img.attr('src') == EMPTY || S.UA.safari){
                 $img.show();
                 $img.attr('src',url);
             }
