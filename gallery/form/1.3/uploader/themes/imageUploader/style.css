@@ -61,6 +61,9 @@ button::-moz-focus-inner {
   background: #db0869;
   display: block;
 }
+.ks-uploader-button {
+  text-decoration: none;
+}
 .imageUploader-button {
   width: 74px;
   height: 25px;
@@ -109,6 +112,8 @@ button::-moz-focus-inner {
 .imageUploader-queue {
   margin: 0;
   margin-top: 10px;
+  padding: 0;
+  font-size: 12px;
 }
 .imageUploader-queue li {
   border: solid 1px #e0e0e0;
@@ -146,7 +151,7 @@ button::-moz-focus-inner {
   left: 50px;
   margin-left: -20px;
   text-decoration: none;
-  z-index: 11;
+  z-index: 3000;
   border: 1px solid #ddd;
   background-color: #fff;
   border-radius: 3px;
@@ -172,6 +177,10 @@ button::-moz-focus-inner {
 .imageUploader-queue .status-wrapper .error-status {
   color: red;
   background-color: #fff;
+}
+.imageUploader-queue .status-wrapper p {
+  margin: 0;
+  padding-left: 10px;
 }
 .imageUploader-queue .pic-mask {
   position: absolute;

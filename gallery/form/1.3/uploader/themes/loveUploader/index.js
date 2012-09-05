@@ -2,7 +2,7 @@
  * @fileoverview 图片上传主题（带图片预览），第一版由紫英同学完成，苏河同学做了大量优化，明河整理优化
  * @author 苏河、紫英、明河
  **/
-KISSY.add('gallery/form/1.3/uploader/themes/imageUploader/index', function (S, Node, Theme) {
+KISSY.add('gallery/form/1.3/uploader/themes/loveUploader/index', function (S, Node, Theme) {
     var EMPTY = '', $ = Node.all;
 
     /**
@@ -241,15 +241,15 @@ KISSY.add('gallery/form/1.3/uploader/themes/imageUploader/index', function (S, N
         /**
          *  主题名（文件名），此名称跟样式息息相关
          * @type String
-         * @default "imageUploader"
+         * @default "loveUploader"
          */
-        name:{value:'imageUploader'},
+        name:{value:'loveUploader'},
         /**
          * css模块路径
          * @type String
-         * @default "gallery/form/1.3/uploader/themes/imageUploader/style.css"
+         * @default "gallery/form/1.3/uploader/themes/loveUploader/style.css"
          */
-        cssUrl:{value:'gallery/form/1.3/uploader/themes/imageUploader/style.css'},
+        cssUrl:{value:'gallery/form/1.3/uploader/themes/loveUploader/style.css'},
         /**
          * 队列使用的模板
          * @type String
