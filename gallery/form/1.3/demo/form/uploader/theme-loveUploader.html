@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
  <head>
-  <title>imageUploader主题 </title>
+  <title>loveUploader主题 </title>
      <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js" charset="utf-8"></script>
      <link rel="stylesheet" type="text/css" href="../../assets/bootstrap.min.css"/>
      <link rel="stylesheet" type="text/css" href="../../assets/bootstrap-responsive.css"/>
@@ -9,12 +9,12 @@
  </head>
 
  <body style="padding:20px;">
- <h2>imageUploader主题</h2>
+ <h2>loveUploader主题</h2>
  <ul>
-     <li>作者：明河</li>
-     <li>设计：明河</li>
-     <li>描述：v1.3新增主题，不同于1.2版的主题，具有更强的通用性</li>
-     <li>兼容：chrome、firefox</li>
+     <li>作者：苏河、明河</li>
+     <li>描述：支持拖拽上传，是原来1.2的imageUploader主题</li>
+     <li>案例：淘宝爱逛街</li>
+     <li>兼容：IE6+、chrome、firefox</li>
  </ul>
  <script type="text/uploader-restore" id="J_ImageRestore">
      [
@@ -32,17 +32,17 @@
      }
      ]
  </script>
-
- <div class="grid">
-
-     <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue"
-            action="upload.php" urlsInputName="imageUrls" max="3" maxSize="500"  restoreHook="#J_ImageRestore">
-
-     <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
-     <input type="hidden" name="imageUrls">
- </div>
- <ul id="J_UploaderQueue" class="grid">
-
+ <ul class="clearfix" id="J_UploaderQueue">
+     <li>
+         <div id="J_UploadBg" class="unupload-area">
+             <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue"
+                    theme="loveUploader"  action="upload.php" urlsInputName="imageUrls" max="3" maxSize="500"  restoreHook="#J_ImageRestore">
+                 <span class="count"> 还可以上传<em id="J_UploadCount">5</em>图片！ </span>
+                 <s class="bg"></s>
+             <input type="hidden" name="imageUrls">
+             </a>
+         </div>
+     </li>
  </ul>
 
 	<script type="text/javascript">
