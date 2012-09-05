@@ -81,9 +81,13 @@
                 <li><a href="#defaultData"><i class="icon-chevron-right"></i>如何渲染默认队列数据</a></li>
 
                 <li><a href="#use-theme"><i class="icon-chevron-right"></i>使用其他主题</a></li>
-                <li><a href="#scrollspy"><i class="icon-chevron-right"></i>事件</a></li>
-                <li><a href="#tabs"><i class="icon-chevron-right"></i> 属性</a></li>
-                <li><a href="#tooltips"><i class="icon-chevron-right"></i>方法</a></li>
+                <li><a href="#events"><i class="icon-chevron-right"></i>ImageUploader支持的所有事件</a></li>
+                <li><a href="#disabled-multiple"><i class="icon-chevron-right"></i>多选/禁用/立即上传控制</a></li>
+
+                <li><a href="#queue"><i class="icon-chevron-right"></i>Queue图片队列控制</a></li>
+
+                <li><a href="#methods"><i class="icon-chevron-right"></i>Uploader常用方法</a></li>
+                <li><a href="#pros"><i class="icon-chevron-right"></i>Uploader常用属性</a></li>
             </ul>
         </div>
         <div class="span9">
@@ -671,7 +675,7 @@ new ImageUploader('#J_RestoreUploaderBtn', '#J_RestoreUploaderQueue', {
                         "status":1,
                         "data":{
                         "name":"icon_evil.gif",
-                        "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
+                        "url":"http://tp4.sinaimg.cn/1653905027/180/5601547226/1",
                         "item_id":"42458"
                         }
                         }
@@ -697,7 +701,7 @@ new ImageUploader('#J_RestoreUploaderBtn', '#J_RestoreUploaderQueue', {
             </div>
             <p style="margin-top:15px">内置的主题，无法满足实际的需求场景，还可以自制主题，可以看<a href="http://www.36ria.com/5137" target="_blank">《如何制作属于自己的主题》</a>。</p>
 
-        <h2>事件演示</h2>
+        <h2 id="events">事件演示</h2>
 
         <div class="row">
             <div class="span6">
@@ -822,10 +826,10 @@ imageUploader2.render();
             <p>所有的事件对象（ev）都带有Uploader和queue的实例，可以通过<code>ev.uploader</code>和<code>ev.queue</code>来控制上传和队列。</p>
 
 
-        <h2>接口控制演示</h2>
+        <h2 id="disabled-multiple">多选/禁用/立即上传控制</h2>
 
         <div class="row">
-            <div class="span6">
+            <div class="span4">
                 <div class="grid">
                     <input class="g-u" id="J_UploaderBtn3" name="Filedata" type="image-uploader" value="上传图片"
                            action="upload.php" urlsInputName="imageUrls3" maxSize="500" max="4">
@@ -835,12 +839,416 @@ imageUploader2.render();
 
                 </ul>
             </div>
-            <div class="span6">
+            <div class="span4">
 
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox inline">
+                            <input id="J_Disabled" name="disabled" type="checkbox" value="1" checked />
+                            禁用按钮
+                        </label>
+                        <label class="checkbox inline">
+                            <input id="J_Multiple" name="multiple" type="checkbox" value="1" />
+                            开启多选
+                        </label>
+                    </div>
+                </div>
+                <p style="margin-top:10px;">        <input class="btn" id="J_UploadAll" type="button" value="上传所有等待的文件"></p>
             </div>
         </div>
+        <p>使用js传参的配置方式：</p>
+        <pre class='brush: js; '>
+var imageUploader3 = new ImageUploader('#J_UploaderBtn3', '#J_UploaderQueue3',{
+    autoUpload: false,
+    multiple:false,
+    disabled:true
+});
+imageUploader3.render();
+        </pre>
+        <p>html标签属性配置方式：</p>
+        <pre class='brush: xml; '>
+                <input id="J_UploaderBtn3" name="Filedata" type="image-uploader" value="上传图片"  disabled multiple autoUpload>
+        </pre>
+        <div class="alert alert-info">留意：设置<code>disabled="false"</code>无效</div>
+        <h3>接口说明</h3>
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th style="width: 100px;">参数名</th>
+                <th style="width: 50px;">类型</th>
+                <th style="width: 100px;">默认值</th>
+                <th>描述</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>autoUpload</td>
+                <td>Boolean</td>
+                <td>true</td>
+                <td>是否自动上传，当为<code>false</code>时，可以通过uploader的<code>upload()</code>和<code>uploadFiles()</code>手动上传队列中的文件。</td>
+            </tr>
+            <tr>
+                <td>multiple</td>
+                <td>Boolean</td>
+                <td>true</td>
+                <td>是否开启多选支持
+                    <div class="alert alert-info">如果采用iframe上传，请设置为<code>false</code></div>
+                </td>
+            </tr>
+            <tr>
+                <td>disabled</td>
+                <td>Boolean</td>
+                <td>false</td>
+                <td>是否可用,false为按钮可用</td>
+            </tr>
+            </tbody>
+        </table>
+        <h3>通过uploader的set方法手动改变这三个状态</h3>
 
+        <p>用法举例：</p>
+        <pre class='brush: js; '>
+imageUploader3.on('render',function(ev){
+    var uploader = ev.uploader;
+    $('#J_Disabled').on('change',function(ev){
+        var isChecked = $(ev.target).prop('checked');
+        uploader.set('disabled',isChecked);
+    });
+    $('#J_Multiple').on('change',function(ev){
+        var isChecked = $(ev.target).prop('checked');
+        uploader.set('multiple',isChecked);
+    });
+    $('#J_UploadAll').on('click',function(){
+        uploader.uploadFiles();
+    })
+});
+        </pre>
+
+        <div class="alert alert-info">
+            <code>uploadFiles()</code>方法为上传所有队列中等待的文件。
         </div>
+
+        <h2 id="queue">queue（队列实例）控制</h2>
+        <div class="alert alert-info">queue的详细API请看<a href="http://www.36ria.com/demo/gal/gallery/form/1.3/doc/symbols/Queue.html" target="_blank">文档</a></div>
+                <h3>示例</h3>
+                <div class="grid">
+                    <input class="g-u" id="J_QueueUploaderBtn" name="Filedata" type="image-uploader" value="上传图片"
+                           action="upload.php" urlsInputName="imageUrls3" maxSize="500" max="4">
+                    <input type="hidden" name="imageUrls3">
+                </div>
+                <ul id="J_QueueUploaderQueue" class="grid">
+
+                </ul>
+
+                <p>想要操作队列，就必须先获取Queue实例，比如下面的代码：</p>
+    <pre class='brush: js; '>
+    //uploaderQueueTest为RenderUploader的实例
+    uploaderQueueTest.on('render',function(ev){
+       var queue = ev.queue;
+    });
+    </pre>
+                <p>下面举例说明常用的方法和属性。</p>
+                <h3>add():向队列添加文件</h3>
+                <p>
+                    <input class="btn" id="J_Add" type="button" value="添加一个文件">
+                </p>
+    <pre class='brush: js; '>
+           $('#J_Add').on('click', function (ev) {
+            //测试文件数据
+            var testFile = {'name':'test.jpg',
+                'size':2000,
+                'input':{},
+                'file':{'name':'test.jpg', 'type':'image/jpeg', 'size':2000}
+            };
+            //向队列添加文件
+            var file = queue.add(testFile);
+            S.log('添加的文件数据为：'+file);
+        });
+    </pre>
+                <h3>remove():删除队列中的文件</h3>
+                <p>
+                    <input class="btn" id="J_DelFirst" type="button" value="删除第一个文件">
+                </p>
+    <pre class='brush: js; '>
+           $('#J_DelFirst').on('click', function (ev) {
+                var removeFile = queue.remove(0);
+                S.log('删除的文件数据为：'+removeFile);
+            });
+    </pre>
+                <div class="alert alert-info">留意remove()的参数可以是队列数组的索引，比如上面代码的0，是取队列第一个文件数据；也可以是文件的id（唯一），比如remove('file-26')</div>
+                <h3>fileStatus(index, status, args):改变文件状态</h3>
+                <p>默认的主题共有以下文件状态：'waiting'、'start'、'progress'、'success'、'cancel'、'error'</p>
+                <p>不同的主题拥有的状态情况可能存在差异。</p>
+                <p>
+                    <input class="btn" id="J_ChangeStatus" type="button" value="改变第一个文件状态为success">
+                </p>
+    <pre class='brush: js; '>
+       $('#J_ChangeStatus').on('click', function (ev) {
+            queue.fileStatus(0, 'success');
+        });
+    </pre>
+                <h3>clear():删除队列内的所有文件</h3>
+                <p>
+                    <input class="btn" id="J_Clear" type="button" value="删除所有文件">
+                </p>
+    <pre class='brush: js; '>
+       $('#J_Clear').on('click', function (ev) {
+        queue.clear();
+        });
+    </pre>
+
+                <h3>files：通过该属性可以获取队列中所有的文件数据</h3>
+                <p>
+                    <input class="btn" id="J_GetAll" type="button" value="获取所有文件id">
+                </p>
+    <pre class='brush: js; '>
+           $('#J_GetAll').on('click', function (ev) {
+                var ids = [],
+                        files = queue.get('files');
+                S.each(files, function (file) {
+                    ids.push(file.id);
+                });
+                alert('所有文件id：' + ids);
+            });
+    </pre>
+                <h3>getFiles(type):获取指定状态下的文件</h3>
+                <p>
+                    <input class="btn" id="J_GetStatusFileIds" type="button" value="获取所有等待状态的文件id">
+                </p>
+    <pre class='brush: js; '>
+       $('#J_GetStatusFileIds').on('click', function (ev) {
+            var files = queue.getFiles('waiting'),
+                    ids = [];
+            S.each(files, function (file) {
+                ids.push(file.id);
+            });
+            alert('所有等待中的文件id为：' + ids);
+        });
+    </pre>
+                <h3>getIndexs(type):获取等指定状态的文件对应的文件数组索引值组成的数组</h3>
+                <p>getFiles()和getFileIds()的作用是不同的，getFiles()类似过滤数组，获取的是指定状态的文件数据，而getFileIds()只是获取指定状态下的文件对应的在文件数组内的索引值。</p>
+                <p>
+                    <input class="btn" id="J_GetStatusFilesIndex" type="button" value="获取所有等待状态文件index">
+                </p>
+    <pre class='brush: js; '>
+       $('#J_GetStatusFilesIndex').on('click', function () {
+            var indexs = queue.getIndexs('waiting');
+            alert('所有等待中的文件index为：' + indexs);
+        })
+    </pre>
+
+    <h2 id=“methods”>uploader常用方法</h2>
+    <h4>upload (index)</h4>
+    <p>上传指定队列索引的文件。</p>
+<pre class='brush: js; '>
+//上传队列中的第一个文件，uploader为Uploader的实例
+uploader.upload(0)
+</pre>
+    <h4>uploadFiles (status)</h4>
+    <p>批量上传队列中的指定状态下的文件。</p>
+<pre class='brush: js; '>
+//上传队列中所有等待的文件
+uploader.uploadFiles("waiting")
+</pre>
+    <h4>cancel  (index)</h4>
+    <p>取消文件上传，当index参数不存在时取消当前正在上传的文件的上传。cancel并不会停止其他文件的上传（对应方法是stop）。</p>
+<pre class='brush: js; '>
+//取消当前正在上传的文件的上传
+uploader.cancel();
+</pre>
+    <h4>stop()：停止上传动作</h4>
+<pre class='brush: js; '>
+//停止上传
+uploader.stop();
+</pre>
+    <h4>testMax()：验证图片是否已经达到最大允许上传数</h4>
+<pre class='brush: js; '>
+//return false | true;
+uploader.testMax();
+</pre>
+    <h4>testRequired()：验证是否至少上传了一个文件</h4>
+<pre class='brush: js; '>
+//return false | true;
+uploader.testRequired();
+</pre>
+        <h2 id="pros">uploader常用属性/配置</h2>
+                <p>uploader的配置都会写入成uploader的属性内。uploader的几个关键配置前面都有提到了，这里做个汇总。</p>
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th style="width: 100px;">属性名</th>
+                        <th style="width: 50px;">类型</th>
+                        <th style="width: 100px;">默认值</th>
+                        <th style="width: 50px;">是否只读</th>
+                        <th>描述</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>type
+                            <code>不推荐使用</code>
+                        </td>
+                        <td>String|Array</td>
+                        <td>"auto"</td>
+                        <td>只读</td>
+                        <td>采用的上传方案，当值是数组时，比如“type” : ["flash","ajax","iframe"]，按顺序获取浏览器支持的方式，该配置会优先使用flash上传方式，如果浏览器不支持flash，会降级为ajax，如果还不支持ajax，会降级为iframe；当值是字符串时，比如“type” : “ajax”，表示只使用ajax上传方式。这种方式比较极端，在不支持ajax上传方式的浏览器会不可用；
+                            <div class="alert alert-info">当“type” : “auto”，auto是一种特例，等价于["ajax","flash","iframe"]。</div>
+                            <div class="alert alert-error">不再推荐配置type，除非在使用flash时遇到难以解决的问题。</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>curUploadIndex</td>
+                        <td>Number</td>
+                        <td>""</td>
+                        <td>只读</td>
+                        <td>
+                            当前上传的文件对应的在数组内的索引值，如果没有文件正在上传，值为空
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>isAllowUpload</td>
+                        <td>Boolean</td>
+                        <td>true</td>
+                        <td>只读</td>
+                        <td>
+                            是否允许上传文件
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>queue</td>
+                        <td>Queue</td>
+                        <td>''</td>
+                        <td>只读</td>
+                        <td>
+                            Queue队列的实例，想要对队列进行操作或监听队列的事件，就必须先获取这个属性
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>restoreHook</td>
+                        <td>String</td>
+                        <td>''</td>
+                        <td>只读</td>
+                        <td>
+                            已经存在的文件数据待提取的容器钩子，用法请看<a href="#defaultData">默认数据展现</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>autoUpload</td>
+                        <td>Boolean</td>
+                        <td>true</td>
+                        <td>读/写</td>
+                        <td>是否自动上传，当为<code>false</code>时，可以通过uploader的<code>upload()</code>和<code>uploadFiles()</code>手动上传队列中的文件。</td>
+                    </tr>
+                    <tr>
+                        <td>multiple</td>
+                        <td>Boolean</td>
+                        <td>true</td>
+                        <td>读/写</td>
+                        <td>是否开启多选支持
+                            <div class="alert alert-info">如果采用iframe上传，请设置为<code>false</code></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>multipleLen</td>
+                        <td>Number</td>
+                        <td>-1</td>
+                        <td>读/写</td>
+                        <td>用于限制多选文件个数，值为负时不设置多选限制（v1.2.6+）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>disabled</td>
+                        <td>Boolean</td>
+                        <td>false</td>
+                        <td>读/写</td>
+                        <td>是否可用,false为按钮可用</td>
+                    </tr>
+                    <tr>
+                        <td>serverConfig
+                            <code>弃用</code>
+                        </td>
+                        <td>Object</td>
+                        <td>{action:'', data:{}, dataType:'json'}</td>
+                        <td>读/写</td>
+                        <td>服务器端配置，包括最重要的<code>action</code>（路径）配置，<code>data</code>为post到服务器端数据
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>action</td>
+                        <td>String</td>
+                        <td>''</td>
+                        <td>读/写</td>
+                        <td>服务器端处理上传的路径（v1.3.0+）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>data</td>
+                        <td>Object</td>
+                        <td>{}</td>
+                        <td>读/写</td>
+                        <td>此配置用于动态修改post给服务器的数据，会覆盖serverConfig的data配置（v1.2.6+）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>name</td>
+                        <td>String</td>
+                        <td>Filedata</td>
+                        <td>只读</td>
+                        <td>文件上传域name名
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>urlsInputName</td>
+                        <td>String</td>
+                        <td>''</td>
+                        <td>只读</td>
+                        <td>用于存放服务器端返回的文件路径的input（type="hidden"）
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>max</td>
+                        <td>Number</td>
+                        <td>3</td>
+                        <td>读/写</td>
+                        <td>最多上传N张图片，没有配置该项验证时不存在（v1.3.0+）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>maxSize</td>
+                        <td>Number</td>
+                        <td>1024</td>
+                        <td>读/写</td>
+                        <td>单文件最大允许上传的文件大小，单位是<code>KB</code>，没有配置该项验证时不存在（v1.3.0+）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>required</td>
+                        <td>Boolean</td>
+                        <td>false</td>
+                        <td>读/写</td>
+                        <td>必须至少上传一个文件，没有配置该项验证时不存在（v1.3.0+）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>allowExts</td>
+                        <td>String</td>
+                        <td>'jpg,jpeg,png,gif,bmp'</td>
+                        <td>读/写</td>
+                        <td>文件格式验证，没有配置该项验证时不存在（v1.3.0+）
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>allowRepeat</td>
+                        <td>Boolean</td>
+                        <td>false</td>
+                        <td>读/写</td>
+                        <td>是否允许多次上传同一个文件，没有配置该项验证时不存在（v1.3.0+）
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
  </div>
 </div>
 <script>
@@ -957,7 +1365,25 @@ imageUploader2.render();
         });
         imageUploader2.render();
 
-        var imageUploader3 = new ImageUploader('#J_UploaderBtn3', '#J_UploaderQueue3');
+        var imageUploader3 = new ImageUploader('#J_UploaderBtn3', '#J_UploaderQueue3',{
+            autoUpload: false,
+            multiple:false,
+            disabled:true
+        });
+        imageUploader3.on('render',function(ev){
+            var uploader = ev.uploader;
+            $('#J_Disabled').on('change',function(ev){
+                var isChecked = $(ev.target).prop('checked');
+                uploader.set('disabled',isChecked);
+            });
+            $('#J_Multiple').on('change',function(ev){
+                var isChecked = $(ev.target).prop('checked');
+                uploader.set('multiple',isChecked);
+            });
+            $('#J_UploadAll').on('click',function(){
+                uploader.uploadFiles();
+            })
+        });
         imageUploader3.render();
 
         var refundUploader = new ImageUploader('#J_RefundUploaderBtn');
@@ -971,6 +1397,55 @@ imageUploader2.render();
             })
         });
         refundUploader.render();
+
+        var uploaderQueueTest = new ImageUploader('#J_QueueUploaderBtn','#J_QueueUploaderQueue');
+        uploaderQueueTest.on('render',function(ev){
+           var queue = ev.queue;
+
+            $('#J_Add').on('click', function (ev) {
+                //测试文件数据
+                var testFile = {'name':'test.jpg',
+                    'size':2000,
+                    'input':{},
+                    'file':{'name':'http://tp4.sinaimg.cn/1653905027/180/5601547226/1', 'type':'image/jpeg', 'size':2000}
+                };
+                //向队列添加文件
+                var file = queue.add(testFile);
+                S.log('添加的文件数据为：'+file);
+            });
+            $('#J_DelFirst').on('click', function (ev) {
+                var removeFile = queue.remove(0);
+                S.log('删除的文件数据为：'+removeFile);
+            });
+            $('#J_Clear').on('click', function (ev) {
+                queue.clear();
+            });
+            $('#J_GetAll').on('click', function (ev) {
+                var ids = [],
+                        files = queue.get('files');
+                S.each(files, function (file) {
+                    ids.push(file.id);
+                });
+                alert('所有文件id：' + ids);
+            });
+            $('#J_ChangeStatus').on('click', function (ev) {
+                queue.fileStatus(0, 'success');
+            });
+            $('#J_GetStatusFileIds').on('click', function (ev) {
+                var files = queue.getFiles('waiting'),
+                        ids = [];
+                S.each(files, function (file) {
+                    ids.push(file.id);
+                });
+                alert('所有等待中的文件id为：' + ids);
+            });
+            $('#J_GetStatusFilesIndex').on('click', function () {
+                var indexs = queue.getIndexs('waiting');
+                alert('所有等待中的文件index为：' + indexs);
+            })
+
+        });
+        uploaderQueueTest.render();
     })
 </script>
 
