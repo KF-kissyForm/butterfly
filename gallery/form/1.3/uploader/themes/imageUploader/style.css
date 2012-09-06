@@ -101,6 +101,12 @@ button::-moz-focus-inner {
   background: -moz-linear-gradient(top, #e2f1fc, #e2f1fc);
   outline: 0 none;
 }
+.uploader-button-disabled,
+.uploader-button-disabled:hover {
+  border: 1px solid #EEEEEE;
+  color: #404040;
+  background: #EEEEEE;
+}
 .upload-count-wrapper {
   margin-top: 4px;
   color: #ccc;
