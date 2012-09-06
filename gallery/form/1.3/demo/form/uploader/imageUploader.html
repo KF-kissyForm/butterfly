@@ -11,9 +11,11 @@
     <script src="../../assets/feedback.js" charset="utf-8"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" charset="utf-8"></script>
     <script src="../../assets/bootstrap.min.js" charset="utf-8"></script>
+    <script src="../../assets/scrollspy.js" charset="utf-8"></script>
+    <script src="../../assets/affix.js" charset="utf-8"></script>
     <script src="../../assets/app.js" charset="utf-8"></script>
 </head>
-<body>
+<body  data-spy="scroll" data-target=".bs-docs-sidebar">
 <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
         <div class="container">
@@ -62,23 +64,30 @@
     </div>
 </div>
 <header id="header" class="jumbotron subhead">
-    <div class="header-content">
-        <h1 class="title-h1">ImageUploader </h1>
-        <p class="header-dec">图片上传组件</p>
+    <div class="row header-content">
+        <div class="span6">
+            <div>
+                <h1 class="title-h1">ImageUploader </h1>
+                <p class="header-dec">图片上传组件</p>
+            </div>
+        </div>
+        <div class="span5">
+            <div id="imageUploader--top-bg"></div>
+        </div>
     </div>
 </header>
 <div id="content" class="container">
     <div class="row">
         <div class="span3 bs-docs-sidebar">
             <ul class="nav nav-list bs-docs-sidenav">
-                <li><a href="#imageUploaderDec"><i class="icon-chevron-right"></i>综述</a></li>
-                <li><a href="#demos"><i class="icon-chevron-right"></i>demo汇总</a></li>
-                <li><a href="#themes"><i class="icon-chevron-right"></i>组件内置的主题</a></li>
-                <li><a href="#init"><i class="icon-chevron-right"></i>3种方式初始化组件</a></li>
-                <li><a href="#server"><i class="icon-chevron-right"></i>与服务器端的交互</a></li>
-                <li><a href="#crossdomain"><i class="icon-chevron-right"></i>IE下上传失败的处理</a></li>
-                <li><a href="#auth"><i class="icon-chevron-right"></i> 上传验证控制</a></li>
-                <li><a href="#defaultData"><i class="icon-chevron-right"></i>如何渲染默认队列数据</a></li>
+                <li><a data-href="" href="#imageUploaderDec"><i class="icon-chevron-right"></i>综述</a></li>
+                <li><a data-href="#demos" href="#demos"><i class="icon-chevron-right"></i>demo汇总</a></li>
+                <li><a data-href="#themes" href="#themes"><i class="icon-chevron-right"></i>组件内置的主题</a></li>
+                <li><a data-href="#init" href="#init"><i class="icon-chevron-right"></i>3种方式初始化组件</a></li>
+                <li><a data-href="#server" href="#server"><i class="icon-chevron-right"></i>与服务器端的交互</a></li>
+                <li><a data-href="#crossdomain" href="#crossdomain"><i class="icon-chevron-right"></i>IE下上传失败的处理</a></li>
+                <li><a data-href="#auth" href="#auth"><i class="icon-chevron-right"></i> 上传验证控制</a></li>
+                <li><a data-href="#defaultData" href="#defaultData"><i class="icon-chevron-right"></i>如何渲染默认队列数据</a></li>
 
                 <li><a href="#use-theme"><i class="icon-chevron-right"></i>使用其他主题</a></li>
                 <li><a href="#events"><i class="icon-chevron-right"></i>ImageUploader支持的所有事件</a></li>
@@ -90,7 +99,7 @@
                 <li><a href="#pros"><i class="icon-chevron-right"></i>Uploader常用属性</a></li>
             </ul>
         </div>
-        <div class="span9">
+        <div class="span9 scrollspy-area">
             <h2 id="imageUploaderDec">综述</h2>
 
             <p>ImageUploader继承于Uploader，用于解决Uploader过于复杂，调用不便的问题，ImageUploader专门用于图片上传，自带图片验证，改进了伪属性配置方式。</p>
@@ -140,20 +149,6 @@
                     </a>
                 </li>
                 <li class="span3">
-                    <a href="" class="demo-item" target="_blank">
-                        <div class="thumbnail">
-                            常用属性控制
-                        </div>
-                    </a>
-                </li>
-                <li class="span3">
-                    <a href="" class="demo-item" target="_blank">
-                        <div class="thumbnail">
-                            常用方法控制
-                        </div>
-                    </a>
-                </li>
-                <li class="span3">
                     <a href="queue.html" class="demo-item" target="_blank">
                         <div class="thumbnail">
                             图片队列控制的demo
@@ -171,6 +166,20 @@
                     <a href="iframe-upload-type.html" class="demo-item" target="_blank">
                         <div class="thumbnail">
                             只使用iframe上传的demo
+                        </div>
+                    </a>
+                </li>
+                <li class="span3">
+                    <a href="" class="demo-item" target="_blank">
+                        <div class="thumbnail">
+                            常用属性控制
+                        </div>
+                    </a>
+                </li>
+                <li class="span3">
+                    <a href="" class="demo-item" target="_blank">
+                        <div class="thumbnail">
+                            常用方法控制
                         </div>
                     </a>
                 </li>

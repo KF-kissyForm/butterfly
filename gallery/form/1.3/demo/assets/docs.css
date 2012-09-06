@@ -1207,3 +1207,13 @@ h4{
 h3{
     margin:20px 0;
 }
+.affix{
+    position: fixed;
+    top:60px !important;
+}
+#imageUploader--top-bg{
+    width:460px;
+    height:160px;
+    background: url("http://www.36ria.com/wp-content/uploads/2012/09/imageUploade-top.png") 0 0 no-repeat;
+    margin-left:80px;
+}
