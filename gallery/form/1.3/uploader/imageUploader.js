@@ -179,23 +179,27 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             S.each(configkeys,function(key){
                 var htmlKey = key;
                 var value = $btn.attr(htmlKey);
-               switch (key){
-                   case 'postData' :
-                       key = 'data';
-                       value = value && S.JSON.parse(value);
-                       serverConfig.data = value;
-                   break;
-                   case 'action' :
-                       serverConfig.action = value;
-                   break;
-                   case 'uploadType':
-                       key = 'type';
-                   break;
-               }
+                if(value){
 
-               if(key == 'autoUpload' || key == 'multiple' || key == 'disabled' ) value = true;
+                   switch (key){
+                       case 'postData' :
+                           key = 'data';
+                           value = value && S.JSON.parse(value);
+                           serverConfig.data = value;
+                       break;
+                       case 'action' :
+                           serverConfig.action = value;
+                       break;
+                       case 'uploadType':
+                           key = 'type';
+                       break;
+                   }
 
-                htmlConfig[key] = value;
+                   if(key == 'autoUpload' || key == 'multiple' || key == 'disabled' ) value = true;
+
+                    htmlConfig[key] = value;
+
+                }
             });
             htmlConfig.serverConfig = serverConfig;
             uploaderConfig = S.merge(htmlConfig,uploaderConfig);
@@ -315,7 +319,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                     maxSize:'图片大小为{size}，超过{maxSize}！',
                     required:'至少上传一张图片！',
                     require:'至少上传一张图片！',
-                    allowExts:'不支持{ext}格式图片！'
+                    allowExts:'不支持{ext}格式！'
                 }
             },
             /**
