@@ -222,11 +222,12 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             var authRules = ['required','max','allowExts','maxSize','allowRepeat'];
             //验证消息
             var msgs = self.get('authMsg');
+            var uploaderConfig = self.get('uploaderConfig');
             if(!$btn.length) return false;
             S.each(authRules,function(rule){
                 //js配置验证
-                if(self.get(rule)){
-                    authConfig[rule] = [self.get(rule),msgs[rule] || ''];
+                if(uploaderConfig[rule]){
+                    authConfig[rule] = [uploaderConfig[rule],msgs[rule] || ''];
                 }else{
                    //拉取属性的验证配置
                     var value = $btn.attr(rule);
