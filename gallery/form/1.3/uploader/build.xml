@@ -56,7 +56,7 @@
             <fileset dir="${src.dir}/themes"/>
         </copy>
         <delete>
-            <fileset dir="${uploader.build.dir}/themes" includes="**/*.html"/>
+            <fileset dir="${uploader.build.dir}/themes" includes="**/*.htm,**/*.less"/>
         </delete>
     </target>
     <!--压缩模板css文件-->
@@ -123,6 +123,16 @@
 
         </jsdoctoolkit>
     </target>
-    <target name="build" depends="clean-build,mkdir,concat,move,build-theme,minify-theme-css,minify,move-swf">
+    <!--改变压缩文件的编码-->
+    <target name="native2ascii">
+        <native2ascii encoding="${charset}" src="${uploader.build.dir}" dest="${uploader.build.dir}" includes="**/*-min.js" ext=".ascii.js"/>
+        <delete >
+            <fileset dir="${uploader.build.dir}" includes="**/*-min.js"/>
+        </delete>
+
+        <renameext srcDir="${uploader.build.dir}" includes="**/*.ascii.js"  fromExtension=".ascii.js" toExtension=".js" replace="true"/>
+    </target>
+
+    <target name="build" depends="clean-build,mkdir,concat,move,build-theme,minify-theme-css,minify,native2ascii,move-swf">
     </target>
 </project>

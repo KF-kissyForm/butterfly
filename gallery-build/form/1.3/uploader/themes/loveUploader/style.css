@@ -1,20 +1,21 @@
 /*--------- 图片上传主题样式，目前应用于爱逛街 BY 苏河、明河（优化） ---------*/
-.imageUploader-queue .imageUploader-button,
-.imageUploader-queue .del-pic{
+.loveUploader-queue .loveUploader-button,
+.loveUploader-queue .del-pic{
     background: url(http://img02.taobaocdn.com/tps/i2/T1RHbnXkxrXXXe0nbf-349-134.png) 2px 2px no-repeat transparent;
 }
 /*图片预览 START*/
-.imageUploader-queue .tb-pic120 {
+.loveUploader-queue .tb-pic120 {
     *overflow: hidden;
     display: table;
     text-align: center;
     table-layout: fixed;
 }
-.imageUploader-queue .tb-pic120  img{
+.loveUploader-queue .tb-pic120  img{
     display:none;
     border:none;
+    margin:0;
 }
-.imageUploader-queue .tb-pic120 a {
+.loveUploader-queue .tb-pic120 a {
     display: table-cell; /*非IE、IE8、IE9的主流浏览器识别的垂直居中的方法*/
     vertical-align: middle;
     /*text-align: center;*/
@@ -23,20 +24,20 @@
     *line-height: 1; /* 避免行高导致垂直居中有误 */
 }
 
-.imageUploader-queue .tb-pic120 a {
+.loveUploader-queue .tb-pic120 a {
     *font-size: 105px;
 }
 
-.imageUploader-queue .tb-pic120 a img {
+.loveUploader-queue .tb-pic120 a img {
     vertical-align: middle;
 }
 
-.imageUploader-queue .tb-pic120, .tb-pic120 a {
+.loveUploader-queue .tb-pic120, .tb-pic120 a {
     width: 120px;
     height: 120px;
 }
 
-.imageUploader-queue .tb-pic120 img {
+.loveUploader-queue .tb-pic120 img {
     max-width: 120px;
     max-height: 120px;
     _width: 120px;
@@ -44,7 +45,7 @@
 
 /*图片预览 END*/
 
-.imageUploader-queue {
+.loveUploader-queue {
     padding: 15px 25px 5px;
     background: #f4f4f4;
     position: relative;
@@ -55,7 +56,7 @@
     font-size:12px;
     list-style:none;
 }
-.imageUploader-queue .tips {
+.loveUploader-queue .tips {
     position: absolute;
     z-index: 10;
     background-position: 0 -130px;
@@ -65,7 +66,7 @@
     left: 200px;
 }
 
-.imageUploader-queue li {
+.loveUploader-queue li {
     width: 120px;
     height: 120px;
     float: left;
@@ -73,7 +74,7 @@
     background-color: #fff;
 }
 
-.imageUploader-queue .imageUploader-button {
+.loveUploader-queue .loveUploader-button {
     display: block;
     width: 110px;
     height: 110px;
@@ -83,44 +84,48 @@
     text-decoration: none;
     background: url(http://img02.taobaocdn.com/tps/i2/T1RHbnXkxrXXXe0nbf-349-134.png) 2px 2px no-repeat transparent;
 }
-.imageUploader-queue .uploader-button-disabled{
+.loveUploader-queue .uploader-button-disabled{
     background-position: -125px 2px;
 }
-.imageUploader-queue .imageUploader-button .count {
+.loveUploader-queue .count {
     position: absolute;
     z-index: 10;
     top: 40px;
-    left: 5px;
+    left: 8px;
     color: #868887 !important;
     _width: 120px
 }
-.imageUploader-queue .drop-wrapper{
+.loveUploader-queue .count  em{
+    font-style: normal;
+    font-weight: bold;
+}
+.loveUploader-queue .drop-wrapper{
     cursor:pointer;
 }
-.imageUploader-queue li a img {
+.loveUploader-queue li a img {
     max-width: 120px;
     max-height: 120px;
 }
 
-.unimageUploader-queue {
+.unloveUploader-queue {
     overflow: hidden;
 
 }
 
-.imageUploader-queue ul {
+.loveUploader-queue ul {
     width: 660px;
     overflow: hidden;
     max-height: 284px;
     margin: 0;
 }
 
-.imageUploader-queue li {
+.loveUploader-queue li {
     border: solid 1px #e0e0e0;
     background: #fff;
     margin: 0 10px 10px 0;
 }
 
-.imageUploader-queue li.clear {
+.loveUploader-queue li.clear {
     clear: both;
     height: 0px;
     width: 0px;
@@ -128,7 +133,7 @@
     font-size: 0px;
     line-height: 0px;
 }
-.imageUploader-queue .imageUploader-button .bg, .imageUploader-queue .go-on .bg {
+.loveUploader-queue .loveUploader-button .bg, .loveUploader-queue .go-on .bg {
     width: 110px;
     height: 110px;
     display: block;
@@ -138,20 +143,20 @@
     top: 5px;
 }
 
-.imageUploader-queue .imageUploader-button .bg {
+.loveUploader-queue .loveUploader-button .bg {
     background-position: -5px -6px;
 }
 
-.imageUploader-queue .go-on .bg {
+.loveUploader-queue .go-on .bg {
     background-position: -133px -6px;
 }
 
-.imageUploader-queue li .wrapper {
+.loveUploader-queue li .wrapper {
     position: relative;
     z-index: 10;
 }
 
-.imageUploader-queue li .pic-mask {
+.loveUploader-queue li .pic-mask {
     width: 120px;
     height: 120px;
     position: absolute;
@@ -163,7 +168,7 @@
     filter: alpha(opacity = 70);
 }
 
-.imageUploader-queue li .del-pic {
+.loveUploader-queue li .del-pic {
     background-position: -257px -101px;
     color: #676767;
     display: none;
@@ -193,7 +198,7 @@
     text-align: center;
 }
 
-imageUploader-queue li .loading-icon {
+loveUploader-queue li .loading-icon {
     color: #666;
     background-position: -337px -101px;
     width: 15px;
@@ -216,7 +221,7 @@ imageUploader-queue li .loading-icon {
 }
 
 /*进度条*/
-.imageUploader-queue  .ks-progress-bar {
+.loveUploader-queue  .ks-progress-bar {
     height: 8px;
     width: 90px;
     background: #b2b2b2;
@@ -226,14 +231,14 @@ imageUploader-queue li .loading-icon {
     margin: 6px 0 0 10px;
 }
 
-.imageUploader-queue .ks-progress-bar  .ks-progress-bar-value {
+.loveUploader-queue .ks-progress-bar  .ks-progress-bar-value {
     width: 0%;
     height: 8px;
     background: #db0869;
     display: block;
 }
 
-.imageUploader-queue .file-input-wrapper {
+.loveUploader-queue .file-input-wrapper {
     width: 120px;
     height: 120px;
     position: absolute;
@@ -245,7 +250,7 @@ imageUploader-queue li .loading-icon {
     overflow: hidden;
 }
 
-.imageUploader-queue .file-input-wrapper .file-input {
+.loveUploader-queue .file-input-wrapper .file-input {
     height: 500px;
     display: block;
     width: 220px;
@@ -259,11 +264,14 @@ imageUploader-queue li .loading-icon {
     filter: alpha(opacity = 0);
     z-index: 14;
 }
-.imageUploader-queue .status-wrapper .status {
+.loveUploader-queue .status-wrapper .status {
     text-align: center;
 }
 .swf-hide{
     position: absolute;
     top:-3000px;
     left:0;
+}
+.loveUploader-queue .loveUploader-button .btn-text{
+    display: none;
 }
