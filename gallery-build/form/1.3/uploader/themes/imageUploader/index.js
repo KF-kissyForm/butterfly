@@ -36,16 +36,15 @@ KISSY.add(function (S, Node, Theme) {
          * @param {Object} ev 类似{index:0,file:{},target:$target}
          */
         _addFileHandler:function(ev){
-            var self = this,file = ev.file,$target = file.target,$delBtn = $('.J_Del_'+file.id),
-                $mask = $('.J_Mask_' + file.id) ;
+            var self = this,file = ev.file,$target = file.target,$delBtn = $('.J_Del_'+file.id) ;
             //显示/隐藏删除按钮
             $target.on('mouseover mouseout',function(ev){
                 if(ev.type == 'mouseover'){
                     $delBtn.show();
-                    $mask.show();
+                    self._setDisplayMsg(true,file);
                 }else{
                     $delBtn.hide();
-                    $mask.hide();
+                    self._setDisplayMsg(false,file);
                 }
             });
             $delBtn.data('data-file',file);
@@ -200,16 +199,17 @@ KISSY.add(function (S, Node, Theme) {
         },
         /**
          * 显示/隐藏遮罩层（遮罩层在出现状态消息的时候出现）
+          * @param isShow
+         * @param data
+         * @return {Boolean}
+         * @private
          */
         _setDisplayMsg:function(isShow,data){
             if(!data) return false;
             var $mask = $('.J_Mask_' + data.id);
+            //出错的情况不允许隐藏遮罩层
+            if($mask.parent('li').hasClass('error')) return false;
             $mask[isShow && 'show' || 'hide']();
-            if(isShow){
-                $mask.show();
-            }else{
-                $mask.hide();
-            }
         },
         /**
          * 删除图片后触发

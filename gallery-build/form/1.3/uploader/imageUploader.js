@@ -1789,6 +1789,21 @@ KISSY.add('gallery/form/1.3/uploader/button/swfButton', function (S, Node, Base,
  **/
 KISSY.add('gallery/form/1.3/uploader/imageUploader',function (S, Base, Node, RenderUploader,Auth) {
     var EMPTY = '', $ = Node.all;
+
+    /**
+     * 主要用于data-valid的解析，为了和Butterfly的uth保持统一
+     * @param cfg
+     * @return {*}
+     */
+    function toJSON(cfg) {
+        cfg = cfg.replace(/'/g, '"');
+        try {
+            eval("cfg=" + cfg);
+        } catch (e) {
+            S.log('data-valid json is invalid');
+        }
+        return cfg;
+    }
     /**
      * @name ImageUploader
      * @class 异步文件上传入口文件，会从按钮的data-config='{}' 伪属性中抓取组件配置
@@ -2009,6 +2024,10 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             var msgs = self.get('authMsg');
             var uploaderConfig = self.get('uploaderConfig');
             if(!$btn.length) return false;
+            //标签上伪属性的消息配置
+            var sMsgs = $btn.attr('data-valid');
+            //合并验证消息
+            if(sMsgs != EMPTY) S.mix(msgs,toJSON(sMsgs));
             S.each(authRules,function(rule){
                 //js配置验证
                 if(uploaderConfig[rule]){
@@ -2017,7 +2036,6 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                    //拉取属性的验证配置
                     var value = $btn.attr(rule);
                     if(value){
-                        if(rule == 'allowExts') value = self._setAllowExts(value);
                         switch (rule){
                             case 'allowExts':
                                 value = self._setAllowExts(value);
@@ -2052,7 +2070,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
          * @private
          */
         _setAllowExts:function(exts){
-            if(!S.isString(exts)) return false;
+            if(!S.isString(exts)) return exts;
             var ext = [];
             var desc = [];
             exts = exts.split(',');
