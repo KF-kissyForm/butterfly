@@ -117,8 +117,11 @@ KISSY.add(function (S, Node, Theme) {
                     progressBar.on('change',function(ev){
                         //百分百进度隐藏进度条
                         if(ev.value == 100){
-                            progressBar.hide();
-                            self._setDisplayMsg(false,ev.file);
+                            S.later(function(){
+                                progressBar.hide();
+                                self._setDisplayMsg(false,ev.file);
+                            },500);
+
                         }
                     });
                     progressBar.render();

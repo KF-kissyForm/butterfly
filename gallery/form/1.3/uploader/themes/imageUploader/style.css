@@ -127,6 +127,7 @@ button::-moz-focus-inner {
   width: 120px;
   height: 120px;
   position: relative;
+  padding: 0;
   border-radius: 4px;
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
@@ -177,12 +178,10 @@ button::-moz-focus-inner {
   margin-left: 2px;
 }
 .imageUploader-queue .status-wrapper .waiting-status {
-  color: #369BD7;
-  background-color: #fff;
+  color: #404040;
 }
 .imageUploader-queue .status-wrapper .error-status {
   color: red;
-  background-color: #fff;
 }
 .imageUploader-queue .status-wrapper p {
   margin: 0;
@@ -195,8 +194,8 @@ button::-moz-focus-inner {
   width: 120px;
   height: 120px;
   filter: ms:alpha(opacity = @o);
-  opacity: 0.1;
-  background: #333;
+  opacity: 0.8;
+  background: #fff;
   z-index: 7;
 }
 .imageUploader-queue .pic {
