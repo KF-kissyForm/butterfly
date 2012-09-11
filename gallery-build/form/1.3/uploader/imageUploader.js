@@ -2027,7 +2027,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             //标签上伪属性的消息配置
             var sMsgs = $btn.attr('data-valid');
             //合并验证消息
-            if(sMsgs != EMPTY) S.mix(msgs,toJSON(sMsgs));
+            if(sMsgs) S.mix(msgs,toJSON(sMsgs));
             S.each(authRules,function(rule){
                 //js配置验证
                 if(uploaderConfig[rule]){
@@ -2643,6 +2643,42 @@ KISSY.add('gallery/form/1.3/uploader/plugins/ajbridge/uploader', function(S,flas
     return A.Uploader;
 },{ requires:["flash","./ajbridge"] });
 /**
+ * @fileoverview �Ӷ���ͼƬ��ѡ��һ����Ϊ����ͼƬ������ͼ��
+ * @author ��Ӣ�����ӣ�<daxingplay@gmail.com>�����<jianping.xwh@taobao.com>
+
+ */
+KISSY.add('gallery/form/1.3/uploader/plugins/coverPic/coverPic', function(S, Node,Base){
+
+    var $ = Node.all,
+        LOG_PRE = '[LineQueue: setMainPic] ';
+
+    /**
+     * �Ӷ���ͼƬ��ѡ��һ����Ϊ����ͼƬ������ͼ
+     * @param {NodeList | String} $input Ŀ��Ԫ��
+     * @param {Uploader} uploader uploader��ʵ��
+     * @constructor
+     */
+    function CoverPic($input,uploader){
+
+    }
+    S.extend(CoverPic, Base, /** @lends CoverPic.prototype*/{
+        /**
+         * �������
+         */
+        render:function(){
+
+        }
+    },{
+        ATTRS:/** @lends CoverPic.prototype*/{
+
+        }
+    });
+
+    return CoverPic;
+
+}, {
+    requires: [ 'node','base' ]
+});/**
  * @fileoverview  文件拖拽上传插件
  *  @author 飞绿
  */

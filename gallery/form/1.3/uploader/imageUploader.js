@@ -242,7 +242,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             //标签上伪属性的消息配置
             var sMsgs = $btn.attr('data-valid');
             //合并验证消息
-            if(sMsgs != EMPTY) S.mix(msgs,toJSON(sMsgs));
+            if(sMsgs) S.mix(msgs,toJSON(sMsgs));
             S.each(authRules,function(rule){
                 //js配置验证
                 if(uploaderConfig[rule]){
