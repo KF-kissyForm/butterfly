@@ -4514,11 +4514,11 @@ KISSY.add('gallery/form/1.3/uploader/type/base',function(S, Node, Base) {
     return UploadType;
 }, {requires:['node','base']});/**
  * @fileoverview flash上传方案，基于龙藏写的ajbridge内的uploader
- * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
+ * @author 剑平（明河）<minghe36@126.com>
  **/
 KISSY.add('gallery/form/1.3/uploader/type/flash', function (S, Node, UploadType, swfUploader) {
-    var EMPTY = '', $ = Node.all, LOG_PREFIX = '[uploader-FlashType]:';
-
+    var EMPTY = '', LOG_PREFIX = '[uploader-FlashType]:';
+    if(S.FlashType) return S.FlashType;
     /**
      * @name FlashType
      * @class flash上传方案，基于龙藏写的ajbridge内的uploader
@@ -4680,6 +4680,8 @@ KISSY.add('gallery/form/1.3/uploader/type/flash', function (S, Node, UploadType,
          */
         uploadingId : {value : EMPTY}
     }});
+    //TODO:之所以污染KISSY，是因为ImageUploader和Uploader同时引用时存在bug
+    S.FlashType = FlashType;
     return FlashType;
 }, {requires:['node', './base']});/**
  * @fileoverview iframe方案上传
