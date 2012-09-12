@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8"/>
-    <title>Limiter组件的demo</title>
+    <title>Limiter：字数统计组件</title>
     <link rel="shortcut icon" href="http://docs.kissyui.com/kissy-dpl/base/assets/favicon.ico"/>
     <link rel="stylesheet" type="text/css" href="../../assets/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="../../assets/bootstrap-responsive.css"/>
@@ -13,71 +13,22 @@
     <!--[if gte IE 8]><!-->
     <link href="http://a.tbcdn.cn/s/kissy/1.1.7/editor/theme/cool/editor-pkg-min-datauri.css" rel="stylesheet"/>
     <!--<![endif]-->
-    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js" charset="utf-8"></script>
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js" charset="utf-8"></script>
     <script src="../../assets/feedback.js" charset="utf-8"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" charset="utf-8"></script>
-    <script src="http://bootswatch.com/assets/js/bootstrap-dropdown.js" charset="utf-8"></script>
-    <script src="http://bootswatch.com/assets/js/bootstrap-scrollspy.js" charset="utf-8"></script>
+    <script src="../../assets/bootstrap.min.js" charset="utf-8"></script>
+    <script src="../../assets/scrollspy.js" charset="utf-8"></script>
+    <script src="../../assets/affix.js" charset="utf-8"></script>
     <script src="../../assets/app.js" charset="utf-8"></script>
     <style type="text/css">
-        .form-section {
-            letter-spacing: -0.31em;
-            margin-bottom: 15px;
-            word-spacing: -0.43em;
-        }
-        .form-section .section-hd, .form-section .section-bd {
-            display: inline-block;
-            letter-spacing: normal;
-            vertical-align: top;
-            word-spacing: normal;
-        }
-        .form-section .section-hd {
-            line-height: 23px;
-            margin-right: 10px;
-            overflow: hidden;
-            text-align: right;
-            width: 70px;
-        }
-        .form-section .section-bd {
-            vertical-align: bottom;
-        }
-        .form-section .section-hd, .form-section .section-bd {
-            display: inline-block;
-            letter-spacing: normal;
-            vertical-align: top;
-            word-spacing: normal;
-        }
-        #auc-title .nice-input {
-            margin-right: 10px;
-            width: 470px;
-        }
-        .nice-input {
-            border: 1px solid #CCCCCC;
-            float: left;
-            position: relative;
-        }
-        .nice-input {
-            border: 1px solid #CCCCCC;
-            margin-bottom: 5px;
-        }
-        #auc-title .nice-input input {
-            width: 458px;
-        }
-        .nice-input input {
-            font-size: 12px;
-            line-height: 1em;
-            padding: 4px 5px;
-        }
-        .nice-input input {
-            border-color: #F0F0F0 #FFFFFF #FFFFFF #F0F0F0;
-            border-style: solid;
-            border-width: 1px;
-        }
         #textarea-wrapper{
             border:none;
         }
         span.ks-letter-count{
             color: #999999;
+            font-size:12px;
+            display: block;
+            margin-top:10px;
         }
         span.ks-letter-count em{
             color:#15428B;
@@ -132,60 +83,74 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <header id="header" class="jumbotron subhead">
-        <h1 class="title-h1">Limiter
-            <small>字数统计</small>
-        </h1>
-        <div class="dec">
-            <ul>
-                <li>作者：<b>明河（剑平）</b></li>
-                <li>接口文档：<a href="http://www.36ria.com/demo/gal/gallery/form/1.3/doc/symbols/Limiter.html" target="_blank">Limiter</a></li>
-            </ul>
-        </div>
-    </header>
-    <div id="content">
-        <div class="demo-wrapper">
-            <dl id="auc-title" class="form-section">
-                <dt class="section-hd">
-                    <label class="section-title-name" for="item-title">标题</label>
-                </dt>
+<header id="header" class="jumbotron subhead">
+    <div class="header-content">
+        <h1 class="title-h1">Limiter </h1>
+        <p class="header-dec">字数统计，能够区别中英文，能够排除html标签，接口文档：<a href="http://www.36ria.com/demo/gal/gallery/form/1.3/doc/symbols/Limiter.html" target="_blank">Limiter</a></p>
+    </div>
+</header>
 
-                <dd class="section-bd clearfix">
-                    <div class="nice-input">
-                        <input type="text" id="J_AucTitle" name="item-title" value="明河">
-                    </div>
-                    <div id="J_LimiterWrapper"></div>
-                </dd>
-            </dl>
-        <pre class='brush: xml;'>
-            <input type="text" id="J_AucTitle" name="item-title" value="明河">
-            <div id="J_LimiterWrapper"></div>
-        </pre>
-        <pre class='brush: js;'>
-         KISSY.use('gallery/form/1.3/limiter/index', function (S, Limiter) {
-            var textLimiter = new Limiter('#J_AucTitle',{wrapper:'#J_LimiterWrapper'});
-            textLimiter.render();
-         })
-        </pre>
-            <dl class="form-section" id="form-desc">
-                <dt class="section-hd">
-                    <label for="J_ItemDesc" class="section-title-name">描述</label>
-                </dt>
-                <dd class="section-bd clearfix form-desc-wrapper">
-                    <div class="form-area">
-                        <div class="nice-input nice-textarea" id="textarea-wrapper">
-                            <textarea class="dec-textarea" id="J_Dec" name="_fm.g._0.d"></textarea>
+<div id="content" class="container" style="margin-top:40px;">
+        <div class="row">
+            <div class="span4">
+                <form id="J_DefaultForm" class="form-horizontal" action="#">
+                    <div class="control-group">
+                        <label class="control-label" for="J_AucTitle">用户名</label>
+                        <div class="controls">
+                            <input type="text" id="J_AucTitle" name="item-title" value="明河">
+                            <div id="J_LimiterWrapper"></div>
+                            <p>不排除html标签、不将中文算成2个英文</p>
                         </div>
                     </div>
-                    <div class="extra-area">
-                        <div id="J_DecCount"></div>
-                    </div>
-                </dd>
-            </dl>
-            <p>编辑器的初始化代码就不贴出来了。</p>
+                </form>
+            </div>
+            <div class="span8">
+                <pre class='brush: xml;'>
+                    <input type="text" id="J_AucTitle" name="item-title" value="明河">
+                    <div id="J_LimiterWrapper"></div>
+                </pre>
+                <pre class='brush: js;'>
+                 KISSY.use('gallery/form/1.3/limiter/index', function (S, Limiter) {
+                    var textLimiter = new Limiter('#J_AucTitle',{wrapper:'#J_LimiterWrapper'});
+                    textLimiter.render();
+                 })
+                </pre>
+            </div>
+        </div>
 
-            <p>监听键盘按起事件，同步下数据，然后触发统计组件。</p>
+    <div class="row">
+        <div class="span4">
+            <form class="form-horizontal" action="#">
+                <div class="control-group">
+                    <label class="control-label">测试</label>
+                    <div class="controls">
+                        <input type="text" id="J_EnText" name="item-title" value="明河">
+                        <div id="J_EnTextLimiter"></div>
+                        <p>将中文算成2个英文</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="span8">
+                <pre class='brush: js;'>
+var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEn:true});
+textLimiter.render();
+
+                </pre>
+        </div>
+    </div>
+
+    <div class="row">
+        <form class="form-horizontal" action="#">
+            <div class="control-group">
+                <label class="control-label">描述</label>
+                <div class="controls">
+                    <textarea class="dec-textarea" id="J_Dec" name="_fm.g._0.d"></textarea>
+                    <div id="J_DecCount"></div>
+
+                    <p>编辑器的初始化代码就不贴出来了。</p>
+
+                    <p>监听键盘按起事件，同步下数据，然后触发统计组件。</p>
         <pre class='brush: js;'>
             editor.ready(function(){
                 var decLimiter = new Limiter('#J_Dec',{wrapper:'#J_DecCount',max:1000,isRejectTag:true});
@@ -196,16 +161,22 @@
                 })
             });
         </pre>
-            <p>isRejectTag:true后，将不统计html标签所占的字数</p>
-        </div>
+                    <p>isRejectTag:true后，将不统计html标签所占的字数</p>
+                </div>
+            </div>
+        </form>
+
     </div>
 </div>
 <script type="text/javascript">
-    KISSY.config({
+    var S = KISSY;
+    //包路径，实际使用请直接配置为"http://a.tbcdn.cn/s/kissy/"
+    var path = S.Config.debug && "../../../../../../" || "http://a.tbcdn.cn/s/kissy/";
+    S.config({
         packages:[
             {
                 name:"gallery",
-                path:"../../../../../../",
+                path:path,
                 charset:"utf-8"
             }
         ]
@@ -213,6 +184,9 @@
     KISSY.use('gallery/form/1.3/limiter/index', function (S, Limiter) {
         var textLimiter = new Limiter('#J_AucTitle',{wrapper:'#J_LimiterWrapper'});
         textLimiter.render();
+
+        var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEn:true});
+        enTextLimiter.render();
 
         KISSY.use('editor',function(S){
             var KE = KISSY.Editor,

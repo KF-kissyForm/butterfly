@@ -134,11 +134,15 @@ KISSY.add('gallery/form/1.3/limiter/index', function (S, Node, Base) {
         len : {
             value : 0,
             getter : function(v){
-                var self = this, $target = self.get('target'),
-                    val = $target.val(),
-                    isRejectTag = self.get('isRejectTag');
+                var self = this;
+                var $target = self.get('target');
+                var val = $target.val();
+                var isRejectTag = self.get('isRejectTag');
+                var isEn = self.get('isEn');
                 //过滤html标签
                 if(isRejectTag) val = val.replace(/<[^>]*>/g, "");
+                //中文转换
+                if(isEn) val = val.replace(/[^\x00-\xff]/g,"**");
                 return val.length;
             }
         },
@@ -147,7 +151,13 @@ KISSY.add('gallery/form/1.3/limiter/index', function (S, Node, Base) {
          * @type Boolean
          * @default false
          */
-        isRejectTag:{value:false}
+        isRejectTag:{value:false},
+        /**
+         * 将中文算成二个英文
+         * @type Boolean
+         * @default true
+         */
+        isEn:{value:false}
     }});
     return Limiter;
 },{requires:['node', 'base']});
