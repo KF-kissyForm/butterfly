@@ -153,8 +153,8 @@ textLimiter.render();
         </div>
         <div class="span8">
                 <pre class='brush: js;'>
-var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEn:true});
-textLimiter.render();
+        var cutLimiter = new Limiter('#J_CutText',{wrapper:'#J_CutLimiter',isCut:true,max:8});
+        cutLimiter.render();
 
                 </pre>
         </div>
@@ -208,7 +208,7 @@ textLimiter.render();
         var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEn:true});
         enTextLimiter.render();
 
-        var cutLimiter = new Limiter('#J_CutText',{wrapper:'#J_CutLimiter',isCut:true,max:8});
+        var cutLimiter = new Limiter('#J_CutText',{wrapper:'#J_CutLimiter',isCut:true,max:10});
         cutLimiter.render();
 
         KISSY.use('editor',function(S){
