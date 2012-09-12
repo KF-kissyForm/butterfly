@@ -670,65 +670,37 @@ uploader.on('error',function(ev){
             <h2 id="defaultData">如何渲染默认队列数据？</h2>
             <p>在实际应用中通常会有个需求：用户已经上传了三张图片，然后保存，那么用户再进入这个页面时，应该如何展示这三张图片呢？</p>
             <p>这里有个难点，我们需要把图片插入到组件的队列中，这样文件数的统计、删除等行为才是一致的。</p>
+            <div class="bs-docs-example">
+                <form action="#" style="font-size:12px;">
+                    <div class="grid">
+                        <input type="image-uploader" class="g-u" id="J_DefaultShowBtn" value="上传图片" >
+                        <input name="defaultUrls" type="hidden" value="http://tp4.sinaimg.cn/1653905027/180/5601547226/1,http://img02.taobaocdn.com/imgextra/i2/748902859/T2OTOdXm0bXXXXXXXX_!!748902859.jpg_310x310.jpg">
+                    </div>
+                    <ul id="J_DefaultShowQueue" class="grid">
 
-            <p>页面中的默认上传的数据，以json形式出现，比如下面的代码：</p>
+                    </ul>
+                </form>
 
-                    <pre class='brush: js; '>
-        <script type="text/uploader-restore" id="J_UploaderRestore">
-            [
-                {
-                "name":"icon_evil.gif",
-                "size":1446,
-                "type":"image/gif",
-                "result":{
-                    "status":1,
-                    "data":{
-                        "name":"icon_evil.gif",
-                        "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
-                        "item_id":"42458"
-                    }
-                }
-                }
-            ]
-        </script>
-        </pre>
-            <p>为一个<code>array</code>，文件数据为<code>object</code>，结构跟队列中的file数据保持一致。</p>
-            <h3>初始化时增加restoreHook属性</h3>
-        <pre class='brush: js; '>
-new ImageUploader('#J_RestoreUploaderBtn', '#J_RestoreUploaderQueue', {
-    restoreHook:"#J_UploaderRestore"
-});
-        </pre>
-            <p>当然一样支持html标签属性方式：<code>restoreHook="#J_UploaderRestore"</code></p>
+            </div>
+            <p>只要开发将图片的url打印到urlsInput隐藏域中即可，组件会自动渲染，比如下面的代码：</p>
+
+            <pre class='brush: xml; '>
+                 <input name="defaultUrls" type="hidden" value="http://tp4.sinaimg.cn/1653905027/180/5601547226/1,http://img02.taobaocdn.com/imgextra/i2/748902859/T2OTOdXm0bXXXXXXXX_!!748902859.jpg_310x310.jpg">
+            </pre>
+
+
             <h2 id="use-theme">如何使用其他主题</h2>
             <p>使用<code>refundUploader</code>主题，增加个属性<code>theme="refundUploader"</code>，该主题是从淘宝退款的上传凭证提炼出来的。</p>
             <p>使用js传参方式，加上<code>theme:"refundUploader"</code>即可。</p>
             <div class="row">
                 <div class="span6">
-                    <script type="text/uploader-restore" id="J_RefundImageRestore">
-                        [
-                        {"name":"icon_evil.gif",
-                        "size":1446,
-                        "type":"image/gif",
-                        "result":{
-                        "status":1,
-                        "data":{
-                        "name":"icon_evil.gif",
-                        "url":"http://tp4.sinaimg.cn/1653905027/180/5601547226/1",
-                        "item_id":"42458"
-                        }
-                        }
-                        }
-                        ]
-                    </script>
 
                     <div class="grid">
                         <input class="g-u" id="J_RefundUploaderBtn" name="Filedata" type="image-uploader" value="选择要上传的图片"
                                theme="refundUploader" queueTarget="#J_RefundUploaderQueue"
                                action="upload.php" urlsInputName="refundImageUrls" maxSize="500" max="3"
-                               restoreHook="#J_RefundImageRestore"
                                 >
-                        <input type="hidden" name="refundImageUrls">
+                        <input type="hidden" name="refundImageUrls" value="http://tp4.sinaimg.cn/1653905027/180/5601547226/1,http://img02.taobaocdn.com/imgextra/i2/748902859/T2OTOdXm0bXXXXXXXX_!!748902859.jpg_310x310.jpg">
                     </div>
                     <ul id="J_RefundUploaderQueue" class="grid">
 
@@ -1485,6 +1457,15 @@ uploader.testRequired();
 
         });
         uploaderQueueTest.render();
+
+        var defaultDataUploader = new ImageUploader('#J_DefaultShowBtn','#J_DefaultShowQueue',{
+            name:"Filedata",
+            action:"upload.php",
+            urlsInputName:"defaultUrls",
+            max:3,
+            maxSize:500
+        });
+        defaultDataUploader.render();
     })
 </script>
 

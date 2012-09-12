@@ -10,7 +10,7 @@
 <h2>渲染默认队列数据的demo</h2>
 
 <div class="grid">
-    <input type="image-uploader" class="g-u" id="J_JsUploaderBtn" value="上传图片" >
+    <input type="image-uploader" class="g-u" id="J_DefaultShowBtn" value="上传图片" >
     <input name="urls" type="hidden" value="http://tp4.sinaimg.cn/1653905027/180/5601547226/1,http://img02.taobaocdn.com/imgextra/i2/748902859/T2OTOdXm0bXXXXXXXX_!!748902859.jpg_310x310.jpg">
 
     <!--以下内容不是必须的，假设需要给默认渲染的file添加额外数据-->
@@ -18,7 +18,7 @@
         [{"author":"明河"},{"author":"剑平"}]
     </script>
 </div>
-<ul id="J_JsUploaderQueue" class="grid">
+<ul id="J_DefaultShowQueue" class="grid">
 
 </ul>
 <script>
@@ -37,7 +37,7 @@
 
     KISSY.use('gallery/form/1.3/uploader/imageUploader', function (S, ImageUploader) {
 
-        var imageUploader = new ImageUploader('#J_JsUploaderBtn','#J_JsUploaderQueue',{
+        var imageUploader = new ImageUploader('#J_DefaultShowBtn','#J_DefaultShowQueue',{
             // 文件域
             name:"Filedata",
             //处理上传的服务器端脚本路径
