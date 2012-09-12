@@ -61,9 +61,12 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
 
             queue.on('add',function(ev){
                 var file = ev.file;
-                self.testAllowExt(file);
-                self.testMaxSize(file);
-                self.testRepeat(file);
+                var type = file.type;
+                if(type != 'restore'){
+                    self.testAllowExt(file);
+                    self.testMaxSize(file);
+                    self.testRepeat(file);
+                }
             });
             queue.on('remove',function(ev){
                 var file = ev.file,status = file.status;

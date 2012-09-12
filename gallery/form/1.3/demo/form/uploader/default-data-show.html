@@ -10,24 +10,13 @@
 <h2>渲染默认队列数据的demo</h2>
 
 <div class="grid">
-    <script type="text/uploader-restore" id="J_UploaderRestore">
-        [
-        {
-        "name":"icon_evil.gif",
-        "size":1446,
-        "type":"image/gif",
-        "result":{
-        "status":1,
-        "data":{
-        "name":"icon_evil.gif",
-        "url":"http://tp4.sinaimg.cn/1653905027/180/5601547226/1",
-        "item_id":"42458"
-        }
-        }
-        }
-        ]
-    </script>
     <input type="image-uploader" class="g-u" id="J_JsUploaderBtn" value="上传图片" >
+    <input name="urls" type="hidden" value="http://tp4.sinaimg.cn/1653905027/180/5601547226/1,http://img02.taobaocdn.com/imgextra/i2/748902859/T2OTOdXm0bXXXXXXXX_!!748902859.jpg_310x310.jpg">
+
+    <!--以下内容不是必须的，假设需要给默认渲染的file添加额外数据-->
+    <script type="text/uploader-restore" id="J_ExtraData">
+        [{"author":"明河"},{"author":"剑平"}]
+    </script>
 </div>
 <ul id="J_JsUploaderQueue" class="grid">
 
@@ -54,22 +43,25 @@
             //处理上传的服务器端脚本路径
             action:"upload.php",
             //用于放服务器端返回的url的隐藏域
-            urlsInputName:"jsImageUrls",
+            urlsInputName:"urls",
             //最多上传个数
             max:3,
             //图片最大允许大小
-            maxSize:500,
-            restoreHook:"#J_UploaderRestore"
+            maxSize:500
         });
-        imageUploader.on('error',function(ev){
-            var uploader = ev.uploader;
-            var max = uploader.get('max');
-            var queue = uploader.get('queue');
-            var files = queue.getFiles('success');
-            if (ev.rule == 'max' && files.length >= max ) {
-                alert('队列已满，不能上传！');
-            }
+        //添加完默认数据后，额外添加一些数据
+
+        var $ = S.Node.all;
+        var defaultExtraData = S.JSON.parse($('#J_ExtraData').text());
+
+        imageUploader.on('add',function(ev){
+            var queue = ev.queue;
+            var index = ev.index;
+            if(!defaultExtraData[index]) return false;
+            queue.updateFile(index,defaultExtraData[index]);
+            S.log('额外数据：'+queue.getFile(index).author);
         });
+
         imageUploader.render();
     })
 

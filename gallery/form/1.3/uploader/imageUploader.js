@@ -113,7 +113,6 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                     theme._UploaderRender(function(){
                         theme.afterUploaderRender(uploader);
                         self._bindEvents(uploader);
-                        // 抓取restoreHook容器内的数据，生成文件DOM
                         uploader.restore();
                         self.fire('render', {uploader:uploader,button:uploader.get('button'),queue:uploader.get('queue'),auth:uploader.get('auth')});
                     });
@@ -189,7 +188,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                   self.set('authConfig', S.mix(authConfig,self.get('authConfig')));
             }
 
-            var configkeys = ['name','urlsInputName','autoUpload','postData','action','multiple','multipleLen','uploadType','disabled','restoreHook'];
+            var configkeys = ['name','urlsInputName','autoUpload','postData','action','multiple','multipleLen','uploadType','disabled'];
             var serverConfig = {};
             S.each(configkeys,function(key){
                 var htmlKey = key;
@@ -210,9 +209,11 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                        break;
                    }
 
-                   if(key == 'autoUpload' || key == 'multiple' || key == 'disabled' ) value = true;
+                   if(key == 'autoUpload' || key == 'multiple' || key == 'disabled' ){
+                       value = value == 'false' && false || true;
+                   }
 
-                    htmlConfig[key] = value;
+                   htmlConfig[key] = value;
 
                 }
             });
