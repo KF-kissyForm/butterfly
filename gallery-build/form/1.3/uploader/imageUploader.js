@@ -61,9 +61,12 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
 
             queue.on('add',function(ev){
                 var file = ev.file;
-                self.testAllowExt(file);
-                self.testMaxSize(file);
-                self.testRepeat(file);
+                var type = file.type;
+                if(type != 'restore'){
+                    self.testAllowExt(file);
+                    self.testMaxSize(file);
+                    self.testRepeat(file);
+                }
             });
             queue.on('remove',function(ev){
                 var file = ev.file,status = file.status;
@@ -970,30 +973,42 @@ KISSY.add('gallery/form/1.3/uploader/base', function (S, Base, Node, UrlsInput, 
                 urlsInput = self.get('urlsInput');
             if (!data) data = self._getRestoreData();
             if (!data.length) return false;
+
             S.each(data, function (file) {
-                //服务器端路径赋值
-                if (!file.sUrl && file.result) file.sUrl = file.result.data.url;
                 //向队列添加文件
-                var fileData = queue.add(file),
-                    id = fileData.id, index = queue.getFileIndex(id);
-                urlsInput.add(file.sUrl);
+                var fileData = queue.add(file);
+                var id = fileData.id;
+                var index = queue.getFileIndex(id);
                 //改变文件状态为成功
                 queue.fileStatus(index, 'success', {index:index, id:id, file:fileData});
             });
-            S.later(function () {
-                self.fire(Uploader.event.RESTORE, {files:queue.get('files')});
-            }, 500);
         },
         /**
          * 抓取restoreHook容器内的数据
          * @return {Array}
          */
         _getRestoreData:function () {
-            var self = this,
-                restoreHook = self.get('restoreHook'),
-                $restore = $(restoreHook);
-            if (!$restore.length) return [];
-            return S.JSON.parse(S.trim($restore.html()));
+            var self = this;
+            var urlsInput = self.get('urlsInput');
+            var urls = urlsInput.parse();
+            var files = [];
+            S.each(urls,function(url){
+                //伪造数据结构
+                files.push({
+                    name:url,
+                    type:'restore',
+                    url : url,
+                    sUrl : url,
+                    result:{
+                        status:1,
+                        data:{
+                            name:url,
+                            url : url
+                        }
+                    }
+                });
+            });
+            return files;
         }
     }, {ATTRS:/** @lends Uploader.prototype*/{
         /**
@@ -1161,12 +1176,6 @@ KISSY.add('gallery/form/1.3/uploader/base', function (S, Base, Node, UrlsInput, 
          * @default ""
          */
         uploadFilesStatus:{value:EMPTY},
-        /**
-         * 已经存在的文件数据待提取的容器钩子
-         * @type String
-         * @default ""
-         */
-        restoreHook:{value:EMPTY},
         /**
          * 强制设置flash的尺寸，只有在flash上传方式中有效，比如{width:100,height:100}，默认为自适应按钮容器尺寸
          * @type Object
@@ -1898,7 +1907,6 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                     theme._UploaderRender(function(){
                         theme.afterUploaderRender(uploader);
                         self._bindEvents(uploader);
-                        // 抓取restoreHook容器内的数据，生成文件DOM
                         uploader.restore();
                         self.fire('render', {uploader:uploader,button:uploader.get('button'),queue:uploader.get('queue'),auth:uploader.get('auth')});
                     });
@@ -1974,7 +1982,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                   self.set('authConfig', S.mix(authConfig,self.get('authConfig')));
             }
 
-            var configkeys = ['name','urlsInputName','autoUpload','postData','action','multiple','multipleLen','uploadType','disabled','restoreHook'];
+            var configkeys = ['name','urlsInputName','autoUpload','postData','action','multiple','multipleLen','uploadType','disabled'];
             var serverConfig = {};
             S.each(configkeys,function(key){
                 var htmlKey = key;
@@ -1995,9 +2003,11 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                        break;
                    }
 
-                   if(key == 'autoUpload' || key == 'multiple' || key == 'disabled' ) value = true;
+                   if(key == 'autoUpload' || key == 'multiple' || key == 'disabled' ){
+                       value = value == 'false' && false || true;
+                   }
 
-                    htmlConfig[key] = value;
+                   htmlConfig[key] = value;
 
                 }
             });
