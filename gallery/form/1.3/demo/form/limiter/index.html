@@ -122,11 +122,31 @@
         <div class="span4">
             <form class="form-horizontal" action="#">
                 <div class="control-group">
-                    <label class="control-label">测试</label>
+                    <label class="control-label">中文算成2个英文</label>
                     <div class="controls">
                         <input type="text" id="J_EnText" name="item-title" value="明河">
                         <div id="J_EnTextLimiter"></div>
-                        <p>将中文算成2个英文</p>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="span8">
+                <pre class='brush: js;'>
+var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEn:true});
+textLimiter.render();
+
+                </pre>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span4">
+            <form class="form-horizontal" action="#">
+                <div class="control-group">
+                    <label class="control-label">超出截断</label>
+                    <div class="controls">
+                        <input type="text" id="J_CutText" name="item-title" value="明河">
+                        <div id="J_CutLimiter"></div>
                     </div>
                 </div>
             </form>
@@ -187,6 +207,9 @@ textLimiter.render();
 
         var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEn:true});
         enTextLimiter.render();
+
+        var cutLimiter = new Limiter('#J_CutText',{wrapper:'#J_CutLimiter',isCut:true,max:8});
+        cutLimiter.render();
 
         KISSY.use('editor',function(S){
             var KE = KISSY.Editor,

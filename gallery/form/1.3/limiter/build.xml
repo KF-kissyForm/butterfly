@@ -47,7 +47,16 @@
             <mapper type="glob" from="*.css" to="*-min.css"/>
         </apply>
     </target>
-    <target name="build" depends="copy,minify">
+    <!--改变压缩文件的编码-->
+    <target name="native2ascii">
+        <native2ascii encoding="${charset}" src="${com.build.dir}" dest="${com.build.dir}" includes="**/*-min.js" ext=".ascii.js"/>
+        <delete >
+            <fileset dir="${com.build.dir}" includes="**/*-min.js"/>
+        </delete>
+
+        <renameext srcDir="${com.build.dir}" includes="**/*.ascii.js"  fromExtension=".ascii.js" toExtension=".js" replace="true"/>
+    </target>
+    <target name="build" depends="copy,minify,native2ascii">
 
     </target>
 </project>
