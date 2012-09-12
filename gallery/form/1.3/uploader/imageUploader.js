@@ -230,6 +230,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             var self = this;
             var $btn = $(self.get('buttonTarget'));
             if(!$btn.length) return false;
+
             var authConfig = {};
             //默认增加图片格式验证
             var defaultAllowExts = self.get('defaultAllowExts');
@@ -238,11 +239,12 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             //验证消息
             var msgs = self.get('authMsg');
             var uploaderConfig = self.get('uploaderConfig');
-            if(!$btn.length) return false;
+
             //标签上伪属性的消息配置
             var sMsgs = $btn.attr('data-valid');
             //合并验证消息
             if(sMsgs) S.mix(msgs,toJSON(sMsgs));
+
             S.each(authRules,function(rule){
                 //js配置验证
                 if(uploaderConfig[rule]){
@@ -273,10 +275,11 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
 
                 }
             });
-            if(!authConfig['allowExts']){
-                authConfig['allowExts'] = [self._setAllowExts(defaultAllowExts),msgs['allowExts'] || ''];
-            }
-            return authConfig;
+            //默认允许上传的图片格式
+            if(!authConfig['allowExts']) authConfig['allowExts'] = [self._setAllowExts(defaultAllowExts),msgs['allowExts'] || ''];
+            //默认不允许上传重复图片
+            if(!authConfig['allowRepeat']) authConfig['allowRepeat'] =  [false,msgs['allowRepeat'] || ''] ;
+             return authConfig;
         },
         /**
          * 举例：将jpg,jpeg,png,gif,bmp转成{desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"}
@@ -338,7 +341,8 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
                     maxSize:'图片大小为{size}，超过{maxSize}！',
                     required:'至少上传一张图片！',
                     require:'至少上传一张图片！',
-                    allowExts:'不支持{ext}格式！'
+                    allowExts:'不支持{ext}格式！',
+                    allowRepeat:'该图片已经存在！'
                 }
             },
             /**

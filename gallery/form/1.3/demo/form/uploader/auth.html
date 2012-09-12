@@ -44,7 +44,8 @@
             var required = uploader.get('required');
             var allowExts = uploader.get('allowExts');
             var maxSize = uploader.get('maxSize');
-            $('.J_AuthMsg').text('max:'+max + ',required:' + required + ',allowExts:' + allowExts + ',maxSize:' + maxSize);
+            var allowRepeat = uploader.get('allowRepeat');
+            $('.J_AuthMsg').text('max:'+max + ',required:' + required + ',allowExts:' + allowExts + ',maxSize:' + maxSize + ',allowRepeat:' +allowRepeat);
 
             $('#J_TestRequired').on('click',function(ev){
                 var isPass = uploader.testRequired();

@@ -306,7 +306,7 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
 	            //允许重复文件名，直接返回false
 	            if(isAllowRepeat) return false;
 	            S.each(files,function(f){
-	                if(f.name == fileName){
+	                if(f.name == fileName && f.size == file.size){
                         self._fireUploaderError('allowRepeat',rule,file);
 	                    return isRepeat = true;
 	                }
