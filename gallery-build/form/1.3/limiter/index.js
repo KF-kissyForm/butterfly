@@ -162,12 +162,16 @@ KISSY.add('gallery/form/1.3/limiter/index', function (S, Node, Base) {
                 var $target = self.get('target');
                 var val = S.trim($target.val());
                 var isRejectTag = self.get('isRejectTag');
-                var isEn = self.get('isEn');
+                var isEnToCn = self.get('isEnToCn');
                 //过滤html标签
                 if(isRejectTag) val = val.replace(/<[^>]*>/g, "");
+                var len = val.length;
                 //中文转换
-                if(isEn) val = val.replace(/[^\x00-\xff]/g,"**");
-                return val.length;
+                if(isEnToCn){
+                    val = val.replace(/[^\x00-\xff]/g,"**");
+                    len = Math.ceil(val.length/2);
+                }
+                return len;
             }
         },
         /**
@@ -177,11 +181,11 @@ KISSY.add('gallery/form/1.3/limiter/index', function (S, Node, Base) {
          */
         isRejectTag:{value:false},
         /**
-         * 将中文算成二个英文
+         * 将英文算成半个汉字
          * @type Boolean
-         * @default true
+         * @default false
          */
-        isEn:{value:false},
+        isEnToCn:{value:false},
         /**
          * 超过最大字数时予以截断
          * @type Boolean

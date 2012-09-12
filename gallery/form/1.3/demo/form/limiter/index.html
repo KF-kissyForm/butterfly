@@ -99,7 +99,6 @@
                         <div class="controls">
                             <input type="text" id="J_AucTitle" name="item-title" value="明河">
                             <div id="J_LimiterWrapper"></div>
-                            <p>不排除html标签、不将中文算成2个英文</p>
                         </div>
                     </div>
                 </form>
@@ -122,7 +121,7 @@
         <div class="span4">
             <form class="form-horizontal" action="#">
                 <div class="control-group">
-                    <label class="control-label">中文算成2个英文</label>
+                    <label class="control-label">英文算半个汉字</label>
                     <div class="controls">
                         <input type="text" id="J_EnText" name="item-title" value="明河">
                         <div id="J_EnTextLimiter"></div>
@@ -132,7 +131,7 @@
         </div>
         <div class="span8">
                 <pre class='brush: js;'>
-var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEn:true});
+var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEnToCn:true});
 textLimiter.render();
 
                 </pre>
@@ -205,7 +204,7 @@ textLimiter.render();
         var textLimiter = new Limiter('#J_AucTitle',{wrapper:'#J_LimiterWrapper'});
         textLimiter.render();
 
-        var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEn:true});
+        var enTextLimiter = new Limiter('#J_EnText',{wrapper:'#J_EnTextLimiter',isEnToCn:true});
         enTextLimiter.render();
 
         var cutLimiter = new Limiter('#J_CutText',{wrapper:'#J_CutLimiter',isCut:true,max:10});
