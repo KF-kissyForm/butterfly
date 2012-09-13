@@ -57,6 +57,10 @@
         imageUploader.on('add',function(ev){
             var queue = ev.queue;
             var index = ev.index;
+            var file = ev.file;
+            var type = file.type;
+            //非restore方法默认渲染的数据
+            if(type != 'restore') return false;
             if(!defaultExtraData[index]) return false;
             queue.updateFile(index,defaultExtraData[index]);
             S.log('额外数据：'+queue.getFile(index).author);

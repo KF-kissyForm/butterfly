@@ -109,6 +109,7 @@ KISSY.add('gallery/form/1.3/uploader/urlsInput',function(S, Node, Base) {
     			var urls = $(input).val(),
     				split = self.get('split'),
     				files;
+                if(urls == EMPTY) return [];
     			files = urls.split(split);
                 self.set('urls',files);
     			return files;
