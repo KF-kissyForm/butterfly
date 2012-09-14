@@ -89,6 +89,7 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
                 var style = self._cfg.style;
 
                 self.on('afterRulesValidate', function (ev) {
+                    debugger;
                     var result = ev.result,
                         curRule = ev.curRule,
                         msg = self._cache[curRule].msg || EMPTY;

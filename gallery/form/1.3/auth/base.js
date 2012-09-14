@@ -29,20 +29,20 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field, Factory,
      * @constructor
      */
     var Auth = function (el, config) {
-        var form = S.get(el),
-            self = this;
+        var form = S.get(el);
+        var self = this;
 
         self._storages = {};
 
-        if (!form) {
-            S.log('[Auth]:form element not exist');
-        } else {
+        config = S.merge(defaultConfig, config);
+        self.AuthConfig = config;
+
+        if(form){
             self.mode = AUTH_MODE.FORM;
-            self._init(form, S.merge(defaultConfig, config));
+            self._init(form, config);
         }
 
         Auth.superclass.constructor.call(self);
-
         return self;
     };
 
@@ -70,9 +70,6 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field, Factory,
                 });
             }
 
-            //save config
-            self.AuthConfig = config;
-
             //如果是form模式，需要屏蔽html5本身的校验，放在最后是为了html5的校验能生效
             if (self.mode === AUTH_MODE.FORM) {
                 S.one(el).attr('novalidate', 'novalidate');
@@ -88,23 +85,23 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field, Factory,
          */
         add:function (field, config) {
             var el, key, self = this;
-
+            var authField = '';
             if (field instanceof Field) {
                 //add field
                 el = field.get('el');
                 key = S.one(el).attr('id') || S.one(el).attr('name');
-                self._storages[key || Utils.guid()] = field;
+                authField = self._storages[key || Utils.guid()] = field;
             } else {
                 //add html element
                 el = S.one(field);
                 if (el) {
                     key = S.one(el).attr('id') || S.one(el).attr('name');
                     var filedConfig = S.merge(self.AuthConfig, {event:self.AuthConfig.autoBind ? Utils.getEvent(el) : 'none'}, config);
-                    self._storages[key || Utils.guid()] = new Field(el, filedConfig);
+                    authField = self._storages[key || Utils.guid()] = new Field(el, filedConfig);
                 }
             }
 
-            return self;
+            return authField;
         },
         /**
          * 根据key返回field对象
