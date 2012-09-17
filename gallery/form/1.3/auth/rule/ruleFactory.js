@@ -3,7 +3,8 @@
  * @author 张挺 <zhangting@taobao.com>
  *
  */
-KISSY.add('gallery/form/1.3/auth/rule/ruleFactory', function (S, Base, PropertyRule, Rule, undefined) {
+KISSY.add('gallery/form/1.3/auth/rule/ruleFactory', function (S, Node,Base, PropertyRule, Rule, undefined) {
+    var $ = S.Node.all;
     var RuleFactory = function () {
         var self = this;
 
@@ -67,12 +68,31 @@ KISSY.add('gallery/form/1.3/auth/rule/ruleFactory', function (S, Base, PropertyR
             RuleFactory.rules[name] = rule;
         },
         create:function (ruleName, cfg) {
+            if(!cfg.msg) cfg.msg = {};
+            S.mix(cfg.msg,this._setMsg(cfg.el,ruleName));
             if(S.inArray(ruleName, RuleFactory.HTML_PROPERTY)) {
                 return new PropertyRule(ruleName, RuleFactory.rules[ruleName], cfg);
             } else if(RuleFactory.rules[ruleName]) {
                 return new Rule(ruleName, RuleFactory.rules[ruleName], cfg);
             }
             return undefined;
+        },
+        /**
+         * 从元素中的属性中拉取消息配置
+          * @param el
+         * @param ruleName
+         * @return {*}
+         * @private
+         */
+        _setMsg:function(el,ruleName){
+            var $el = $(el);
+            var msg = {};
+            if(!el.length) return msg;
+            var success = $el.attr(ruleName+'-success-msg');
+            var error = $el.attr(ruleName + '-msg');
+            if(success) msg.success = success;
+            if(error) msg.error = error;
+            return msg;
         }
     });
 
@@ -80,6 +100,7 @@ KISSY.add('gallery/form/1.3/auth/rule/ruleFactory', function (S, Base, PropertyR
 
 }, {
     requires:[
+        'node',
         'base',
         './html/propertyRule',
         './rule'
