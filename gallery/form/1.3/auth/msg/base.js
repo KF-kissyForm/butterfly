@@ -42,7 +42,11 @@ KISSY.add('gallery/form/1.3/auth/msg/base', function (S, Base) {
 
         },
         hide:function () {
-            this._msgContainer.hide();
+            var self = this;
+            var $msg = self._msgContainer;
+            S.buffer(function () {
+                $msg.hide();
+            }, 50)();
         },
         show:function (o) {
             var self = this;

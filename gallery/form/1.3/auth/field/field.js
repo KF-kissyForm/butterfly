@@ -89,7 +89,7 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
                 var style = self._cfg.style;
 
                 self.on('afterRulesValidate', function (ev) {
-                    debugger;
+                    //TODO:多次触发的问题
                     var result = ev.result,
                         curRule = ev.curRule,
                         msg = self._cache[curRule].msg || EMPTY;
