@@ -78,7 +78,7 @@ KISSY.add('gallery/form/1.3/radio/index', function(S, Node, Base) {
                 return false;
             }
             //遍历
-            target.each(function(value) {
+            target.each(function(value,index) {
                 value.hide();
                 if (self._isDisabled(value)) {
                     kfbtn = $(disabledHTML).insertBefore(value).attr('ks-kfbtn-disabled', 'disabled').removeAttr('tabindex');
@@ -99,7 +99,12 @@ KISSY.add('gallery/form/1.3/radio/index', function(S, Node, Base) {
                     }
                 }
                 kfbtnArr.push(kfbtn);
-            })
+
+                value.on('click',function(){
+                    if (self._isDisabled(value)) return;
+                    self._clickHandler.call(self, index);
+                })
+            });
             self.set('kfbtn', kfbtnArr);
         },
         /**
@@ -241,12 +246,12 @@ KISSY.add('gallery/form/1.3/radio/index', function(S, Node, Base) {
          * @param  {Number} targetIndex 数组radio的索引
          */
         _clickHandler: function(targetIndex) {
-            var that = this,
-                targets = that.get('target'),
-                kfbtns = $(that.get('kfbtn'));
-            kfbtn = $(that.get('kfbtn')[targetIndex]), getCls = this.get('cls'), selectedClass = getCls.selected, hoverClass = getCls.hover;
+            var that = this;
+            var targets = that.get('target');
+            var kfbtns = $(that.get('kfbtn'));
+            var kfbtn = $(that.get('kfbtn')[targetIndex]), getCls = this.get('cls'), selectedClass = getCls.selected, hoverClass = getCls.hover;
             //触发原生dom节点的点击事件
-            $(targets[targetIndex]).fire('click');
+            //$(targets[targetIndex]).fire('click');
             kfbtns.each(function(value, key) {
                 value.removeClass(selectedClass).removeClass(hoverClass);
             })
