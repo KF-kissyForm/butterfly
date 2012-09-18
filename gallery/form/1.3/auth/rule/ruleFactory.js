@@ -87,6 +87,7 @@ KISSY.add('gallery/form/1.3/auth/rule/ruleFactory', function (S, Node,Base, Prop
         _setMsg:function(el,ruleName){
             var $el = $(el);
             var msg = {};
+            //元素可能是一组，比如radio或chekcbox
             if(!el.length) return msg;
             var success = $el.attr(ruleName+'-success-msg');
             var error = $el.attr(ruleName + '-msg');

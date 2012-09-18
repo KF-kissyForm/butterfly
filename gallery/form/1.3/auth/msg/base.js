@@ -3,8 +3,8 @@
  * @author czy88840616 <czy88840616@gmail.com>
  *
  */
-KISSY.add('gallery/form/1.3/auth/msg/base', function (S, Base) {
-
+KISSY.add('gallery/form/1.3/auth/msg/base', function (S, Base,Node) {
+    var $ = Node.all;
     /**
      * msg cls
      * @type {String}
@@ -32,12 +32,13 @@ KISSY.add('gallery/form/1.3/auth/msg/base', function (S, Base) {
             self._el = S.one(srcNode);
             self.set('tpl', cfg.tpl);
             self.set('args', cfg.args);
+            var $wrapper = self._getWrapper();
 
-            self._msgContainer = S.one('.' + AUTH_MSG_CLS, self._el.parent());
+            self._msgContainer = S.one('.' + AUTH_MSG_CLS, $wrapper);
 
             if(!self._msgContainer) {
                 self._msgContainer = S.one('<div class="' + AUTH_MSG_CLS +'" style="display: none"></div>');
-                self._el.parent().append(self._msgContainer);
+                $wrapper.append(self._msgContainer);
             }
 
         },
@@ -56,6 +57,24 @@ KISSY.add('gallery/form/1.3/auth/msg/base', function (S, Base) {
                 self._msgContainer.html(S.substitute(self.get('tpl'), o));
                 self._msgContainer.show();
             }, 50)();
+        },
+        /**
+         * 获取消息层容器
+         * @private
+         */
+        _getWrapper:function(){
+            var self = this;
+            var $wrapper = self.get('wrapper');
+            var $target = self._el;
+
+            //html标签属性上存在消息层
+            var wrapperHook = $target.attr('msg-wrapper');
+            if(wrapperHook) $wrapper = $(wrapperHook);
+
+            if(!$wrapper || !$wrapper.length){
+                $wrapper = $target.parent();
+            }
+            return $wrapper;
         }
     }, {
         ATTRS:{
@@ -64,6 +83,17 @@ KISSY.add('gallery/form/1.3/auth/msg/base', function (S, Base) {
             },
             args:{
                 value:{}
+            },
+            /**
+             * 消息层容器
+             * @type String
+             * @default ''
+             */
+            wrapper:{
+                value:'',
+                getter:function(v){
+                    return $(v);
+                }
             }
         }
     });
@@ -72,6 +102,7 @@ KISSY.add('gallery/form/1.3/auth/msg/base', function (S, Base) {
 
 }, {
     requires:[
-        'base'
+        'base',
+        'node'
     ]
 });
