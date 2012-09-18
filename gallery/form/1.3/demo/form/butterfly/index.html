@@ -74,8 +74,8 @@
                     <div class="control-group">
                         <label class="control-label" for="username">用户名</label>
                         <div class="controls">
-                            <input type="text" class="input-xlarge" name="username" placeholder="必填，只能是英文、数字"
-                                   value="" required data-valid="{required:'用户名为必填！'}"
+                            <input id="username" type="text" class="input-xlarge" name="username" placeholder="必填，只能是英文、数字"
+                                   value="" required required-msg="用户名不能为空！" required-success-msg="用户名填写正确"
                                    maxlength="10" limiter-target="#J_UsernameLimiter"
                                     >
                             <div id="J_UsernameLimiter"></div>
@@ -86,14 +86,15 @@
                         <label class="control-label" for="username">性别</label>
                         <div class="controls">
                             <label class="radio inline">
-                                <input type="radio" name="sex" value="男"/>男
+                                <input type="radio" name="sex" value="男" required="required" required-msg="必须选择一个性别！" msg-wrapper="#sex-msg"/>男
                             </label>
                             <label class="radio inline">
-                                <input type="radio" name="sex" value="女"/>女
+                                <input type="radio" name="sex" value="女" />女
                             </label>
                             <label class="radio inline">
-                                <input type="radio" name="sex" value="gray" disabled/>gray
+                                <input type="radio" name="sex" value="gray" disabled />gray
                             </label>
+                            <div id="sex-msg"></div>
                         </div>
                     </div>
 
@@ -164,31 +165,12 @@
 
                         <div class="controls">
                             <div class="grid">
-                                <script type="text/uploader-restore" id="J_ImageUploaderRestore">
-                                    [
-                                    {"name":"icon_evil.gif",
-                                    "size":1446,
-                                    "type":"image/gif",
-                                    "result":{
-                                    "status":1,
-                                    "data":{
-                                    "name":"icon_evil.gif",
-                                    "url":"http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
-                                    "item_id":"42458"
-                                    }
-                                    }
-                                    }
-                                    ]
-                                </script>
-
                                 <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传照片" queueTarget="#J_UploaderQueue"
-                                       action="upload.php" postData='{"username":"minghe"}' urlsInputName="imageUrls"
-                                       required maxSize="500" max="4" allowExts="jpg,jpeg,png,gif,bmp"
-                                       restoreHook="#J_ImageUploaderRestore"
-                                        >
+                                       action="upload.php" urlsInputName="imageUrls"
+                                       required maxSize="500" max="4" allowExts="jpg,jpeg,png,gif,bmp">
 
                                 <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
-                                <input type="hidden" name="imageUrls">
+                                <input type="hidden" name="imageUrls" value="http://tp4.sinaimg.cn/1653905027/50/5601547226/1">
 
                                 <div class="g-u upload-count-wrapper">您还可以上传<em id="J_UploadCount">4</em>张照片</div>
                             </div>
@@ -229,13 +211,14 @@
             }
         ]
     });
+    var $ = KISSY.Node.all;
     KISSY.use("gallery/form/1.3/butterfly/index", function (S, Butterfly) {
         var butterfly = new Butterfly('#J_DefaultForm');
         butterfly.on('render',function(){
             //立即验证用户名
-            butterfly.validate('username');
+            butterfly.test('username');
 
-            butterfly.add('#interest', {
+            butterfly.addFieldAuth('#interest', {
                 rules:{
                     moreselect: {
                         error:'必须选择超过1个'
@@ -245,7 +228,25 @@
                     error:'error'
                 }
             });
-            butterfly.field('username','明河');
+
+            var username = butterfly.field('username');
+            username.val('明河');
+            username.test();
+            username.val('');
+            username.test();
+
+            //数据同步测试
+            $('#username').val('数据同步测试');
+            $('#username').fire('blur');
+            S.log(username.val());
+
+            //组的情况的处理（比如一组radio或checkbox）
+            var sex = butterfly.field('sex');
+            /*sex.set('value','女');
+            S.log(sex.get('index'));
+            S.log(sex.get('options'));*/
+            sex.test();
+
         });
         butterfly.render();
     });

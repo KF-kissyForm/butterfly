@@ -164,24 +164,6 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
             }
 
         },
-        /**
-         * 合并html的属性配置，比如获取required-msg，或者data-valid（不推荐使用）
-          * @private
-         */
-        _getMsgConfig:function(el){
-            if(!el) return {};
-            if (DOM.attr(el, CONFIG_NAME)) {
-                var cfg = DOM.attr(el, CONFIG_NAME);
-
-                cfg = Utils.toJSON(cfg);
-                //把所有伪属性都当作rule处理
-                var propertyConfig = {
-                    rules:cfg
-                };
-
-                config = S.merge(propertyConfig, config);
-            }
-        },
         add:function (name, rule, cfg) {
             var self = this,
                 _storage = self._storage;

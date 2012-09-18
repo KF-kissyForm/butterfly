@@ -44,29 +44,40 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                     //实例化表单数据集合
                     self.set('collection',new Collection());
                     self._loadTheme(self.get('theme'), function () {
+                        //实例化验证组件
+                        self._renderAuth();
                         self._initInput();
                         self._initTextArea();
                         self._initSelect();
-                        //实例化验证组件
-                        self._renderAuth();
                         self.fire('render');
                     });
+                },
+                /**
+                 * 获取元素的id，获取不到，获取name
+                 * @param $el
+                 * @return {String}
+                 */
+                getName:function($el){
+                    if(!$el || !$el.length) return '';
+                    return $el.attr('id') || $el.attr('name') || '';
                 },
                 /**
                  * 当不传参时候，验证整个表单的合法性，当参数为字符串时候，验证指定表单字段的合法性，当参数为数组时候，验证多个字段的合法性
                  * @param {String|Array} field 字段名
                  * @return {Boolean} 是否通过
                  */
-                validate:function (field) {
+                test:function (field) {
                     var self = this;
                     var auth = self.get('auth');
+                    var authField;
                     if(!auth){
                         S.log(LOG_PREFIX+'不存在Auth的实例！');
                         return false;
                     }
                     //验证指定表单字段的合法性
                     if(S.isString(field)){
-                        return auth.getField(field).validate();
+                        authField = auth.getField(field);
+                        return authField && authField.validate() || EMPTY;
                     }
                     else if(S.isArray(field)){
 
@@ -81,19 +92,23 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                  * @param field {Field|string|htmlElement} 表单域对象或html表单元素
                  * @param authConfig {object} 验证时使用的配置
                  */
-                add:function(field,authConfig){
+                addFieldAuth:function(field,authConfig){
                     var self = this;
                     if(!field){
                         S.log(LOG_PREFIX + '缺少第一个field参数！');
                         return false;
                     }
+
                     var auth = self.get('auth');
                     if(!auth){
                         S.log(LOG_PREFIX+'不存在Auth的实例！');
                         return false;
                     }
-                    auth.add(field,authConfig);
 
+                    //处理传递的是元素name的情况
+                    if(S.isString(field) && !/^#/.test(field)) field = document.getElementsByName(field)[0];
+
+                    return auth.add(field,authConfig);
                 },
                 /**
                  * 获取指定的域Model
@@ -135,43 +150,16 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                  * 向collection添加表单域数据
                  * @public
                  */
-                addField:function($filed,isGroup){
+                add:function($field){
                     var self = this;
-                    var field;
-                    var type = $filed.attr('type');
-                    var name = $filed.attr('name');
-                    var value = $filed.val();
+                    var type = $field.attr('type');
+                    var name = self.getName($field);
+                    var value = $field.val();
                     var collection = self.get('collection');
-                    var data = {target : $filed, type : type,name:name,value:value,isGroup:isGroup,group:[]};
-                    if(isGroup){
-                        var groupFiled = collection.field(name);
-                        if(!groupFiled){
-                            groupFiled = collection.add(data);
-                        }
-                        var group = groupFiled.get('group');
-                        group.push(value);
-                        groupFiled.set('group',group);
-                        var isSelect = $filed.prop('checked');
-                        if(isSelect) groupFiled.set('value',value);
-
-                        field = groupFiled;
-                    }else{
-                        field = collection.add(data);
-                    }
-                    return field;
-                },
-                /**
-                 * 表单域绑定数据更新事件
-                 * @private
-                 */
-                _fieldBindEvent:function($input){
-                    if(!$input || !$input.length) return false;
-                    var self = this;
-                    var name = $input.attr('name');
-                    $input.on('blur',function(ev){
-                        var val = $input.val();
-                        self.field(name,val);
-                    });
+                    //验证域
+                    var authField = self.addFieldAuth($field);
+                    var data = {target : $field, type : type,name:name,value:value,authField:authField};
+                    return collection.add(data);
                 },
                 /**
                  * 根据input的type实例化对应的表单组件
@@ -181,17 +169,11 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                     var $target = self.get('target');
                     var $inputs = $target.all('input');
                     if (!$inputs.length) return false;
-                    var noGroupTypes = ['text','spinbox'];
-                    var groupTypes=['radio','checkbox'];
                     //遍历input
                     $inputs.each(function ($input) {
                         var type = $input.attr('type');
                         //添加field的model
-                        if(S.inArray(type,noGroupTypes)){
-                            self.addField($input);
-                        }else if(S.inArray(type,groupTypes)){
-                            self.addField($input,true);
-                        }
+                        self.add($input);
                         switch (type) {
                             case 'text':
                                 self._renderLimiter($input);
@@ -220,7 +202,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                 _renderGroupCom:function ($input) {
                     if (!$input || !$input.length) return false;
                     var self = this;
-                    var name = $input.attr('name');
+                    var name =  self.getName($input);
                     var type = $input.attr('type');
                     var fields = self.get('fields');
                     var CLASS;
@@ -253,7 +235,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                     var $target = self.get('target');
                     if (!$target.length) return false;
                     var config = self.getUiConfig('auth');
-                    var auth = new Auth($target, config);
+                    var auth = new Auth(null, config);
                     self.set('auth', auth);
                     return auth;
                 },
