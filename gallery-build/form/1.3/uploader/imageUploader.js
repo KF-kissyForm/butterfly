@@ -26,6 +26,34 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
          */
         event : {
             ERROR : 'error'
+        },
+        /**
+         * 默认规则配置
+         */
+        defaultRules:{
+            /**
+             * 允许上传的文件格式，如果是使用flash上传方式，在选择文件时就可以过滤格式
+             */
+            allowExts:[
+                {desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"},
+                '不支持{ext}格式的文件上传！'
+            ],
+            /**
+             * 是否必须上传个文件
+             */
+            required:[false, '必须至少上传一个文件！'],
+            /**
+             * 允许的最大上传数
+             */
+            max:[3, '每次最多上传{max}个文件！'],
+            /**
+             * 文件最大大小，单位为kb
+             */
+            maxSize:[1000, '文件大小为{size}，文件太大！'],
+            /**
+             * 允许重复上传相同文件
+             */
+            allowRepeat:[false, '该文件已经存在！']
         }
     });
     /**
@@ -94,6 +122,28 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
             var self = this;
             var uploader = self.get('uploader');
             var rules = self.get('rules');
+            var defaultRules = Auth.defaultRules;
+            S.each(defaultRules,function(aRule,key){
+                var hasRule = !S.isUndefined(rules[key]);
+                var ruleVal = hasRule && rules[key][0] || null;
+                if(!hasRule){
+                    rules[key] = [ruleVal,aRule[1]];
+                }
+                uploader.addAttr(key,{
+                    value:ruleVal,
+                    getter:function(v){
+                        if(key == 'allowExts') v = self.getAllowExts(v);
+                        return v;
+                    },
+                    setter:function(v){
+                        var rules = self.get('rules');
+                        debugger;
+                        if(key == 'allowExts') v = self.setAllowExts(v);
+                        rules[key][0] = v;
+                        return v;
+                    }
+                });
+            });
             S.each(rules,function(val,rule){
                 uploader.addAttr(rule,{
                     value:val[0],
@@ -404,31 +454,7 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
          *
          */
         rules:{
-            value : {
-                /**
-                 * 允许上传的文件格式，如果是使用flash上传方式，在选择文件时就可以过滤格式
-                 */
-                allowExts:[
-                    {desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"},
-                    '不支持{ext}格式的文件上传！'
-                ],
-                /**
-                 * 是否必须上传个文件
-                 */
-                required:[false, '必须至少上传一个文件！'],
-                /**
-                 * 允许的最大上传数
-                 */
-                max:[3, '每次最多上传{max}个文件！'],
-                /**
-                 * 文件最大大小，单位为kb
-                 */
-                maxSize:[1000, '文件大小为{size}，文件太大！'],
-                /**
-                 * 允许重复上传相同文件
-                 */
-                allowRepeat:[false, '该文件已经存在！']
-            }
+            value : Auth.defaultRules
         }
     }});
     return Auth;
@@ -2163,8 +2189,8 @@ KISSY.add('gallery/form/1.3/uploader/index',function (S, Base, Node, Uploader,Au
             AUTH : 'data-auth'
         },
         //所支持的内置主题
-        THEMES = ['default','imageUploader', 'ershouUploader','loveUploader','uploadify','refundUploader','daogouUploader'],
-    //内置主题路径前缀
+        THEMES = ['default','imageUploader', 'ershouUploader','loveUploader','uploadify','refundUploader','daogouUploader','singleImageUploader'],
+         //内置主题路径前缀
         THEME_PREFIX='gallery/form/1.3/uploader/themes/';
     S.namespace('form');
     /**

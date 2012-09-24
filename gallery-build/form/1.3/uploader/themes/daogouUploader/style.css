@@ -383,3 +383,6 @@
 .btn-hide{
     display: none;
 }
+.daogouUploader-button .uploader-button-swf{
+    text-indent: 0;
+}
