@@ -11,8 +11,11 @@
 
 <div class="grid">
 
-    <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue"
-           action="upload.php" urlsInputName="imageUrls" max="3" maxSize="500">
+    <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader"
+           value="上传图片" queueTarget="#J_UploaderQueue"
+           action="upload.php" urlsInputName="imageUrls" postData='{"author":"minghe"}'
+           max="3" maxSize="500"
+    >
 
     <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
     <input type="hidden" name="imageUrls" value="http://tp4.sinaimg.cn/1653905027/180/5601547226/1,http://img02.taobaocdn.com/imgextra/i2/748902859/T2OTOdXm0bXXXXXXXX_!!748902859.jpg_310x310.jpg">
