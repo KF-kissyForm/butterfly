@@ -142,16 +142,19 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
                     self.add(item, rule);
                 }
             });
-
             //add custom rule
             S.each(_ruleCfg, function(ruleCfg, name){
                 if(!self._storage[name] && Factory.rules[name]) {
-                    //如果集合里没有，但是有配置，可以认定是自定义属性，入口为form.add
-                    var rule = Factory.create(name, {
+
+                    var ruleConfig = {
                         el:self.get('el'), //bugfix for change value
                         msg:ruleCfg
-                    });
-
+                    };
+                    if(ruleCfg.propertyValue){
+                        S.mix(ruleConfig,{args:[ruleCfg.propertyValue]});
+                    }
+                    //如果集合里没有，但是有配置，可以认定是自定义属性，入口为form.add
+                    var rule = Factory.create(name, ruleConfig);
                     self.add(name, rule);
                 }
             });

@@ -43,7 +43,7 @@ KISSY.add('gallery/form/1.3/auth/utils', function (S, DOM, undefined) {
                 case "radio":
                 case "checkbox":
                     S.each(els, function(el) {
-                        if (el.checked)val.push(el.value);
+                        DOM.prop(el,'checked') && val.push(el.value);
                     });
                     break;
                 default:
