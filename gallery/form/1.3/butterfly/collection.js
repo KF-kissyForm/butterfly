@@ -1,7 +1,7 @@
 KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,SingleSelectField,MultipleSelectField) {
     var EMPTY = '',$ = Node.all;
     /**
-     * 表单的数据模块
+     * 表单的数据集合
      * @class Collection
      * @constructor
      * @extends Base
@@ -9,7 +9,7 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
     function Collection(){
         Collection.superclass.constructor.apply(this, arguments);
     }
-    S.extend(Collection, Base,{
+    S.extend(Collection, Base,/** @lends Collection.prototype*/{
         /**
          * 想集合添加Field或SelectField数据模型
          * @param data
@@ -40,7 +40,7 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
          * @return {Boolean}
          */
         isSelectFieldType:function(type){
-            var selectFieldTypes = ['radio','checkbox'];
+            var selectFieldTypes = ['radio','select','checkbox'];
             if(!type) return false;
             return S.inArray(type,selectFieldTypes);
         },
@@ -119,6 +119,7 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
             //为选择类型的数据模型
             if(self.isSelectFieldType(type)){
                 name = $target.attr('name');
+                //TODO:需要优化
                 //通过name来获取元素集合
                 if(name) data.target = $(document.getElementsByName(name));
                 FieldClass = self.isMultipleType(type) && MultipleSelectField || SingleSelectField;

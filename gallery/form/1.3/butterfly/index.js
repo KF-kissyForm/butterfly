@@ -312,6 +312,11 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     if (!$target.length) return false;
                     var $selects = $target.all('select');
                     $selects.each(function ($select) {
+                        //为了和input保持统一
+                        $select.attr('type','select');
+                        //添加数据模型
+                        self.add($select,{});
+                        //render模拟UI
                         var config = self.getUiConfig('select', $select, 'width');
                         var select = new Select($select, config);
                         select.render();

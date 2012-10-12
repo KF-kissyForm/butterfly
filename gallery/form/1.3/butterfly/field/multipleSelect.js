@@ -1,10 +1,3 @@
-/**
- *  模块名：gallery/form/1.3/butterfly/selectField
- *
- * @module butterfly
- * @submodule butterfly-model
- */
-
 KISSY.add('gallery/form/1.3/butterfly/field/multipleSelect',function (S, Base, Node,SingleSelect) {
     var EMPTY = '';
     var $ = Node.all;

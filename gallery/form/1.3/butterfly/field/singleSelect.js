@@ -1,15 +1,8 @@
-/**
- *  模块名：gallery/form/1.3/butterfly/selectField
- *
- * @module butterfly
- * @submodule butterfly-model
- */
-
 KISSY.add('gallery/form/1.3/butterfly/field/singleSelect',function (S, Base, Node) {
     var EMPTY = '';
     var $ = Node.all;
     /**
-     * 应用于radio或checkbox或select的数据模块，是存在多个target、多个value、增加select和index的处理
+     * 应用于radio或select的数据模型，是存在多个target、单个value、增加select和index的处理
      * @class SelectField
      * @constructor
      */
@@ -17,7 +10,7 @@ KISSY.add('gallery/form/1.3/butterfly/field/singleSelect',function (S, Base, Nod
         SelectField.superclass.constructor.call(this, config);
         this._init();
     }
-    S.extend(SelectField, Base,{
+    S.extend(SelectField, Base,/** @lends SelectField.prototype*/{
         /**
          * 初始化
          * @private
@@ -35,21 +28,13 @@ KISSY.add('gallery/form/1.3/butterfly/field/singleSelect',function (S, Base, Nod
             var self = this;
             var $target = self.get('target');
             var options = [];
+            //选择框，去遍历option元素
+            if(self.get('type') == 'select')$target = $target.children();
             $target.each(function($option){
                 options.push($option.val());
             });
             self.set('options',options);
             return options;
-        },
-        /**
-         * 改变表单字段的值
-         * @param value
-         * @return value
-         */
-        val:function(value){
-            var self = this;
-            if(!S.isUndefined(value)) self.set('value',value);
-            return self.get('value');
         },
         /**
          * 验证表单字段
@@ -85,14 +70,14 @@ KISSY.add('gallery/form/1.3/butterfly/field/singleSelect',function (S, Base, Nod
         target:{
             value:EMPTY,
             getter:function(v){
-                return S.Node.all(v);
+                return $(v);
             }
         },
         /**
          * 同步表单字段值的事件
          */
         syncEvents:{
-            value:'click'
+            value:'click change'
         },
         /**
          * 字段类型
