@@ -30,6 +30,57 @@ KISSY.add('gallery/form/1.3/checkbox/index', function(S, Base, Node, Radio) {
     //方法
     S.extend(Checkbox, Base, /** @lends Checkbox.prototype*/ {
         /**
+         * 改变指定的多选框的选中状态
+         * @param {Number} targetIndex 多选框的索引值
+         */
+        change:function(targetIndex){
+            var self = this;
+            var kfbtn = $(self.get('kfbtn')[targetIndex]);
+            var targets = self.get('target');
+            var $target = $(targets[targetIndex]);
+            var getCls = this.get('cls');
+            var selectedClass = getCls.selected;
+            var isChecked = self.isChecked(targetIndex);
+            var isUiClick = self.get('isUiClick');
+            var isHtmlClick = self.get('isHtmlClick');
+            kfbtn[isChecked && 'removeClass' || 'addClass'](selectedClass);
+            if(isChecked){
+                kfbtn.removeClass(selectedClass);
+                kfbtn.removeClass(getCls.hover);
+                if(!isHtmlClick) $target.prop('checked',true);
+            }else{
+                kfbtn.addClass(selectedClass);
+                if(!isHtmlClick) $target.prop('checked',false);
+            }
+            self.set('isHtmlClick',false);
+        },
+        /**
+         * 多选框是否是选中状态
+         * @param {Number} index 多选框的索引值
+         * @return {Boolean}
+         */
+        isChecked:function(index){
+            var self = this;
+            var kfbtns = $(self.get('kfbtn'));
+            var kfbtn = kfbtns.item(index);
+            var getCls = self.get('cls');
+            var selectedClass = getCls.selected;
+            return kfbtn && kfbtn.hasClass(selectedClass) || false;
+        },
+        /**
+         * 监听原生表单元素的click事件
+         * @private
+         */
+        _onClick:function(target,index){
+            var self = this;
+            target.on('click',function(){
+                var isUiClick = self.get('isUiClick');
+                self.set('isHtmlClick',true);
+                !isUiClick && self.change(index);
+                self.set('isUiClick',false);
+            })
+        },
+        /**
          * 模拟的checkbox全选
          * @return {Object} return self
          */
@@ -41,7 +92,7 @@ KISSY.add('gallery/form/1.3/checkbox/index', function(S, Base, Node, Radio) {
                 if (self._isSelected(value) || self._isDisabled(value)) return;
                 value.addClass(self.get('cls').selected);
                 $(targets[key]).prop('checked',true);
-            })
+            });
             return self;
         },
         /**
@@ -53,12 +104,10 @@ KISSY.add('gallery/form/1.3/checkbox/index', function(S, Base, Node, Radio) {
                 kfbtns = self.get('kfbtn'),
                 oClass = self.get('cls'),
                 selectedClass = oClass.selected,
-                hoverClass = self.get('cls').hover,
                 targets = self.get('target');
             $(kfbtns).each(function(value, key) {        
-                //alert(selectedClass);        
                 if (!self._isSelected(value)) return;
-                value.removeClass(selectedClass)// +' ' + hoverClass);
+                value.removeClass(selectedClass);
                 $(targets[key]).prop('checked',false);
             })
             return self;
@@ -68,12 +117,10 @@ KISSY.add('gallery/form/1.3/checkbox/index', function(S, Base, Node, Radio) {
          * @param  {Number} targetIndex 一组input的索引
          */
         _clickHandler: function(targetIndex) {
-            var self = this,
-                targets = self.get('target'),
-                kfbtns = self.get('kfbtn'),
-                checkedClass = self.get('cls').selected;
-            $(targets[targetIndex]).fire('click');
-            $(kfbtns[targetIndex]).toggleClass(checkedClass);
+            var self = this;
+            var isUiClick = self.get('isUiClick');
+            self.set('isUiClick',true);
+            self.change(targetIndex);
         },
         /**
          * 获取所有选中的key
@@ -102,7 +149,6 @@ KISSY.add('gallery/form/1.3/checkbox/index', function(S, Base, Node, Radio) {
                 oClass = self.get('cls'),
 
                 selectedClass = oClass.selected,
-                disabledClass = oClass.disabled,
                 hoverClass = oClass.hover,
 
 
@@ -132,7 +178,6 @@ KISSY.add('gallery/form/1.3/checkbox/index', function(S, Base, Node, Radio) {
                     value.detach('mouseenter');
                 }
                 value.addClass(hoverClass);
-                //value.fire('mouseenter');
             }).on('mouseleave', function() {
                 if (self._isDisabled(radios[key])) return;
 
@@ -140,7 +185,6 @@ KISSY.add('gallery/form/1.3/checkbox/index', function(S, Base, Node, Radio) {
                     value.detach('mouseleave');
                 }
                 value.removeClass(hoverClass);
-                //value.fire('mouseleave');
             })
         },
         /**
@@ -151,9 +195,7 @@ KISSY.add('gallery/form/1.3/checkbox/index', function(S, Base, Node, Radio) {
                 kfbtns = $(self.get('kfbtn')),
                 hoverClass = this.get('cls').hover,
                 hasLabel = self.get('hasLabel'),
-                targets = self.get('target'),
-                getLabelFunc = self.get('getLabelFunc'),
-                nextLabel;
+                getLabelFunc = self.get('getLabelFunc');
             kfbtns.each(function(value, key) {
                 value.on('mouseenter mouseleave', function(ev) {
                     //如果本身是选中状态或者是禁用状态，则不做处理
@@ -258,9 +300,13 @@ KISSY.add('gallery/form/1.3/checkbox/index', function(S, Base, Node, Radio) {
              */
             accessible: {
                 value: false
-            }
+            },
+            //是否是模拟UI触发change
+            isUiClick:{value:false},
+            //是否是原生表单元素触发change
+            isHtmlClick:{value:false}
         }
-    })
+    });
     return Checkbox;
 }, {
     requires: ['base', 'node', 'gallery/form/1.3/radio/index']

@@ -79,7 +79,7 @@ KISSY.add('gallery/form/1.3/radio/index', function(S, Node, Base) {
             }
             //遍历
             target.each(function(value,index) {
-                value.hide();
+                //value.hide();
                 if (self._isDisabled(value)) {
                     kfbtn = $(disabledHTML).insertBefore(value).attr('ks-kfbtn-disabled', 'disabled').removeAttr('tabindex');
                 } else {
@@ -99,13 +99,20 @@ KISSY.add('gallery/form/1.3/radio/index', function(S, Node, Base) {
                     }
                 }
                 kfbtnArr.push(kfbtn);
-
-                value.on('click',function(){
-                    if (self._isDisabled(value)) return;
-                    self._clickHandler.call(self, index);
-                })
+                self._onClick(value,index);
             });
             self.set('kfbtn', kfbtnArr);
+        },
+        /**
+         * 监听原生表单元素的click事件
+         * @private
+         */
+        _onClick:function(target,index){
+            var self = this;
+            target.on('click',function(){
+                if (self._isDisabled(target)) return;
+                self._clickHandler.call(self, index);
+            })
         },
         /**
          * 加载css
