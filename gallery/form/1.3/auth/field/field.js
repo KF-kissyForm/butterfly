@@ -3,8 +3,7 @@
  * @author czy88840616 <czy88840616@gmail.com>
  *
  */
-KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, DOM, Factory,
-                                                         Rule, PropertyRule, Msg, Utils, undefined) {
+KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, DOM, Factory, Rule, PropertyRule, Msg, Utils) {
 
     var EMPTY = '',
         CONFIG_NAME = 'data-valid';

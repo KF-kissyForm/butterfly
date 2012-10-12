@@ -17,33 +17,36 @@ KISSY.add('gallery/form/1.3/auth/utils', function (S, DOM, undefined) {
         guid:function () {
             return 'AUTH_' + S.guid();
         },
-        getEvent: function(els){
+        getEvent:function (els) {
             var event = 'blur',
                 type = DOM.attr(els, 'type');
             switch (type) {
                 case "select-multiple":
                 case "radio":
                 case "checkbox":
-                    event='click';
+                    event = 'click';
+                    break;
+                case "select":
+                    event = 'change';
                     break;
                 default:
                     event = 'blur';
             }
             return event;
         },
-        getValue:function(els) {
+        getValue:function (els) {
             var val = [],
                 type = DOM.attr(els, 'type');
             switch (type) {
                 case "select-multiple":
-                    S.each(els.options, function(el) {
+                    S.each(els.options, function (el) {
                         if (el.selected)val.push(el.value);
                     });
                     break;
                 case "radio":
                 case "checkbox":
-                    S.each(els, function(el) {
-                        DOM.prop(el,'checked') && val.push(el.value);
+                    S.each(els, function (el) {
+                        DOM.prop(el, 'checked') && val.push(el.value);
                     });
                     break;
                 default:
@@ -54,7 +57,7 @@ KISSY.add('gallery/form/1.3/auth/utils', function (S, DOM, undefined) {
     };
 
     return Utils;
-},{
+}, {
     requires:[
         'dom'
     ]
