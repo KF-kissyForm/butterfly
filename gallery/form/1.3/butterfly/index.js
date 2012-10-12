@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Collection, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Select, Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Collection, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Select, Auth) {
         var EMPTY = '';
         var $ = Node.all;
         var LOG_PREFIX = '[Butterfly]:';
@@ -42,7 +42,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                         return false;
                     }
                     //实例化表单数据集合
-                    self.set('collection',new Collection());
+                    self.set('collection', new Collection());
                     self._loadTheme(self.get('theme'), function () {
                         //实例化验证组件
                         self._renderAuth();
@@ -57,9 +57,21 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                  * @param $el
                  * @return {String}
                  */
-                getName:function($el){
-                    if(!$el || !$el.length) return '';
+                getName:function ($el) {
+                    if (!$el || !$el.length) return '';
                     return $el.attr('id') || $el.attr('name') || '';
+                },
+                /**
+                 * 添加自定义验证规则
+                 * @param {String} ruleName 规则名
+                 * @param {Function} fnRule 规则函数
+                 */
+                addRule:function (ruleName, fnRule) {
+                    var self = this;
+                    var rules = self.get('customRules');
+                    if (!S.isString(ruleName) || !S.isFunction(fnRule) || !S.isArray(rules)) return false;
+                    rules.push([ruleName, fnRule]);
+                    self.set('customRules', rules);
                 },
                 /**
                  * 当不传参时候，验证整个表单的合法性，当参数为字符串时候，验证指定表单字段的合法性，当参数为数组时候，验证多个字段的合法性
@@ -70,19 +82,19 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                     var self = this;
                     var auth = self.get('auth');
                     var authField;
-                    if(!auth){
-                        S.log(LOG_PREFIX+'不存在Auth的实例！');
+                    if (!auth) {
+                        S.log(LOG_PREFIX + '不存在Auth的实例！');
                         return false;
                     }
                     //验证指定表单字段的合法性
-                    if(S.isString(field)){
+                    if (S.isString(field)) {
                         authField = auth.getField(field);
                         return authField && authField.validate() || EMPTY;
                     }
-                    else if(S.isArray(field)){
+                    else if (S.isArray(field)) {
 
                     }
-                    else{
+                    else {
                         auth.validate();
                     }
                     return auth.get('result');
@@ -92,23 +104,23 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                  * @param field {Field|string|htmlElement} 表单域对象或html表单元素
                  * @param authConfig {object} 验证时使用的配置
                  */
-                addFieldAuth:function(field,authConfig){
+                addFieldAuth:function (field, authConfig) {
                     var self = this;
-                    if(!field){
+                    if (!field) {
                         S.log(LOG_PREFIX + '缺少第一个field参数！');
                         return false;
                     }
 
                     var auth = self.get('auth');
-                    if(!auth){
-                        S.log(LOG_PREFIX+'不存在Auth的实例！');
+                    if (!auth) {
+                        S.log(LOG_PREFIX + '不存在Auth的实例！');
                         return false;
                     }
 
                     //处理传递的是元素name的情况
-                    if(S.isString(field) && !/^#/.test(field)) field = document.getElementsByName(field)[0];
+                    if (S.isString(field) && !/^#/.test(field)) field = document.getElementsByName(field)[0];
 
-                    return auth.add(field,authConfig);
+                    return auth.add(field, authConfig);
                 },
                 /**
                  * 获取指定的域Model
@@ -116,11 +128,11 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                  * @return Model
                  *
                  */
-                field:function(name,data){
+                field:function (name, data) {
                     var self = this;
                     var collection = self.get('collection');
-                    if(collection == EMPTY || !S.isString(name)) return false;
-                    return collection.field(name,data);
+                    if (collection == EMPTY || !S.isString(name)) return false;
+                    return collection.field(name, data);
                 },
                 /**
                  * 获取组件配置，会合并html属性中的配置
@@ -150,16 +162,41 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                  * 向collection添加表单域数据
                  * @public
                  */
-                add:function($field){
+                add:function ($field, rulesConfig) {
                     var self = this;
                     var type = $field.attr('type');
                     var name = self.getName($field);
                     var value = $field.val();
                     var collection = self.get('collection');
+                    var customRules = self._getFieldCustomRules($field);
+                    if (!S.isEmptyObject(customRules)) {
+                        rulesConfig = S.merge({ rules:customRules}, rulesConfig);
+                    }
                     //验证域
-                    var authField = self.addFieldAuth($field);
-                    var data = {target : $field, type : type,name:name,value:value,authField:authField};
+                    var authField = self.addFieldAuth($field, rulesConfig);
+                    var data = {target:$field, type:type, name:name, value:value, authField:authField};
                     return collection.add(data);
+                },
+                /**
+                 * 自定义验证规则配置
+                 * @private
+                 */
+                _getFieldCustomRules:function ($field) {
+                    var self = this;
+                    var customRules = self.get('customRules');
+                    var rules = {};
+                    if (!customRules.length) return rules;
+                    S.each(customRules, function (rule) {
+                        var ruleName = rule[0];
+                        if ($field.attr(ruleName)) {
+                            rules[ruleName] = {
+                                error:$field.attr(ruleName + '-msg'),
+                                success:$field.attr(ruleName + '-success-msg') || '',
+                                propertyValue:$field.attr(ruleName)
+                            };
+                        }
+                    });
+                    return rules;
                 },
                 /**
                  * 根据input的type实例化对应的表单组件
@@ -202,7 +239,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                 _renderGroupCom:function ($input) {
                     if (!$input || !$input.length) return false;
                     var self = this;
-                    var name =  self.getName($input);
+                    var name = self.getName($input);
                     var type = $input.attr('type');
                     var fields = self.get('fields');
                     var CLASS;
@@ -237,6 +274,13 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                     var config = self.getUiConfig('auth');
                     var auth = new Auth(null, config);
                     self.set('auth', auth);
+
+                    var rules = self.get('customRules');
+                    if (rules.length) {
+                        S.each(rules, function (rule) {
+                            auth.register(rule[0], rule[1]);
+                        })
+                    }
                     return auth;
                 },
                 /**
@@ -462,7 +506,9 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event,Col
                      * @type Auth
                      * @default ''
                      */
-                    auth:{ value:EMPTY }
+                    auth:{ value:EMPTY },
+                    //自定义的验证规则
+                    customRules:{value:[]}
                 }
             }
         )

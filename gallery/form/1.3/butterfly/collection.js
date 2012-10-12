@@ -1,4 +1,4 @@
-KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,SelectField) {
+KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,SingleSelectField,MultipleSelectField) {
     var EMPTY = '',$ = Node.all;
     /**
      * 表单的数据模块
@@ -19,31 +19,14 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
             if(!S.isObject(data)) return false;
             //字段name
             var name = data.name;
-            //字段类型
-            var type = data.type;
-            //字段目标元素
-            var $target = data.target;
-            if(!name || !type || !$target) return false;
-
             var self = this;
-
             //已经存在该字段直接返回该字段
             if(self.isExist(name)) return self.field(name);
 
-            var field = EMPTY;
-
-            //为选择类型的数据模型
-            if(self.isSelectFieldType(type)){
-                name = $target.attr('name');
-                //通过name来获取元素集合
-                if(name){
-                    data.target = $(document.getElementsByName(name));
-                }
-
-                field = new SelectField(data);
-            }else{
-                field = new Field(data);
-            }
+            //数据模型类
+            var FieldClass = self.getField(data);
+            //实例化数据模型
+            var field = new FieldClass(data);
 
             //向集合添加字段数据模型
             var fields = self.get('fields');
@@ -60,6 +43,16 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
             var selectFieldTypes = ['radio','checkbox'];
             if(!type) return false;
             return S.inArray(type,selectFieldTypes);
+        },
+        /**
+         * 是否是类似checkbox的多选方式的表单域
+         * @param {String} type
+         * @return {Boolean}
+         */
+        isMultipleType:function(type){
+            var multipleTypes = ['checkbox'];
+            if(!type) return false;
+            return S.inArray(type,multipleTypes);
         },
         /**
          * collection中是否存在该字段的数据
@@ -106,11 +99,34 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
                 })
             }
             return field;
+        },
+        /**
+         * 获取数据模型
+         */
+        getField:function(data){
+            var FieldClass = Field;
+            if(!S.isObject(data)) return FieldClass;
+
+            var self = this;
+            //字段name
+            var name = data.name;
+            //字段类型
+            var type = data.type;
+            //字段目标元素
+            var $target = data.target;
+            if(!name || !type || !$target) return FieldClass;
+
+            //为选择类型的数据模型
+            if(self.isSelectFieldType(type)){
+                name = $target.attr('name');
+                //通过name来获取元素集合
+                if(name) data.target = $(document.getElementsByName(name));
+                FieldClass = self.isMultipleType(type) && MultipleSelectField || SingleSelectField;
+            }
+            return FieldClass;
         }
     },{
         ATTRS:{
-            Field:{value:Field},
-            SelectField:{value:SelectField},
             fields:{
                 value:[]
             },
@@ -118,4 +134,4 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
         }
     });
     return Collection;
-},{requires:['base', 'node','./field/base','./field/selectField']});
+},{requires:['base', 'node','./field/base','./field/singleSelect','./field/multipleSelect']});

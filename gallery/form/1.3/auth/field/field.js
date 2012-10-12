@@ -162,7 +162,10 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
             //element event bind
             if (_cfg.event != 'none') {
                 Event.on(self.get('el'), _cfg.event || Utils.getEvent(_el), function (ev) {
-                    self.validate();
+                    //增加个延迟，确保原生表单改变完成
+                    S.later(function(){
+                        self.validate();
+                    })
                 });
             }
 

@@ -103,7 +103,7 @@
 
                         <div class="controls">
                             <label class="checkbox inline">
-                                <input type="checkbox" value="option1" name="interest">
+                                <input type="checkbox" value="option1" name="interest" more-select="2" more-select-msg="至少选择2个爱好！" msg-wrapper="#interest-msg">
                                 爬山
                             </label>
                             <label class="checkbox inline">
@@ -114,6 +114,7 @@
                                 <input type="checkbox" value="option3" name="interest">
                                 旅游
                             </label>
+                            <div id="interest-msg"></div>
                         </div>
                     </div>
                     <div class="control-group">
@@ -214,20 +215,13 @@
     var $ = KISSY.Node.all;
     KISSY.use("gallery/form/1.3/butterfly/index", function (S, Butterfly) {
         var butterfly = new Butterfly('#J_DefaultForm');
+        //添加一个自定义的规则
+        butterfly.addRule('more-select', function (values,limitValue) {
+            return values.length >= Number(limitValue);
+        });
         butterfly.on('render',function(){
             //立即验证用户名
             butterfly.test('username');
-
-            butterfly.addFieldAuth('#interest', {
-                rules:{
-                    moreselect: {
-                        error:'必须选择超过1个'
-                    }
-                },
-                style:{
-                    error:'error'
-                }
-            });
 
             var username = butterfly.field('username');
             username.val('明河');
@@ -242,11 +236,13 @@
 
             //组的情况的处理（比如一组radio或checkbox）
             var sex = butterfly.field('sex');
-            /*sex.set('value','女');
+/*            sex.set('value','女');
             S.log(sex.get('index'));
             S.log(sex.get('options'));*/
             sex.test();
 
+            var interest = butterfly.field('interest');
+            interest.test();
         });
         butterfly.render();
     });

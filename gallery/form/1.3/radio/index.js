@@ -79,7 +79,7 @@ KISSY.add('gallery/form/1.3/radio/index', function(S, Node, Base) {
             }
             //遍历
             target.each(function(value,index) {
-                //value.hide();
+                value.hide();
                 if (self._isDisabled(value)) {
                     kfbtn = $(disabledHTML).insertBefore(value).attr('ks-kfbtn-disabled', 'disabled').removeAttr('tabindex');
                 } else {

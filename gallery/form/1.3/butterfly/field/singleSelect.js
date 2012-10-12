@@ -5,7 +5,7 @@
  * @submodule butterfly-model
  */
 
-KISSY.add('gallery/form/1.3/butterfly/field/selectField',function (S, Base, Node) {
+KISSY.add('gallery/form/1.3/butterfly/field/singleSelect',function (S, Base, Node) {
     var EMPTY = '';
     var $ = Node.all;
     /**
@@ -79,12 +79,6 @@ KISSY.add('gallery/form/1.3/butterfly/field/selectField',function (S, Base, Node
             })
         }
     },{ATTRS:{
-        /**
-         * 为选择类型的表单域，比如radio或checkbox或select
-         * @type {Boolean}
-         * @default true
-         */
-        isSelectField:{value:true},
         /**
          * 目标表单字段
          */
