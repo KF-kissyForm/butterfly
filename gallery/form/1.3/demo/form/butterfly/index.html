@@ -166,7 +166,7 @@
 
                         <div class="controls">
                             <div class="grid">
-                                <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传照片" queueTarget="#J_UploaderQueue"
+                                <input class="g-u" id="images" name="Filedata" type="image-uploader" value="上传照片" queueTarget="#J_UploaderQueue"
                                        action="upload.php" urlsInputName="imageUrls"
                                        required maxSize="500" max="4" allowExts="jpg,jpeg,png,gif,bmp">
 
@@ -251,6 +251,9 @@
             var citySelect = butterfly.field('citySelect');
             S.log(citySelect.get('options'));
             citySelect.test();
+
+            //图片选择
+            var imageUploader = butterfly.field('images');
         });
         butterfly.render();
     });

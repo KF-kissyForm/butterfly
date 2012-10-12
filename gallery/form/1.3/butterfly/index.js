@@ -49,8 +49,23 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                         self._initInput();
                         self._initTextArea();
                         self._initSelect();
-                        self.fire('render');
+                        self._fireRenderEvent();
                     });
+                },
+                /**
+                 * fire render事件
+                 * @private
+                 * @return {Boolean}
+                 */
+                _fireRenderEvent:function(){
+                    var self = this;
+                    var isImageUploaderReady = self.get('_isImageUploaderReady');
+                    //存在异步初始化的组件
+                    if(isImageUploaderReady === false){
+                        return false;
+                    }
+                    self.fire('render');
+                    return true;
                 },
                 /**
                  * 获取元素的id，获取不到，获取name
@@ -315,7 +330,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                         //为了和input保持统一
                         $select.attr('type','select');
                         //添加数据模型
-                        self.add($select,{});
+                        self.add($select);
                         //render模拟UI
                         var config = self.getUiConfig('select', $select, 'width');
                         var select = new Select($select, config);
@@ -364,7 +379,14 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                  */
                 _renderImageUploader:function ($input) {
                     if (!$input || !$input.length) return false;
+
+                    var self = this;
+                    self.set('_isImageUploaderReady',false);
                     var imageUploader = new ImageUploader($input);
+                    imageUploader.on('render',function(ev){
+                        self.set('_isImageUploaderReady',true);
+                        self._fireRenderEvent();
+                    });
                     imageUploader.render();
                     return imageUploader;
                 },
