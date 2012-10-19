@@ -1,4 +1,4 @@
-KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,SingleSelectField,MultipleSelectField) {
+KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,SingleSelectField,MultipleSelectField,Uploader) {
     var EMPTY = '',$ = Node.all;
     /**
      * 表单的数据集合
@@ -23,10 +23,19 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
             //已经存在该字段直接返回该字段
             if(self.isExist(name)) return self.field(name);
 
-            //数据模型类
-            var FieldClass = self.getField(data);
-            //实例化数据模型
-            var field = new FieldClass(data);
+            var field;
+            //特殊的自定义组件
+            if(data.type == 'image-uploader'){
+                field = data.ui;
+                if(!field) return false;
+                new Uploader({ui:field,authField:data.authField});
+                field.set('name',name);
+            }else{
+                //数据模型类
+                var FieldClass = self.getField(data);
+                //实例化数据模型
+                field = new FieldClass(data);
+            }
 
             //向集合添加字段数据模型
             var fields = self.get('fields');
@@ -135,4 +144,9 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
         }
     });
     return Collection;
-},{requires:['base', 'node','./field/base','./field/singleSelect','./field/multipleSelect']});
+},{requires:['base', 'node',
+    './field/base',
+    './field/singleSelect',
+    './field/multipleSelect',
+    './field/uploader'
+]});

@@ -96,12 +96,34 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field, Factory,
                 el = S.one(field);
                 if (el) {
                     key = S.one(el).attr('id') || S.one(el).attr('name');
+                    var isUploaderType = self._isUploaderType(el);
                     var filedConfig = S.merge(self.AuthConfig, {event:self.AuthConfig.autoBind ? Utils.getEvent(el) : 'none'}, config);
                     authField = self._storages[key || Utils.guid()] = new Field(el, filedConfig);
                 }
             }
 
             return authField;
+        },
+        /**
+         * 是否是异步文件上传域
+         * @private
+         * @param {NodeList} el
+         * @return {Boolean}
+         */
+        _isUploaderType:function(el){
+            if(!el || !el.length) return false;
+            var type = el.attr('type');
+            return type == 'image-uploader' || type == 'file';
+        },
+        /**
+         * 异步文件上传的验证配置处理
+         * @param {NodeList} el
+         * @private
+         */
+        _UploaderFieldConfig:function(el){
+            if(!el || !el.length) return false;
+
+            var required = el.attr('required');
         },
         /**
          * 根据key返回field对象

@@ -51,6 +51,8 @@ KISSY.add('gallery/form/1.3/auth/msg/base', function (S, Base,Node) {
         },
         show:function (o) {
             var self = this;
+            var args =self.get('args');
+            var tpl = self.get('tpl');
             o = S.merge(self.get('args'), o);
 
             S.buffer(function () {

@@ -86,6 +86,9 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
             uploader.testRequired = function(){
                 return self.testRequired();
             };
+            uploader.test = function(){
+                return self.testMax() && self.testRequired();
+            };
 
             queue.on('add',function(ev){
                 var file = ev.file;
@@ -99,7 +102,7 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
             queue.on('remove',function(ev){
                 var file = ev.file,status = file.status;
                 //删除的是已经成功上传的文件，需要重新检验最大允许上传数
-                if(status == 'success') self.testMax();
+                if(status == 'success') self.testMax() && self.testRequired();
             });
             queue.on('statusChange',function(ev){
                 var status = ev.status;

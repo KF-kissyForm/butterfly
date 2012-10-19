@@ -181,15 +181,22 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     var self = this;
                     var type = $field.attr('type');
                     var name = self.getName($field);
-                    var value = $field.val();
                     var collection = self.get('collection');
-                    var customRules = self._getFieldCustomRules($field);
-                    if (!S.isEmptyObject(customRules)) {
-                        rulesConfig = S.merge({ rules:customRules}, rulesConfig);
+                    var data = {target:$field, type:type, name:name};
+                    if(type == 'image-uploader'){
+                        S.mix(data,rulesConfig);
+                    }else{
+                        var value = $field.val();
+                        //合并自定义的规则配置
+                        var customRules = self._getFieldCustomRules($field);
+                        if (!S.isEmptyObject(customRules)) {
+                            rulesConfig = S.merge({ rules:customRules}, rulesConfig);
+                        }
+                        S.mix(data,{value:value});
                     }
                     //验证域
                     var authField = self.addFieldAuth($field, rulesConfig);
-                    var data = {target:$field, type:type, name:name, value:value, authField:authField};
+                    S.mix(data,{authField:authField});
                     return collection.add(data);
                 },
                 /**
@@ -385,6 +392,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     var imageUploader = new ImageUploader($input);
                     imageUploader.on('render',function(ev){
                         self.set('_isImageUploaderReady',true);
+                        self.add($input,{ui:ev.uploader});
                         self._fireRenderEvent();
                     });
                     imageUploader.render();

@@ -208,7 +208,7 @@ KISSY.add(function (S, Node, Theme) {
             if(!data) return false;
             var $mask = $('.J_Mask_' + data.id);
             //出错的情况不允许隐藏遮罩层
-            if($mask.parent('li').hasClass('error')) return false;
+            if($mask.parent('li') && $mask.parent('li').hasClass('error')) return false;
             $mask[isShow && 'show' || 'hide']();
         },
         /**

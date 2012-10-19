@@ -126,21 +126,26 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
                 resetAfterValidate();
             });
 
-            //add html property
-            S.each(Factory.HTML_PROPERTY, function (item) {
+            var type = _el.attr('type');
+            //排除掉异步上传组件的属性规则添加
+            if(type != 'image-uploader' && type != 'file'){
+                //add html property
+                S.each(Factory.HTML_PROPERTY, function (item) {
 
-                if (_el.hasAttr(item)) {
-                    //从工厂中创建属性规则
-                    var rule = Factory.create(item, {
-                        //属性的value必须在这里初始化
-                        propertyValue:_el.attr(item),
-                        el:self.get('el'), //bugfix for change value
-                        msg:_ruleCfg[item]
-                    });
+                    if (_el.hasAttr(item)) {
+                        //从工厂中创建属性规则
+                        var rule = Factory.create(item, {
+                            //属性的value必须在这里初始化
+                            propertyValue:_el.attr(item),
+                            el:self.get('el'), //bugfix for change value
+                            msg:_ruleCfg[item]
+                        });
 
-                    self.add(item, rule);
-                }
-            });
+                        self.add(item, rule);
+                    }
+                });
+            }
+
             //add custom rule
             S.each(_ruleCfg, function(ruleCfg, name){
                 if(!self._storage[name] && Factory.rules[name]) {
