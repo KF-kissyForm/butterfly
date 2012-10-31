@@ -678,10 +678,9 @@ KISSY.add('gallery/form/1.3/uploader/base', function (S, Base, Node, UrlsInput, 
             setter:function (v) {
                 if (S.isObject(v)) {
                     var self = this, uploadType = self.get('uploadType');
-                    if (S.isFunction(uploadType)) {
-                        uploadType.set('data', v);
-                        self.set('serverConfig', S.mix(self.get('serverConfig'), {data:v}));
-                    }
+                    self.set('serverConfig', S.mix(self.get('serverConfig'), {data:v}));
+                    if (S.isFunction(uploadType)) uploadType.set('data', v);
+
                 }
                 return v;
             }
