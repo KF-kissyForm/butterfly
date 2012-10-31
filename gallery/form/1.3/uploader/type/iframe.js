@@ -183,10 +183,7 @@ KISSY.add('gallery/form/1.3/uploader/type/iframe',function(S, Node, UploadType) 
          */
         _remove : function() {
             var self = this,form = self.get('form');
-            if(!form){
-                S.log(LOG_PREFIX + 'form节点不存在！');
-                return false;
-            }
+            if(!form)return false;
             //移除表单
             form.remove();
             //重置form属性
@@ -215,7 +212,7 @@ KISSY.add('gallery/form/1.3/uploader/type/iframe',function(S, Node, UploadType) 
          * iframe
          */
         iframe : {value : {}},
-        form : {value : {}},
+        form : {value : EMPTY},
         fileInput : {value : EMPTY}
     }});
 
