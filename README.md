@@ -22,45 +22,45 @@ Butterfly是完整的表单解决方案，自带表单验证、数据层、多�
 
 （PS:kissy1.3不再需要配置gallery包路径。）
 
- ## 目前可以使用的表单UI组件
+## 目前可以使用的表单UI组件
 
- ### Uploader
+### Uploader
 
  异步文件上传组件，支持ajax、iframe、flash三种上传方案,由明河（剑平）、紫英、飞绿完成，请勿使用v1.0和v1.1的代码。
 
  <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/uploader.png">
 
- ### Limiter
+### Limiter
 
  字数统计组件，支持对kissy的富编辑器editor的统计，由明河（剑平）完成。
 
  <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/limiter.png">
 
- ### SpinBox
+### SpinBox
 
  数字增减器，由易敛完成。
 
  <img src="http://www.36ria.com/wp-content/uploads/2012/05/splinBox.png">
 
- ### Auth
+### Auth
 
  新的表单验证，由张挺完成。
 
  <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/kf-auth.png">
 
- ### Checkbox
+### Checkbox
 
  模拟多选框，用于表单美化，由伯方完成。
 
  <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/checkbox.png">
 
- ### Radio
+### Radio
 
  模拟单选框，用于表单美化，由伯方完成。
 
  <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/radio.png">
 
- ## 组件变更
+## 组件变更
 
          <h3>V1.3.0 change</h3>
          <h5>[+] 新增Butterfly</h5>
