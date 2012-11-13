@@ -10,7 +10,7 @@
 <h2>上传验证控制的demo</h2>
 <div class="grid">
     <input type="image-uploader" class="g-u" id="J_AuthBtn" name="Filedata" value="上传图片"
-           maxSize="500" max="4" allowExts="jpg,png" required data-valid="{maxSize:'图片大小超过{maxSize}！'}" >
+           maxSize="500" max="4" allowExts="jpg,png" required maxSize-msg="图片大小超过{maxSize}！" >
 </div>
 <ul id="J_AuthQueue" class="grid">
 
@@ -36,7 +36,8 @@
     KISSY.use('gallery/form/1.3/uploader/imageUploader', function (S, ImageUploader) {
         var authImageUploader = new ImageUploader('#J_AuthBtn','#J_AuthQueue',{
             action:"upload.php",
-            urlsInputName:"authImageUrls"
+            urlsInputName:"authImageUrls",
+            data:{'author':'minghe'}
         });
         authImageUploader.on('render',function(ev){
             var uploader = ev.uploader;

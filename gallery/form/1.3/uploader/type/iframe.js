@@ -132,6 +132,8 @@ KISSY.add('gallery/form/1.3/uploader/type/iframe',function(S, Node, UploadType) 
                 return false;
             }
             var response = doc.body.innerHTML;
+            //输出为直接退出
+            if(response == EMPTY) return false;
             result = self._processResponse(response);
             self.fire(IframeType.event.SUCCESS, {result : result});
             self._remove();
