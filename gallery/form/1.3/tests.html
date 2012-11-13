@@ -1,0 +1,36 @@
+<html>
+<head>
+    <title>Jasmine Test Runner</title>
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js"></script>
+    <link rel="stylesheet" href="spec/jasmine/jasmine.css">
+    <script src="spec/jasmine/jasmine.js"></script>
+    <script>
+        if (location.hash === '#testem') document.write('<script src="/testem.js"></'+'script>')
+    </script>
+    <script src="spec/jasmine/jasmine-html.js"></script>
+    <script src="spec/jasmine/jasmine-kissy.js"></script>
+</head>
+<body>
+       <script>
+           var S = KISSY;
+           S.config({
+               packages:[
+                   {
+                       name:"gallery",
+                       path:"http://localhost/gallery",
+                       charset:"utf-8"
+                   },
+                   {
+                       name:'spec',
+                       path:'./',
+                       charset:"utf-8"
+                   }
+               ]
+           });
+           JF.path = 'spec/fixture';
+           S.use('spec/runner',function(S,runner){
+               runner();
+           })
+       </script>
+</body>
+</html>
