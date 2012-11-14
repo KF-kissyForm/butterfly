@@ -30,7 +30,6 @@ button::-moz-focus-inner {
   top: 0;
   left: 0;
   overflow: hidden;
-  filter: ms:alpha(opacity = @o);
   opacity: 0;
 }
 .file-input-wrapper .file-input {
@@ -43,8 +42,8 @@ button::-moz-focus-inner {
   position: absolute;
   left: 0;
   top: -200px;
-  filter: ms:alpha(opacity = @o);
   opacity: 0;
+  filter: alpha(opacity = 0);
   z-index: 14;
 }
 .ks-progress-bar {
@@ -193,7 +192,6 @@ button::-moz-focus-inner {
   left: 0;
   width: 120px;
   height: 120px;
-  filter: ms:alpha(opacity = @o);
   opacity: 0.8;
   background: #fff;
   z-index: 7;

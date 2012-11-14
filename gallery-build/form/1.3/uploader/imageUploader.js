@@ -3531,6 +3531,7 @@ KISSY.add('gallery/form/1.3/uploader/queue', function (S, Node, Base) {
 
     S.mix(Queue, /**@lends Queue*/ {
         /**
+         * TODO:多余？
          * 模板
          */
         tpl:{
@@ -3865,7 +3866,7 @@ KISSY.add('gallery/form/1.3/uploader/queue', function (S, Node, Base) {
             //设置文件唯一id
             if (!file.id) file.id = S.guid(Queue.FILE_ID_PREFIX);
             //转换文件大小单位为（kb和mb）
-            if (file.size) file.textSize = S.convertByteSize(file.size);
+            if (file.size && S.convertByteSize) file.textSize = S.convertByteSize(file.size);
             //状态
             file.status = EMPTY;
             files.push(file);

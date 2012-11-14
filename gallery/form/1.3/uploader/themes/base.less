@@ -1,5 +1,4 @@
 .opacity(@o:0){
-    filter: ~"ms:alpha(opacity = @o)";
     opacity: @o/100;
 }
 .border-radius(@radius:0px){
@@ -69,6 +68,7 @@ button::-moz-focus-inner{ border:0; padding:0; margin:0; }
         left: 0;
         top: -200px;
         .opacity(0);
+        filter: ~"alpha(opacity = 0)";
         z-index: 14;
     }
 }
