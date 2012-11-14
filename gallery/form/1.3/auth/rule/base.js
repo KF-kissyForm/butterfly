@@ -42,18 +42,18 @@ KISSY.add('gallery/form/1.3/auth/rule/base', function(S, Base, undefined) {
         validate: function() {
             var self = this;
 
-            var args = [].slice.call(arguments);
-            var validated = self.validation.apply(self, args.length ? args: self._args);
+            self.fire('beforeValidate');
 
+            var args = [].slice.call(arguments);
+             args = self._setArgs(args);
+            //调用验证方法
+            var validated = self.validation.apply(self, args);
             var msg;
             if(self._msg) {
                 msg = validated ? self._msg[RULE_SUCCESS] : self._msg[RULE_ERROR];
             } else {
                 msg = validated ? self._msg[RULE_SUCCESS] : '';
             }
-
-            self.fire('beforeValidate');
-
             //Deprecated
             self.fire(validated ? RULE_SUCCESS:RULE_ERROR, {
                 msg:msg
@@ -68,14 +68,42 @@ KISSY.add('gallery/form/1.3/auth/rule/base', function(S, Base, undefined) {
             self.fire('afterValidate');
 
             return validated;
+        },
+        /**
+         * 设置验证函数的参数值
+         * @param {Array} args 参数值数组
+         * @return {Array}
+         * @private
+         */
+        _setArgs:function(args){
+            var self = this;
+            args = args.length ? args: self._args;
+            //过滤掉无用的参数
+            args = S.filter(args,function(val){
+                return !S.isUndefined(val);
+            });
+            var field = self.get('field');
+            if(field != '') args.push(field);
+            return  args;
         }
     }, {
         ATTRS: {
+            /**
+             * 验证消息
+             * @type {String}
+             */
             msg:{
                 value:'',
                 setter:function(msg) {
                     this._msg = S.merge(this._msg, msg);
                 }
+            },
+            /**
+             * 规则对应的表单域（指向会变化）
+             * @type {Field}
+             */
+            field:{
+                value:''
             }
         }
     });

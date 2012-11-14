@@ -18,16 +18,13 @@ KISSY.add('gallery/form/1.3/butterfly/field/uploader',function (S, Base, Node) {
         _init:function(){
             var self = this;
             var authField = self.get('authField');
-            var ui = self.get('ui');
-            if(!authField || !ui) return false;
-            var msgCls = authField._msg;
-            ui.on('error',function(ev){
-                var rule = ev.rule;
-                if(rule == 'required' || rule == 'require') msgCls.show({msg:ev.msg,style:'error'});
-            });
-            ui.on('success',function(ev){
-                msgCls.hide();
-            })
+            var oUploader = authField.get('uploader');
+            if(!authField || !oUploader) return false;
+            //验证消息类
+            var message = authField.get('oMsg');
+            oUploader.test = function(){
+                authField.validate();
+            };
         }
     },{ATTRS:{
         /**
@@ -39,10 +36,6 @@ KISSY.add('gallery/form/1.3/butterfly/field/uploader',function (S, Base, Node) {
                 return $(v);
             }
         },
-        /**
-         * Uploader的实例
-         */
-        ui:{value:EMPTY},
         //auth的验证字段
         authField:{ value:EMPTY }
     }});

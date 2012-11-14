@@ -76,6 +76,10 @@ Butterfly是完整的表单解决方案，自带表单验证、数据层、多�
     [!] add方法返回Field实例
     [!] 第一个参数可以为空
     [!] #35修复消息层显示后无法隐藏的bug
+    [+] 新增getFieldAttrRules方法
+    [+] 新增getName方法
+    [+] 新增mergeConfig方法
+    [+] Field新增rules属性
 
 #### Limiter
 

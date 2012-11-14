@@ -86,44 +86,66 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field, Factory,
         add:function (field, config) {
             var el, key, self = this;
             var authField = '';
+            //传入的是Field的实例
             if (field instanceof Field) {
-                //add field
                 el = field.get('el');
                 key = S.one(el).attr('id') || S.one(el).attr('name');
                 authField = self._storages[key || Utils.guid()] = field;
             } else {
-                //add html element
                 el = S.one(field);
-                if (el) {
-                    key = S.one(el).attr('id') || S.one(el).attr('name');
-                    var isUploaderType = self._isUploaderType(el);
-                    var filedConfig = S.merge(self.AuthConfig, {event:self.AuthConfig.autoBind ? Utils.getEvent(el) : 'none'}, config);
-                    authField = self._storages[key || Utils.guid()] = new Field(el, filedConfig);
-                }
+                if(!el.length) return false;
+
+                key = self.getName(el);
+                var filedConfig  = self.mergeConfig(el,config);
+                authField = self._storages[key] = new Field(el, filedConfig);
             }
 
             return authField;
         },
         /**
-         * 是否是异步文件上传域
-         * @private
-         * @param {NodeList} el
-         * @return {Boolean}
+         * 合并表单域的验证配置
+         * @param {HTMLElement} el
+         * @param {Object} config 配置
+         * @return {Object|Boolean}
          */
-        _isUploaderType:function(el){
+        mergeConfig:function(el,config){
             if(!el || !el.length) return false;
-            var type = el.attr('type');
-            return type == 'image-uploader' || type == 'file';
+            var self = this;
+            var filedConfig = S.merge(self.AuthConfig, {event:self.AuthConfig.autoBind ? Utils.getEvent(el) : 'none'}, config);
+            var rules  = self.getFieldAttrRules(el);
+            //合并自定义规则配置
+            if(!S.isEmptyObject(rules)){
+                filedConfig.rules = S.merge(rules, filedConfig.rules);
+            }
+            return filedConfig;
         },
         /**
-         * 异步文件上传的验证配置处理
-         * @param {NodeList} el
-         * @private
+         * 获取元素的id，获取不到，获取name
+         * @param $el
+         * @return {String}
          */
-        _UploaderFieldConfig:function(el){
-            if(!el || !el.length) return false;
-
-            var required = el.attr('required');
+        getName:function ($el) {
+            if (!$el || !$el.length) return '';
+            return $el.attr('id') || $el.attr('name') || Utils.guid();
+        },
+        /**
+         * 从html元素的属性中拉取规则配置
+         * @param {NodeList} $field 表单域元素
+         * @return {Object} rules
+         */
+        getFieldAttrRules:function ($field) {
+            var allRules = Factory.rules;
+            var rules = {};
+            S.each(allRules, function (rule,ruleName) {
+                if ($field.attr(ruleName)) {
+                    rules[ruleName] = {
+                        error:$field.attr(ruleName + '-msg'),
+                        success:$field.attr(ruleName + '-success-msg') || '',
+                        propertyValue:$field.attr(ruleName)
+                    };
+                }
+            });
+            return rules;
         },
         /**
          * 根据key返回field对象
@@ -140,7 +162,6 @@ KISSY.add('gallery/form/1.3/auth/base', function (S, JSON, Base, Field, Factory,
          */
         register:function (name, rule) {
             Factory.register(name, rule);
-
             return this;
         },
         validate:function (group) {

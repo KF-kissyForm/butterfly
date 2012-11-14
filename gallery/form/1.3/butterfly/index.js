@@ -183,42 +183,17 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     var name = self.getName($field);
                     var collection = self.get('collection');
                     var data = {target:$field, type:type, name:name};
-                    if(type == 'image-uploader'){
+                    //区别异步上传组件，会带上ui属性(Uploader的实例)
+                    if(type == 'image-uploader' && !S.isEmptyObject(rulesConfig)){
                         S.mix(data,rulesConfig);
                     }else{
                         var value = $field.val();
-                        //合并自定义的规则配置
-                        var customRules = self._getFieldCustomRules($field);
-                        if (!S.isEmptyObject(customRules)) {
-                            rulesConfig = S.merge({ rules:customRules}, rulesConfig);
-                        }
                         S.mix(data,{value:value});
                     }
                     //验证域
                     var authField = self.addFieldAuth($field, rulesConfig);
                     S.mix(data,{authField:authField});
                     return collection.add(data);
-                },
-                /**
-                 * 自定义验证规则配置
-                 * @private
-                 */
-                _getFieldCustomRules:function ($field) {
-                    var self = this;
-                    var customRules = self.get('customRules');
-                    var rules = {};
-                    if (!customRules.length) return rules;
-                    S.each(customRules, function (rule) {
-                        var ruleName = rule[0];
-                        if ($field.attr(ruleName)) {
-                            rules[ruleName] = {
-                                error:$field.attr(ruleName + '-msg'),
-                                success:$field.attr(ruleName + '-success-msg') || '',
-                                propertyValue:$field.attr(ruleName)
-                            };
-                        }
-                    });
-                    return rules;
                 },
                 /**
                  * 根据input的type实例化对应的表单组件
@@ -392,7 +367,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     var imageUploader = new ImageUploader($input);
                     imageUploader.on('render',function(ev){
                         self.set('_isImageUploaderReady',true);
-                        self.add($input,{ui:ev.uploader});
+                        self.add($input,{uploader:ev.uploader});
                         self._fireRenderEvent();
                     });
                     imageUploader.render();

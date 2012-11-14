@@ -51,8 +51,7 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
 
         self._init(el);
 
-        Field.superclass.constructor.call(self);
-
+        Field.superclass.constructor.call(self,config);
         return self;
     };
 
@@ -84,6 +83,7 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
             //msg init
             if (self._cfg.msg) {
                 self._msg = new Msg(_el, self._cfg.msg);
+                self.set('oMsg',self._msg);
                 var style = self._cfg.style;
 
                 self.on('afterRulesValidate', function (ev) {
@@ -111,7 +111,6 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
                 var result = ev.result,
                     curRule = ev.curRule,
                     msg = self._cache[curRule].msg || EMPTY;
-
                 self.set('result', result);
                 self.set('message', msg);
 
@@ -185,7 +184,7 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
                     //TODO args
                 });
             }
-
+            self.set('oRules',_storage);
             if(_storage[name]) {
                 _storage[name].on('validate', function (ev) {
                     S.log('[after rule validate]: name:' + ev.name + ',result:' + ev.result + ',msg:' + ev.msg);
@@ -199,12 +198,16 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
 
             return self;
         },
-
+        /**
+         * 删除规则
+         * @param name
+         * @return {*}
+         */
         remove:function (name) {
             var _storage = this._storage;
             delete _storage[name];
             delete this._cache[name];
-
+            self.set('oRules',_storage);
             return this;
         },
 
@@ -220,25 +223,24 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
         validate:function (name, cfg) {
             var result = true,
                 self = this,
-                _storage = self._storage,
                 cfg = cfg||{},
                 curRule = EMPTY;
-
+            var rules = self.get('oRules');
+            //校验开始
+            self.fire('beforeValidate');
             if (name) {
-                if (_storage[name]) {
-                    //校验开始
-                    self.fire('beforeValidate');
-
-                    result = _storage[name].validate(cfg.args);
+                if (rules[name]) {
+                    result = rules[name].validate(cfg.args);
                     curRule = name;
                 }
             } else {
-                //校验开始
-                self.fire('beforeValidate');
-
-                for (var key in _storage) {
-                    curRule = key;
-                    if (!_storage[key].validate(cfg.args)) {
+                var isPass;
+                for (var key in rules) {
+                    curRule =  key;
+                    var oRule = rules[key];
+                    oRule.set('field',self);
+                    isPass =  oRule.validate(cfg.args);
+                    if (!isPass) {
                         result = false;
                         break;
                     }
@@ -263,7 +265,17 @@ KISSY.add('gallery/form/1.3/auth/field/field', function (S, Event, Base, JSON, D
                 value:EMPTY
             },
             result:{},
-            el:{}
+            el:{},
+            /**
+             *  绑定在域上的所有规则实例
+             *  @type {Object}
+             */
+            oRules:{ value:{} },
+            /**
+             * 验证消息类
+             * @type {Object}
+             */
+            oMsg:{value:''}
         }
     });
 

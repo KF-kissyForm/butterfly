@@ -26,9 +26,9 @@ KISSY.add('gallery/form/1.3/butterfly/collection',function (S, Base, Node,Field,
             var field;
             //特殊的自定义组件
             if(data.type == 'image-uploader'){
-                field = data.ui;
+                field = data.uploader;
                 if(!field) return false;
-                new Uploader({ui:field,authField:data.authField});
+                new Uploader({authField:data.authField});
                 field.set('name',name);
             }else{
                 //数据模型类

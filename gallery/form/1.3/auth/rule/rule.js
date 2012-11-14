@@ -30,6 +30,10 @@ KISSY.add('gallery/form/1.3/auth/rule/rule', function(S, BaseRule, Utils, undefi
     };
 
     S.extend(Rule, BaseRule, /** @lends BaseRule.prototype*/{
+        /**
+         * 规则验证
+         * @return {*}
+         */
         validate:function () {
             var self = this;
             if(S.isUndefined(arguments[0])) {
