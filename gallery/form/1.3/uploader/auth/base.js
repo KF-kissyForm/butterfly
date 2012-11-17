@@ -94,9 +94,10 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                 var file = ev.file;
                 var type = file.type;
                 if(type != 'restore'){
-                    self.testAllowExt(file);
-                    self.testMaxSize(file);
-                    self.testRepeat(file);
+                    var isPass = true;
+                    isPass = self.testAllowExt(file);
+                    if(isPass) isPass = self.testMaxSize(file);
+                    if(isPass) self.testRepeat(file);
                 }
             });
             queue.on('remove',function(ev){
@@ -332,6 +333,10 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                 size = file.size,
                 rule = self.getRule('maxSize');
             if(rule){
+                var uploader = self.get('uploader');
+                if(S.UA.ie && uploader.get('type') == 'iframe'){
+                    return true;
+                }
             	var maxSize = Number(rule[0]) * 1024,
 	                isAllow = size <= maxSize,
 	                msg;
