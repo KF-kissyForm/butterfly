@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Collection, Radio, Checkbox, Limiter, ImageUploader, SpinBox, Select, Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Collection, Radio, Checkbox, RenderLimiter, RenderImageUploader, SpinBox, Select,RenderEditor, Auth) {
         var EMPTY = '';
         var $ = Node.all;
         var LOG_PREFIX = '[Butterfly]:';
@@ -210,7 +210,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                         self.add($input);
                         switch (type) {
                             case 'text':
-                                self._renderLimiter($input);
+                                self._renderUi(RenderLimiter,$input);
                                 break;
                             case 'radio':
                                 self._renderGroupCom($input);
@@ -291,12 +291,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     var $textAreas = $target.all('textarea');
                     if (!$textAreas.length) return false;
                     $textAreas.each(function ($textArea) {
-                        //实例化富编辑器
-                        if ($textArea.attr('type') == 'editor') {
-                            self._renderEditor($textArea);
-                        } else {
-                            self._renderLimiter($textArea);
-                        }
+                        self._renderUi($textArea.attr('type') == 'editor' && RenderEditor || RenderLimiter,$textArea);
                     });
                 },
                 /**
@@ -320,31 +315,6 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     })
                 },
                 /**
-                 * 运行字数统计组件
-                 * @private
-                 */
-                _renderLimiter:function ($textArea) {
-                    if (!$textArea || !$textArea.length) return false;
-                    var self = this;
-                    //最大允许输入长度
-                    var maxLen = $textArea.attr('maxlength');
-                    //统计文案的目标元素
-                    var limiterTarget = $textArea.attr('limiter-target');
-                    var type = $textArea.attr('type');
-                    var $limiterTarget = $(limiterTarget);
-                    //获取配置
-                    var config = self.get('uiConfig').limiter || {};
-                    //不存在字数统计基础配置
-                    if (!maxLen || !$limiterTarget.length) return false;
-                    S.mix(config, {wrapper:$limiterTarget, max:maxLen});
-                    //富编辑器，将html标签排除掉
-                    if (type == 'editor') S.mix(config, {isRejectTag:true});
-
-                    var textLimiter = new Limiter($textArea, config);
-                    textLimiter.render();
-                    return textLimiter;
-                },
-                /**
                  * 运行数字增减器
                  * @private
                  */
@@ -361,51 +331,24 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                  */
                 _renderImageUploader:function ($input) {
                     if (!$input || !$input.length) return false;
-
+                    //TODO:uiConfig
                     var self = this;
                     self.set('_isImageUploaderReady',false);
-                    var imageUploader = new ImageUploader($input);
-                    imageUploader.on('render',function(ev){
+                    var renderImageUploader = new RenderImageUploader({target:$input});
+                    renderImageUploader.on('render',function(ev){
                         self.set('_isImageUploaderReady',true);
-                        self.add($input,{uploader:ev.uploader});
+                        self.add($input,{uploader:ev.ui});
                         self._fireRenderEvent();
                     });
-                    imageUploader.render();
-                    return imageUploader;
                 },
                 /**
-                 * 初始化富编辑器
-                 * @paran {NodeList} $target
+                 * 初始化ui组件
                  * @private
                  */
-                _renderEditor:function ($target) {
+                _renderUi:function(Class,$target){
                     if (!$target || !$target.length) return false;
                     var self = this;
-                    var uiConfig = self.get('uiConfig');
-                    var config = uiConfig.editor;
-                    var cssUrl = config.cssUrl;
-                    cssUrl = S.UA.ie < 8 && cssUrl + 'editor-pkg-sprite.css' || cssUrl + 'editor-pkg-datauri.css';
-                    S.use(cssUrl);
-                    S.use('editor', function (S, Editor) {
-                        var editor = new Editor($target.getDOMNode(), config).use("undo,separator,removeformat,format,font,color,separator,list,indent,justify,separator,link,separator,table,resize,draft");
-                        editor.ready(function () {
-                            //运行字数统计
-                            var limiter = self._renderLimiter($target);
-                            //编辑器容器
-                            var $wrapper = editor.editorWrap;
-                            var width = $target.attr('width');
-                            // var height = $target.attr('height');
-                            //获取width和height属性设置容器宽高
-                            width && $wrapper.width(Number(width));
-                            //height && $wrapper.height(Number(height));
-                            Event.on(editor.document, "keyup", function (ev) {
-                                var val = editor.getData();
-                                $target.val(val);
-                                limiter.count();
-                            });
-
-                        });
-                    });
+                    return new Class({target:$target,uiConfig:self.get('uiConfig')});
                 },
                 /**
                  * 加载主题css文件
@@ -517,6 +460,12 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                      * @default ''
                      */
                     auth:{ value:EMPTY },
+                    /**
+                     * 是否所有的UI组件都初始化完毕
+                     * @type Boolean
+                     * @default false
+                     */
+                    isAllUiReady:{value:false},
                     //自定义的验证规则
                     customRules:{value:[]}
                 }
@@ -530,10 +479,11 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
             './collection',
             'gallery/form/1.3/radio/index',
             'gallery/form/1.3/checkbox/index',
-            'gallery/form/1.3/limiter/index',
-            'gallery/form/1.3/uploader/imageUploader',
+            './render/limiter',
+            './render/imageUploader',
             'gallery/form/1.3/spinbox/index',
             'gallery/form/1.3/select/index',
+            './render/editor',
             'gallery/form/1.3/auth/index']
     }
 )

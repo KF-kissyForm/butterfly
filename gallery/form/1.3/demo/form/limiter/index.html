@@ -225,7 +225,7 @@ textLimiter.render();
 
                  });
             editor.ready(function(){
-                var decLimiter = new Limiter('#J_Dec',{wrapper:'#J_DecCount',max:1000,isRejectTag:true});
+                var decLimiter = new Limiter('#J_Dec',{wrapper:'#J_DecCount',max:10,isRejectTag:true,isCut:true});
                 decLimiter.render();
                 KISSY.Event.on(editor.document, "keyup", function (ev) {
                     editor.sync();

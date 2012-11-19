@@ -168,7 +168,7 @@
                             <div class="grid">
                                 <input class="g-u" id="images" name="Filedata" type="image-uploader" value="上传照片" queueTarget="#J_UploaderQueue"
                                        action="upload.php" urlsInputName="imageUrls"
-                                       required maxSize="500" max="4" min-upload="2" allowExts="jpg,jpeg,png,gif,bmp" required-msg="必须上传一张照片"  min-upload-msg="至少上传二张照片" msg-wrapper="#image-uploader-msg">
+                                       required maxSize="500" max="4" min-upload="2" min-upload-msg="至少上传二张照片" allowExts="jpg,jpeg,png,gif,bmp" required-msg="必须上传一张照片"  msg-wrapper="#image-uploader-msg">
 
                                 <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
                                 <input type="hidden" name="imageUrls" value="http://tp4.sinaimg.cn/1653905027/50/5601547226/1">
@@ -263,7 +263,7 @@
             S.log(citySelect.get('options'));
             citySelect.test();
 
-            //图片选择
+            //图片上传
             var imageUploader = butterfly.field('images');
             imageUploader.test();
         });
