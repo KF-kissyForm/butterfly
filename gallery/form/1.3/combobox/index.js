@@ -15,7 +15,7 @@ KISSY.add('gallery/form/1.3/combobox/index',function(S, Node, Base){
      * @param {String} target 目标
      * @param {Object} config 组件配置
      * @example
-     * var ck = new Number('#J_ComboBox',{ariaLabel: '即可选择，又可手动输入'})
+     * var ck = new Number('#J_ComboBox',{aria: true})
      */
 
     function ComboBox(target, config) {
@@ -44,7 +44,7 @@ KISSY.add('gallery/form/1.3/combobox/index',function(S, Node, Base){
         /**
          * 一组样式名
          * @type {Object}
-         * @default cls:{init: 'ks-spinbox',plus: 'ks-spinbox-plus',minus: 'ks-spinbox-minus',container: 'ks-radio-hover'}
+         * @default cls:{combobox: 'ks-combobox',comboselect: 'ks-combobox-select',combotext: 'ks-combobox-text',combohide: 'ks-combobox-hide'}
          */
         cls: {
             value: {
@@ -58,7 +58,7 @@ KISSY.add('gallery/form/1.3/combobox/index',function(S, Node, Base){
          * 无障碍，设置aria-label属性值
          * @default ''
          */
-        ariaLabel: {
+        aria: {
             value: ''
         },
         /**
@@ -92,6 +92,7 @@ KISSY.add('gallery/form/1.3/combobox/index',function(S, Node, Base){
             //加载css文件
             if (cssUrl != '')  S.use(cssUrl);
         },
+        /*重新组装select，套一层容器*/
         _reformSelect: function($target){
             var self = this;
             S.each($target, function(item){
@@ -100,6 +101,7 @@ KISSY.add('gallery/form/1.3/combobox/index',function(S, Node, Base){
                 var comboBox = self._productComboBox(item);
                 var $combobox = $(comboBox);
                 $parent.append(comboBox);
+                /*定位添加的text控件位置，覆盖掉部分select*/
                 $combobox.children('.'+ COMBOTEXTCLS).css({left: item.offsetLeft + 1, width: item.offsetWidth-27, height: item.offsetHeight - 4});
             })
         },
@@ -113,7 +115,7 @@ KISSY.add('gallery/form/1.3/combobox/index',function(S, Node, Base){
             item.removeAttribute('required');
 
             /*将select用combobox替换，name值赋予隐藏控件，实际提交的为隐藏控件
-            * 如果设置aria属性，则显示aria-label，否则显示span*/
+            * 如果设置aria属性，则显示aria-label，否则显示文字提示*/
             if(aria){
                 tpl = '<input type="text" name="ks_combotext" class="J_ComboText ' + COMBOTEXTCLS + '" value="' + text + '" maxLength="30" aria-label="'+ariaLabel+'">' +
                     '<input type="hidden" name="' + name + '" class="J_ComboHide ' + COMBOHIDECLS + '" required="' + required + '">';
