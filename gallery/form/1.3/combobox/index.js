@@ -95,20 +95,33 @@ KISSY.add('gallery/form/1.3/combobox/index',function(S, Node, Base){
         /*重新组装select，套一层容器*/
         _reformSelect: function($target){
             var self = this;
+
             S.each($target, function(item){
                 var $item = $(item);
                 var $parent = $item.parent();
                 var comboBox = self._productComboBox(item);
                 var $combobox = $(comboBox);
                 $parent.append(comboBox);
+                var offsetWidth = item.offsetWidth;
+                if(S.UA.ie == 6){
+                    offsetWidth = offsetWidth - 20;
+                }
+                else{
+                    offsetWidth = offsetWidth - 27;
+                }
                 /*定位添加的text控件位置，覆盖掉部分select*/
-                $combobox.children('.'+ COMBOTEXTCLS).css({left: item.offsetLeft + 1, width: item.offsetWidth-27, height: item.offsetHeight - 4});
+                $combobox.children('.'+ COMBOTEXTCLS).css({left: item.offsetLeft + 1, width: offsetWidth, height: item.offsetHeight - 4});
+                S.UA.ie == 6 && $combobox.children('.J_ComboFrame').css({left: item.offsetLeft + 1, width: offsetWidth, height: item.offsetHeight - 4});
             })
         },
         _productComboBox: function(item){
             var self = this, con = document.createElement('span'), tpl;
-            var name = item.name, text = item.options[0].text, required = item.hasAttribute('required'), aria = self.get('aria');
+            var name = item.name, text = item.options[0].text;
+            var ieVersion = S.UA.ie;
+            var required = (ieVersion == 6 ? item.getAttribute('required') : item.hasAttribute('required'));
+            var aria = self.get('aria');
             var ariaLabel = '可选择，也可手动输入';
+            var isIE6 = (ieVersion == 6);
             con.className = COMBOBOXCLS;
             item.className = COMBOSELECTCLS;
             item.name = 'ks_comboselelct';
@@ -118,10 +131,12 @@ KISSY.add('gallery/form/1.3/combobox/index',function(S, Node, Base){
             * 如果设置aria属性，则显示aria-label，否则显示文字提示*/
             if(aria){
                 tpl = '<input type="text" name="ks_combotext" class="J_ComboText ' + COMBOTEXTCLS + '" value="' + text + '" maxLength="30" aria-label="'+ariaLabel+'">' +
+                    (isIE6 ? '<iframe class="ks-comboframe J_ComboFrame"></iframe>' : '') +
                     '<input type="hidden" name="' + name + '" class="J_ComboHide ' + COMBOHIDECLS + '" required="' + required + '">';
             }
             else{
                 tpl = '<input type="text" name="ks_combotext" class="J_ComboText ' + COMBOTEXTCLS + '" value="' + text + '" maxLength="30"><span>  （可手动输入属性值）</span>' +
+                    (isIE6 ? '<iframe class="ks-comboframe J_ComboFrame"></iframe>' : '') +
                     '<input type="hidden" name="' + name + '" class="J_ComboHide ' + COMBOHIDECLS + '" required="' + required + '">';
 
             }
