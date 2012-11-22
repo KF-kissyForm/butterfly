@@ -1,13 +1,13 @@
 /**
- * @fileoverview ³õÊ¼»¯×ÖÊıÍ³¼ÆÆ÷
- * @author  ½£Æ½£¨Ã÷ºÓ£©<minghe36@gmail.com>
+ * @fileoverview åˆå§‹åŒ–å­—æ•°ç»Ÿè®¡å™¨
+ * @author  å‰‘å¹³ï¼ˆæ˜æ²³ï¼‰<minghe36@gmail.com>
  */
 KISSY.add(function (S, Node,RenderUi,Limiter) {
     var EMPTY = '';
     var MAX_LENGTH = 'maxlength';
     var LIMITER_TARGET = 'limiter-target';
     /**
-     *  ³õÊ¼»¯×ÖÊıÍ³¼ÆÆ÷
+     *  åˆå§‹åŒ–å­—æ•°ç»Ÿè®¡å™¨
      *  @param {Object} config
      * @constructor
      */
@@ -18,25 +18,23 @@ KISSY.add(function (S, Node,RenderUi,Limiter) {
 
     S.extend(RenderLimiter, RenderUi, /** @lends RenderLimiter.prototype*/{
         /**
-         * ³õÊ¼»¯
+         * åˆå§‹åŒ–
          * @private
          */
-         _init:function(){
+        _init:function(){
             var self = this;
             var $target = self.get('target');
             if (!$target || !$target.length) return false;
 
-            //»ñÈ¡ÅäÖÃ
+            //è·å–é…ç½®
             var config = self._getConfig();
 
-            self.fireBeforeRenderEvent();
             var textLimiter = new Limiter($target, config);
-            textLimiter.render();
-            self.fireRenderEvent();
+            self._render(textLimiter);
             return self;
-         },
+        },
         /**
-         * ºÏ²¢htmlÖĞµÄ×é¼şÅäÖÃ
+         * åˆå¹¶htmlä¸­çš„ç»„ä»¶é…ç½®
          * @return {Object|Boolean}
          * @private
          */
@@ -45,27 +43,27 @@ KISSY.add(function (S, Node,RenderUi,Limiter) {
             var $target = self.get('target');
             if (!$target || !$target.length) return false;
 
-            //×î´óÔÊĞíÊäÈë³¤¶È
+            //æœ€å¤§å…è®¸è¾“å…¥é•¿åº¦
             var maxLen = self.get('maxLen');
-            //Í³¼ÆÎÄ°¸µÄÄ¿±êÔªËØ
+            //ç»Ÿè®¡æ–‡æ¡ˆçš„ç›®æ ‡å…ƒç´ 
             var $limiterTarget = self.get('limiterTarget');
-            //²»´æÔÚ×ÖÊıÍ³¼Æ»ù´¡ÅäÖÃ
+            //ä¸å­˜åœ¨å­—æ•°ç»Ÿè®¡åŸºç¡€é…ç½®
             if (!maxLen || !$limiterTarget.length) return false;
 
-            //»ñÈ¡ÅäÖÃ
+            //è·å–é…ç½®
             var config = self.getConfig('limiter');
 
             S.mix(config, {wrapper:$limiterTarget, max:maxLen});
 
             var type = $target.attr('type');
-            //¸»±à¼­Æ÷£¬½«html±êÇ©ÅÅ³ıµô
+            //å¯Œç¼–è¾‘å™¨ï¼Œå°†htmlæ ‡ç­¾æ’é™¤æ‰
             if (type == 'editor') S.mix(config, {isRejectTag:true});
             return config;
         }
     },{
         ATTRS:/** @lends RenderLimiter.prototype*/{
             /**
-             * ×î´óÔÊĞíÊäÈë³¤¶È
+             * æœ€å¤§å…è®¸è¾“å…¥é•¿åº¦
              * @type Number
              * @default 0
              */
@@ -81,7 +79,7 @@ KISSY.add(function (S, Node,RenderUi,Limiter) {
                 }
             },
             /**
-             * Í³¼ÆÎÄ°¸µÄÄ¿±êÔªËØ
+             * ç»Ÿè®¡æ–‡æ¡ˆçš„ç›®æ ‡å…ƒç´ 
              * @type NodeList
              * @default ''
              */

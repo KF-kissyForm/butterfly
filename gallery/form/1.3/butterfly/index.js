@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Collection, Radio, Checkbox, RenderLimiter, RenderImageUploader, SpinBox, Select,RenderEditor, Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Collection, RenderRadio, RenderCheckbox, RenderLimiter, RenderImageUploader, RenderNumber, Select,RenderEditor, Auth) {
         var EMPTY = '';
         var $ = Node.all;
         var LOG_PREFIX = '[Butterfly]:';
@@ -213,13 +213,13 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                                 self._renderUi(RenderLimiter,$input);
                                 break;
                             case 'radio':
-                                self._renderGroupCom($input);
+                                self._renderUi(RenderRadio,$input);
                                 break;
                             case 'checkbox':
-                                self._renderGroupCom($input);
+                                self._renderUi(RenderCheckbox,$input);
                                 break;
                             case 'spinbox':
-                                self._renderSpinbox($input);
+                                self._renderUi(RenderNumber,$input);
                                 break;
                             case 'image-uploader':
                                 self._renderImageUploader($input);
@@ -228,36 +228,6 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                                 break;
                         }
                     });
-                },
-                /**
-                 * 实例化像radio和checkbox的模拟组件（多个input）
-                 * @private
-                 */
-                _renderGroupCom:function ($input) {
-                    if (!$input || !$input.length) return false;
-                    var self = this;
-                    var name = self.getName($input);
-                    var type = $input.attr('type');
-                    var fields = self.get('fields');
-                    var CLASS;
-                    if (name == EMPTY) {
-                        S.log(LOG_PREFIX + type + '缺少name值');
-                    } else {
-                        if (!fields[name]) {
-                            switch (type) {
-                                case 'radio':
-                                    CLASS = Radio;
-                                    break;
-                                case 'checkbox':
-                                    CLASS = Checkbox;
-                                    break;
-                            }
-                            $input = $(document.getElementsByName(name));
-                            fields[name] = new CLASS($input, {cssUrl:EMPTY}).render();
-                            self.set('fields', fields);
-                        }
-                    }
-                    return self.get('fields');
                 },
                 /**
                  * 实例化验证组件
@@ -286,13 +256,9 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                  */
                 _initTextArea:function () {
                     var self = this;
-                    var $target = self.get('target');
-                    if (!$target.length) return false;
-                    var $textAreas = $target.all('textarea');
-                    if (!$textAreas.length) return false;
-                    $textAreas.each(function ($textArea) {
+                    self._eachEls('textarea',function($textArea){
                         self._renderUi($textArea.attr('type') == 'editor' && RenderEditor || RenderLimiter,$textArea);
-                    });
+                    })
                 },
                 /**
                  * 初始化模拟选择框
@@ -300,10 +266,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                  */
                 _initSelect:function () {
                     var self = this;
-                    var $target = self.get('target');
-                    if (!$target.length) return false;
-                    var $selects = $target.all('select');
-                    $selects.each(function ($select) {
+                    self._eachEls('select',function($select){
                         //为了和input保持统一
                         $select.attr('type','select');
                         //添加数据模型
@@ -315,14 +278,25 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     })
                 },
                 /**
-                 * 运行数字增减器
+                 * 遍历表单元素
+                 * @param type
+                 * @param callback
                  * @private
+                 * @return NodeList
                  */
-                _renderSpinbox:function ($input) {
-                    if (!$input || !$input.length) return false;
-                    var spinbox = new SpinBox($input, {cssUrl:''});
-                    spinbox.render();
-                    return spinbox;
+                _eachEls:function(type,callback){
+                    if(!type || !callback) return false;
+                    var self = this;
+                    var $target = self.get('target');
+                    if (!$target.length) return false;
+                    var $els = $target.all(type);
+                    if(!$els.length) return false;
+
+                    $els.each(function($el){
+                        callback($el);
+                    });
+
+                    return $els;
                 },
                 /**
                  * 运行图片上传组件
@@ -348,7 +322,12 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                 _renderUi:function(Class,$target){
                     if (!$target || !$target.length) return false;
                     var self = this;
-                    return new Class({target:$target,uiConfig:self.get('uiConfig')});
+                    var uis = self.get('uis');
+                    var cls = new Class({target:$target,uiConfig:self.get('uiConfig'),uis:uis});
+                    cls.on('render',function(){
+                       self.set('uis',cls.get('uis'));
+                    });
+                    return cls;
                 },
                 /**
                  * 加载主题css文件
@@ -441,7 +420,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                      * @type Object
                      * @default {}
                      */
-                    fields:{
+                    uis:{
                         value:{
                         }
                     },
@@ -477,11 +456,11 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
     {
         requires:['base', 'node', 'event',
             './collection',
-            'gallery/form/1.3/radio/index',
-            'gallery/form/1.3/checkbox/index',
+            './render/radio',
+            './render/checkbox',
             './render/limiter',
             './render/imageUploader',
-            'gallery/form/1.3/spinbox/index',
+            './render/number',
             'gallery/form/1.3/select/index',
             './render/editor',
             'gallery/form/1.3/auth/index']

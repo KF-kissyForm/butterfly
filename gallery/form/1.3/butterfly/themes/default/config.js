@@ -15,6 +15,18 @@ KISSY.add(function (S) {
             }
         },
         /**
+         * 模拟单选框的配置
+         */
+        radio:{
+            cssUrl:''
+        },
+        /**
+         * 数字增减器配置
+         */
+        number:{
+            cssUrl:''
+        },
+        /**
          * 字数统计
          */
         limiter:{

@@ -1,11 +1,11 @@
 /**
- * @fileoverview ³õÊ¼»¯±à¼­Æ÷
- * @author  ½£Æ½£¨Ã÷ºÓ£©<minghe36@gmail.com>
+ * @fileoverview åˆå§‹åŒ–ç¼–è¾‘å™¨
+ * @author  å‰‘å¹³ï¼ˆæ˜æ²³ï¼‰<minghe36@gmail.com>
  */
 KISSY.add(function (S, Event,Node,RenderUi,RenderLimiter) {
     var EMPTY = '';
     /**
-     *  ³õÊ¼»¯±à¼­Æ÷
+     *  åˆå§‹åŒ–ç¼–è¾‘å™¨
      *  @param {Object} config
      * @constructor
      */
@@ -16,10 +16,10 @@ KISSY.add(function (S, Event,Node,RenderUi,RenderLimiter) {
 
     S.extend(RenderEditor, RenderUi, /** @lends RenderEditor.prototype*/{
         /**
-         * ³õÊ¼»¯
+         * åˆå§‹åŒ–
          * @private
          */
-         _init:function(){
+        _init:function(){
             var self = this;
             var $target = self.get('target');
             if (!$target || !$target.length) return false;
@@ -27,20 +27,21 @@ KISSY.add(function (S, Event,Node,RenderUi,RenderLimiter) {
             var useMods = self.get('use');
             var editorConfig = self.getConfig('editor');
 
-            //¼ÓÔØcss
+            //åŠ è½½css
             self._loadCss();
 
             S.use('editor', function (S, Editor) {
                 var editor = new Editor($target.getDOMNode(), editorConfig).use(useMods);
+                self.fireBeforeRenderEvent(editor);
                 editor.ready(function () {
                     self._editorReady();
+                    self.fireRenderEvent();
                 });
-                self.set('ui',editor);
             });
             return self;
-         },
+        },
         /**
-         * ¼ÓÔØcss
+         * åŠ è½½css
          * @private
          */
         _loadCss:function(){
@@ -52,7 +53,7 @@ KISSY.add(function (S, Event,Node,RenderUi,RenderLimiter) {
             S.use(cssUrl);
         },
         /**
-         * ±à¼­Æ÷³õÊ¼»¯Íê±ÏºóÖ´ĞĞµÄ·½·¨
+         * ç¼–è¾‘å™¨åˆå§‹åŒ–å®Œæ¯•åæ‰§è¡Œçš„æ–¹æ³•
          * @private
          */
         _editorReady:function(){
@@ -60,7 +61,7 @@ KISSY.add(function (S, Event,Node,RenderUi,RenderLimiter) {
             var editor = self.get('ui');
             if(!editor) return false;
             var $target = self.get('target');
-            //×ÖÊıÍ³¼Æ×é¼ş
+            //å­—æ•°ç»Ÿè®¡ç»„ä»¶
             var limiter = self._renderLimiter();
             self._setWidth();
             Event.on(editor.document, "keyup", function (ev) {
@@ -70,14 +71,14 @@ KISSY.add(function (S, Event,Node,RenderUi,RenderLimiter) {
             });
         },
         /**
-         * ³õÊ¼»¯×ÖÊıÍ³¼Æ
+         * åˆå§‹åŒ–å­—æ•°ç»Ÿè®¡
          * @private
          * @return {Limiter}
          */
         _renderLimiter:function(){
             var self = this;
             var $target = self.get('target');
-            //ÔËĞĞ×ÖÊıÍ³¼Æ
+            //è¿è¡Œå­—æ•°ç»Ÿè®¡
             var renderLimiter = new RenderLimiter({target:$target,uiConfig:self.get('uiConfig')});
             var limiter = renderLimiter.get('ui');
             if(!limiter) return false;
@@ -85,7 +86,7 @@ KISSY.add(function (S, Event,Node,RenderUi,RenderLimiter) {
             return limiter;
         },
         /**
-         * ÉèÖÃ±à¼­Æ÷¿í¶È
+         * è®¾ç½®ç¼–è¾‘å™¨å®½åº¦
          * @private
          * @return {Boolean}
          */
@@ -95,27 +96,27 @@ KISSY.add(function (S, Event,Node,RenderUi,RenderLimiter) {
             if(!editor) return false;
 
             var $target = self.get('target');
-            //±à¼­Æ÷ÈİÆ÷
+            //ç¼–è¾‘å™¨å®¹å™¨
             var $wrapper = editor.editorWrap;
             var width = $target.attr('width');
             // var height = $target.attr('height');
-            //»ñÈ¡widthºÍheightÊôĞÔÉèÖÃÈİÆ÷¿í¸ß
+            //è·å–widthå’Œheightå±æ€§è®¾ç½®å®¹å™¨å®½é«˜
             width && $wrapper.width(Number(width));
             return self;
         }
     },{
         ATTRS:/** @lends RenderEditor.prototype*/{
             /**
-             * ¼ÓÔØµÄ±à¼­Æ÷Ä£¿é
+             * åŠ è½½çš„ç¼–è¾‘å™¨æ¨¡å—
              * @type String
              * @default undo,separator,removeformat,format,font,color,separator,list,indent,justify,separator,link,separator,table,resize,draft
              */
             use:{value:"undo,separator,removeformat,format,font,color,separator,list,indent,justify,separator,link,separator,table,resize,draft"},
             /**
-            * ×ÖÊıÍ³¼Æ×é¼ş
-            * @type Limiter
-            * @default '' 
-            */
+             * å­—æ•°ç»Ÿè®¡ç»„ä»¶
+             * @type Limiter
+             * @default ''
+             */
             limiter:{value:EMPTY}
         }
     });
