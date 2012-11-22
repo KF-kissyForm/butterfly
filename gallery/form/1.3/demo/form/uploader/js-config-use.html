@@ -39,7 +39,7 @@
             //用于放服务器端返回的url的隐藏域
             urlsInputName:"jsImageUrls",
             //最多上传个数
-            max:3,
+            //max:3,
             //图片最大允许大小
             maxSize:500
         });
@@ -51,6 +51,11 @@
             if (ev.rule == 'max' && files.length >= max ) {
                 alert('队列已满，不能上传！');
             }
+        });
+        imageUploader.on('render',function(ev){
+            var uploader = ev.uploader;
+            var allowRepeat = uploader.get('allowRepeat');
+            var max = uploader.get('max');
         });
         imageUploader.render();
     })
