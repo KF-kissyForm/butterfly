@@ -37,6 +37,7 @@
         var authImageUploader = new ImageUploader('#J_AuthBtn','#J_AuthQueue',{
             action:"upload.php",
             urlsInputName:"authImageUrls",
+            allowRepeat:false,
             data:{'author':'minghe'}
         });
         authImageUploader.on('render',function(ev){
