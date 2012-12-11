@@ -1,0 +1,15 @@
+.ks-combobox-text{
+     position: absolute;
+     border-width: 0;
+     padding-left: 5px;
+     margin-top: 1px;
+    _margin-top: 0;
+    z-index: 99;
+ }
+.ks-comboframe{
+    position: absolute;
+    border-width: 0;
+    overflow: hidden;
+    margin-top: 1px;
+    z-index:9;
+}
