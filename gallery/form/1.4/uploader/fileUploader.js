@@ -2,39 +2,40 @@
  * @fileoverview 运行文件上传组件
  * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
  **/
-KISSY.add('gallery/form/1.4/uploader/imageUploader',function (S, Base, Node, RenderUploader,Auth) {
+KISSY.add('gallery/form/1.4/uploader/fileUploader',function (S, Base, Node, RenderUploader,Auth) {
     var EMPTY = '', $ = Node.all;
     /**
-     * @name ImageUploader
-     * @class 异步图片上传入口文件
+     * @name FileUploader
+     * @class 异步文件上传入口文件
      * @version 1.4
+     * @since 1.4
      * @constructor
      * @param {String | HTMLElement} buttonTarget *，上传按钮目标元素
      * @param {String | HTMLElement} queueTarget 文件队列目标元素，再不需要显示文件信息的情况下这个参数可以设置为null
-     * @param {Object} config 配置，该配置会覆盖html属性中的数据
+     * @param {Object} config 配置，该配置会覆盖data-config伪属性中的数据
      * @requires Uploader
      * @requires Auth
      * @example
      * @example
      *
-KISSY.use('gallery/form/1.4/uploader/index', function (S, ImageUploader) {
-     var ru = new ImageUploader('#J_UploaderBtn', '#J_UploaderQueue');
+KISSY.use('gallery/form/1.4/uploader/index', function (S, FileUploader) {
+     var ru = new FileUploader('#J_UploaderBtn', '#J_UploaderQueue');
      ru.on("init", function (ev) {
         var uploader = ev.uploader;
      })
 })
      */
-    function ImageUploader(buttonTarget, queueTarget, config) {
+    function FileUploader(buttonTarget, queueTarget, config) {
         var self = this;
         //合并配置
         config = S.mix(S.form.parseConfig(buttonTarget), config);
         //超类初始化
-        ImageUploader.superclass.constructor.call(self, config);
+        FileUploader.superclass.constructor.call(self, config);
         self.set('buttonTarget', buttonTarget);
         self.set('queueTarget', queueTarget);
         self.set('uploaderConfig', config);
     }
-    S.mix(ImageUploader, /** @lends ImageUploader*/{
+    S.mix(FileUploader, /** @lends FileUploader*/{
         /**
          * 监听的uploader事件
          */
@@ -44,7 +45,7 @@ KISSY.use('gallery/form/1.4/uploader/index', function (S, ImageUploader) {
          */
         queueEvents:['add','remove','statusChange','clear']
     });
-    S.extend(ImageUploader, RenderUploader, /** @lends ImageUploader.prototype*/{
+    S.extend(FileUploader, RenderUploader, /** @lends FileUploader.prototype*/{
         /**
          * 删除父类的自动初始化函数
          * @private
@@ -54,7 +55,7 @@ KISSY.use('gallery/form/1.4/uploader/index', function (S, ImageUploader) {
         },
         /**
          * 初始化组件
-         * @return {ImageUploader}
+         * @return {FileUploader}
          */
         render:function () {
             var self = this;
@@ -117,8 +118,8 @@ KISSY.use('gallery/form/1.4/uploader/index', function (S, ImageUploader) {
         _bindEvents:function(uploader){
             if(!uploader) return false;
             var self = this;
-            var events = ImageUploader.events;
-            var queueEvents = ImageUploader.queueEvents;
+            var events = FileUploader.events;
+            var queueEvents = FileUploader.queueEvents;
             var queue = uploader.get('queue');
             var extEventObj =  {uploader:uploader,queue:queue};
             S.each(events,function(event){
@@ -285,7 +286,7 @@ KISSY.use('gallery/form/1.4/uploader/index', function (S, ImageUploader) {
             return $aBtn;
         }
     }, {
-        ATTRS:/** @lends ImageUploader.prototype*/{
+        ATTRS:/** @lends FileUploader.prototype*/{
             /**
              * 主题引用路径，当值为""时，不使用uploader主题。非内置主题，值为模块路径，比如"refund/rfUploader"
              * @type String
@@ -321,12 +322,5 @@ KISSY.use('gallery/form/1.4/uploader/index', function (S, ImageUploader) {
             }
         }
     });
-    return ImageUploader;
+    return FileUploader;
 }, {requires:['base', 'node','./index','./auth/base' ]});
-/**
- * changes:
- * 明河：201212.11
- *          - 修正allowRepeat规则无效的bug
- * 明河：2012.11.22
- *          - 去掉默认不允许图片重复的验证
- */

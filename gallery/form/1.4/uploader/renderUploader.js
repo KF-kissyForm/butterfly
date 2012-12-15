@@ -2,59 +2,26 @@
  * @fileoverview 运行文件上传组件
  * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
  **/
-KISSY.add('gallery/form/1.4/uploader/index',function (S, Base, Node, Uploader,Auth) {
-    var EMPTY = '', $ = Node.all, LOG_PREFIX = '[uploaderRender]:',
-        dataName = {
-            CONFIG:'data-config',
-            BUTTON_CONFIG : 'data-button-config',
-            THEME_CONFIG : 'data-theme-config',
-            AUTH : 'data-auth'
-        },
-        //所支持的内置主题
-        THEMES = ['default','imageUploader', 'ershouUploader','loveUploader','uploadify','refundUploader','daogouUploader','singleImageUploader'],
-         //内置主题路径前缀
-        THEME_PREFIX='gallery/form/1.4/uploader/themes/';
-    /**
-     * 解析组件在页面中data-config成为组件的配置
-     * @param {String} hook 组件钩子
-     * @param {String} dataConfigName 配置名
-     * @return {Object}
-     */
-    S.form.parseConfig = function(hook, dataConfigName) {
-        var config = {}, sConfig, DATA_CONFIG = dataConfigName || dataName.CONFIG;
-        sConfig = $(hook).attr(DATA_CONFIG);
-        if (!S.isString(sConfig)) return {};
-        try {
-            config = S.JSON.parse(sConfig);
-        } catch (err) {
-            S.log(LOG_PREFIX + '请检查' + hook + '上' + DATA_CONFIG + '属性内的json格式是否符合规范！');
-        }
-        return config;
-    };
-
+KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Uploader,Auth) {
+    var EMPTY = '', $ = Node.all, LOG_PREFIX = '[uploaderRender]:', DATA_CONFIG = 'data-config';
+    //所支持的内置主题
+    var THEMES = ['default','imageUploader', 'ershouUploader','loveUploader','uploadify','refundUploader','daogouUploader','singleImageUploader'];
+     //内置主题路径前缀
+    var THEME_PREFIX='gallery/form/1.4/uploader/themes/';
     /**
      * @name RenderUploader
-     * @class 异步文件上传入口文件，会从按钮的data-config='{}' 伪属性中抓取组件配置
-     * @version 1.2
+     * @class 异步文件上传入口文件
+     * @version 1.4
+     * @since 1.4
      * @constructor
      * @param {String | HTMLElement} buttonTarget *，上传按钮目标元素
      * @param {String | HTMLElement} queueTarget 文件队列目标元素，再不需要显示文件信息的情况下这个参数可以设置为null
-     * @param {Object} config 配置，该配置会覆盖data-config伪属性中的数据
+     * @param {Object} config 配置
      * @requires Uploader
      * @requires Auth
-     * @example
-     *
-KISSY.use('gallery/form/1.4/uploader/index', function (S, RenderUploader) {
-     var ru = new RenderUploader('#J_UploaderBtn', '#J_UploaderQueue');
-     ru.on("init", function (ev) {
-        var uploader = ev.uploader;
-     })
-})
      */
     function RenderUploader(buttonTarget, queueTarget, config) {
         var self = this;
-        //合并配置
-        config = S.mix(S.form.parseConfig(buttonTarget), config);
         //超类初始化
         RenderUploader.superclass.constructor.call(self, config);
         self.set('buttonTarget', buttonTarget);
@@ -249,10 +216,3 @@ themeConfig:{
     });
     return RenderUploader;
 }, {requires:['base', 'node', './base','./auth/base']});
-/**
- * changes:
- * 明河：201212.15
- *          - multiple默认为false，禁用多选
- *          - 默认上传方式改成["ajax","iframe"]
- *          - 去掉 S.namespace('form');
- */

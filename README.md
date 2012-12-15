@@ -66,6 +66,7 @@ Butterfly是完整的表单解决方案，自带表单验证、数据层、多�
 
     [!] multiple默认为false，禁用多选
     [!] 默认上传方式改成["ajax","iframe"]
+    [-] 去掉data-config配置支持
 
 ### V1.3.0 change
 
