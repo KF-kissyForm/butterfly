@@ -28,12 +28,18 @@ KISSY.use('gallery/form/1.4/uploader/index', function (S, FileUploader) {
     function FileUploader(buttonTarget, queueTarget, config) {
         var self = this;
         //超类初始化
-        FileUploader.superclass.constructor.call(self, config);
+        FileUploader.superclass.constructor.call(self,buttonTarget, queueTarget, config);
     }
     S.extend(FileUploader, RenderUploader, /** @lends FileUploader.prototype*/{
 
     }, {
         ATTRS:/** @lends FileUploader.prototype*/{
+            /**
+             * 支持的内置主题
+             * @type Array
+             * @default ['default','daogouUploader']
+             */
+            supportThemes:{value:['default','daogouUploader']},
             /**
              * 主题引用路径，当值为""时，不使用uploader主题。非内置主题，值为模块路径，比如"refund/rfUploader"
              * @type String

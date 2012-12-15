@@ -3,9 +3,7 @@
  * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
  **/
 KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Uploader,Auth) {
-    var EMPTY = '', $ = Node.all, LOG_PREFIX = '[uploaderRender]:', DATA_CONFIG = 'data-config';
-    //所支持的内置主题
-    var THEMES = ['default','imageUploader', 'ershouUploader','loveUploader','uploadify','refundUploader','daogouUploader','singleImageUploader'];
+    var EMPTY = '', $ = Node.all, LOG_PREFIX = '[uploaderRender]:';
      //内置主题路径前缀
     var THEME_PREFIX='gallery/form/1.4/uploader/themes/';
     /**
@@ -106,11 +104,7 @@ KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Up
         _initThemes:function (callback) {
             var self = this, theme = self.get('theme'),
                 target = self.get('buttonTarget'),
-                cf = self.get('themeConfig'),
-                //从html标签的伪属性中抓取配置
-                config = S.form.parseConfig(target,dataName.THEME_CONFIG);
-            S.mix(config,cf);
-            self.set('themeConfig',config);
+                config = self.get('themeConfig');
             //如果只是传递主题名，组件自行拼接
             theme = self._getThemeName(theme);
             S.use(theme, function (S, Theme) {
@@ -129,8 +123,10 @@ KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Up
          * @return {String}
          */
         _getThemeName:function(theme){
+            var self = this;
             var themeName = theme;
-            S.each(THEMES,function(t){
+            var supportThemes = self.get('supportThemes');
+            S.each(supportThemes,function(t){
                if(t == theme){
                    themeName = THEME_PREFIX + theme;
                }
@@ -144,12 +140,9 @@ KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Up
         _auth:function () {
             var self = this,buttonTarget = self.get('buttonTarget'),
                 uploader = self.get('uploader'),
-                cf = self.get('authConfig'),
-                config = S.form.parseConfig(buttonTarget,dataName.AUTH);
-            S.mix(config,cf);
-            self.set('authConfig',config);
+                config = self.get('authConfig');
             if(S.isEmptyObject(config)) return false;
-            auth = new Auth(uploader,{rules : config});
+            var auth = new Auth(uploader,{rules : config});
             uploader.set('auth',auth);
             return auth;
         },
@@ -225,8 +218,8 @@ KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Up
         _bindEvents:function(uploader){
             if(!uploader) return false;
             var self = this;
-            var events = FileUploader.events;
-            var queueEvents = FileUploader.queueEvents;
+            var events = RenderUploader.events;
+            var queueEvents = RenderUploader.queueEvents;
             var queue = uploader.get('queue');
             var extEventObj =  {uploader:uploader,queue:queue};
             S.each(events,function(event){
@@ -264,29 +257,41 @@ KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Up
                     //拉取属性的验证配置
                     var value = $btn.attr(rule);
                     if(value){
-                        switch (rule){
-                            case 'allowExts':
-                                value = self._setAllowExts(value);
-                                break;
-                            case 'max':
-                                value = Number(value);
-                                break;
-                            case 'maxSize':
-                                value = Number(value);
-                                break;
-                            case  'required':
-                                value = true;
-                                break;
-                            case 'allowRepeat':
-                                value = true;
-                                break;
-                        }
+                        self._formatAuthConfig(rule,value);
                         authConfig[rule] = [value,msgs[rule] || ''];
                     }
 
                 }
             });
             return authConfig;
+        },
+        /**
+         * 格式化验证配置的值
+         * @param rule
+         * @param value
+         * @return {*}
+         * @private
+         */
+        _formatAuthConfig:function(rule,value){
+            var self = this;
+            switch (rule){
+                case 'allowExts':
+                    value = self._setAllowExts(value);
+                    break;
+                case 'max':
+                    value = Number(value);
+                    break;
+                case 'maxSize':
+                    value = Number(value);
+                    break;
+                case  'required':
+                    value = true;
+                    break;
+                case 'allowRepeat':
+                    value = true;
+                    break;
+            }
+            return value;
         },
         /**
          * 举例：将jpg,jpeg,png,gif,bmp转成{desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"}
@@ -329,6 +334,11 @@ KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Up
         }
     }, {
         ATTRS:/** @lends RenderUploader.prototype*/{
+            /**
+             * 支持的内置主题
+             * @type Array
+              */
+            supportThemes:{value:[]},
             /**
              * 主题引用路径，当值为""时，不使用uploader主题。非内置主题，值为模块路径，比如"refund/rfUploader"
              * @type String
