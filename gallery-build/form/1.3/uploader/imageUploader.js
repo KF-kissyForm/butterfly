@@ -2047,7 +2047,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
 
             S.each(authRules,function(rule){
                 //js配置验证
-                if(uploaderConfig[rule]){
+                if(!S.isUndefined(uploaderConfig[rule])){
                     authConfig[rule] = [uploaderConfig[rule],msgs[rule] || ''];
                 }else{
                    //拉取属性的验证配置
@@ -2155,6 +2155,8 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
 }, {requires:['base', 'node','./index','./auth/base' ]});
 /**
  * changes:
+ * 明河：201212.11
+ *          - 修正allowRepeat规则无效的bug
  * 明河：2012.11.22
  *          - 去掉默认不允许图片重复的验证
  */

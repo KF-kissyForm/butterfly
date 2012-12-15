@@ -6,6 +6,7 @@ KISSY.add(function (S, Node,RenderUi,Limiter) {
     var EMPTY = '';
     var MAX_LENGTH = 'maxlength';
     var LIMITER_TARGET = 'limiter-target';
+    var $ = Node.all;
     /**
      *  初始化字数统计器
      *  @param {Object} config

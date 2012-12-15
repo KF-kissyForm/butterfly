@@ -73,16 +73,27 @@ KISSY.add(function (S, Node,Base) {
             return {ui : ui,isReady:isReady,target:target};
         },
         /**
-         * 获取指定ui的配置
+         * 获取指定ui的配置（可以合并元素上的属性配置）
          * @param {String} uiName ui名称
+         * @param {NodeList} $target
+         * @param {String} attrs 目标元素上的属性
          * @return {Object}
          */
-        getConfig:function(uiName){
+        getConfig:function(uiName,$target, attrs){
             var self = this;
-            var config = {};
             var uiConfig = self.get('uiConfig');
-            if(!S.isString(uiName) || !uiConfig[uiName]) return config;
-            return uiConfig[uiName];
+            if(!uiName) return {};
+            var config = uiConfig[uiName] || {};
+
+            if($target && attrs){
+                attrs = attrs.split(',');
+                S.each(attrs, function (attr) {
+                    var val = $target.attr(attr);
+                    if (val) config[attr] = val;
+                })
+            }
+
+            return config;
         },
         /**
          * 向ui集合添加ui
@@ -97,6 +108,10 @@ KISSY.add(function (S, Node,Base) {
             if(!uis[name])  uis[name] = ui;
             return self;
         },
+        /**
+         * 删除ui
+         * @return {*}
+         */
         removeUi:function(){
             var self = this;
             var uis = self.get('uis');

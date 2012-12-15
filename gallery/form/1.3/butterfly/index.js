@@ -2,7 +2,7 @@
  * @fileoverview 表单美化组件
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Collection, RenderRadio, RenderCheckbox, RenderLimiter, RenderImageUploader, RenderNumber, Select,RenderEditor, Auth) {
+KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Collection, RenderRadio, RenderCheckbox, RenderLimiter, RenderImageUploader, RenderNumber, RenderSelect,RenderEditor, Auth) {
         var EMPTY = '';
         var $ = Node.all;
         var LOG_PREFIX = '[Butterfly]:';
@@ -64,7 +64,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     if(isImageUploaderReady === false){
                         return false;
                     }
-                    self.fire('render');
+                    self.fire('render',{collection:self.get('collection')});
                     return true;
                 },
                 /**
@@ -150,30 +150,6 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     return collection.field(name, data);
                 },
                 /**
-                 * 获取组件配置，会合并html属性中的配置
-                 * @param $target
-                 * @param uiName
-                 * @param attrs
-                 * @return {*}
-                 */
-                getUiConfig:function (uiName, $target, attrs) {
-                    var self = this;
-                    var config = self.get('uiConfig')[uiName] || {};
-                    var tagConfig = {};
-                    if (!$target || !$target.length) return config;
-                    if (S.isArray(attrs)) {
-                        S.each(attrs, function (attr) {
-                            var val = $target.attr(attr);
-                            if (val) tagConfig[attr] = val;
-                        })
-                    }
-                    else if (S.isString(attrs)) {
-                        var val = $target.attr(attrs);
-                        if (val) tagConfig[attrs] = val;
-                    }
-                    return S.merge(config, tagConfig);
-                },
-                /**
                  * 向collection添加表单域数据
                  * @public
                  */
@@ -224,8 +200,6 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                             case 'image-uploader':
                                 self._renderImageUploader($input);
                                 break;
-                            case 'button':
-                                break;
                         }
                     });
                 },
@@ -238,7 +212,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     var self = this;
                     var $target = self.get('target');
                     if (!$target.length) return false;
-                    var config = self.getUiConfig('auth');
+                    var config = self.get('uiConfig')['auth'] || {};
                     var auth = new Auth(null, config);
                     self.set('auth', auth);
 
@@ -271,10 +245,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                         $select.attr('type','select');
                         //添加数据模型
                         self.add($select);
-                        //render模拟UI
-                        var config = self.getUiConfig('select', $select, 'width');
-                        var select = new Select($select, config);
-                        select.render();
+                        self._renderUi(RenderSelect,$select);
                     })
                 },
                 /**
@@ -291,10 +262,8 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
                     if (!$target.length) return false;
                     var $els = $target.all(type);
                     if(!$els.length) return false;
-
-                    $els.each(function($el){
-                        callback($el);
-                    });
+                    //遍历元素
+                    $els.each(function($el){ callback($el); });
 
                     return $els;
                 },
@@ -461,7 +430,7 @@ KISSY.add('gallery/form/1.3/butterfly/index', function (S, Base, Node, Event, Co
             './render/limiter',
             './render/imageUploader',
             './render/number',
-            'gallery/form/1.3/select/index',
+            './render/select',
             './render/editor',
             'gallery/form/1.3/auth/index']
     }
