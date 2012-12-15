@@ -1,0 +1,33 @@
+<html>
+<head>
+    <title>Butterfly Test Runner</title>
+    <meta charset="utf-8">
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/seed-min.js"></script>
+    <link rel="stylesheet" href="http://a.tbcdn.cn/s/kissy/gallery/jasmine-kissy/1.0/jasmine.css">
+    <script>
+        if (location.hash === '#testem') document.write('<script src="/testem.js"></'+'script>')
+    </script>
+    <script type="text/javascript" src="http://a.tbcdn.cn/s/kissy/??gallery/jasmine-kissy/1.0/jasmine.js,gallery/jasmine-kissy/1.0/jasmine-html.js,gallery/velocity/1.0/index.js,gallery/jasmine-kissy/1.0/jasmine-kissy.js,/1.2.0/core-min.js,gallery/jasmine-kissy/1.0/runner.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+    KISSY.config({
+        packages:[
+            {
+                name:'gallery',
+                path:'../../../',
+                charset:'utf-8'
+            }
+        ]
+    });
+    KISSY.use('jasmine/runner',function(S,runner){
+        var butterflySpecs = 'specs/butterfly/index-spec';
+        runner(butterflySpecs, {
+            name:"specs",
+            path:"./",
+            charset:"utf-8"
+        });
+    })
+</script>
+</body>
+</html>

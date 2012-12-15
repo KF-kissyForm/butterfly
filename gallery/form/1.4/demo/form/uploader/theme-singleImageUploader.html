@@ -1,0 +1,49 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <title>singleImageUploader主题 </title>
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/docs.css"/>
+</head>
+
+<body style="padding:20px;">
+<h2>singleImageUploader主题</h2>
+<ul>
+    <li>作者：明河、溪夏</li>
+    <li>描述：v1.3新增主题，用于单图片上传</li>
+    <li>兼容：chrome、firefox、IE</li>
+</ul>
+<div class="grid">
+    <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue"
+           action="upload.php" urlsInputName="imageUrls" theme="singleImageUploader" maxSize="500">
+
+    <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
+    <input type="hidden" name="imageUrls" value="http://www.36ria.com/wp-content/uploads/2012/11/singleImageUploader.png">
+</div>
+<div id="J_UploaderQueue">
+
+</div>
+
+<script type="text/javascript">
+    var S = KISSY;
+    //包路径，实际使用请直接配置为"http://a.tbcdn.cn/s/kissy/"
+    var path = S.Config.debug && "../../../../../../" || "http://a.tbcdn.cn/s/kissy/";
+    S.config({
+        packages:[
+            {
+                name:"gallery",
+                path:path,
+                charset:"utf-8"
+            }
+        ]
+    });
+
+    KISSY.use('gallery/form/1.4/uploader/imageUploader', function (S, ImageUploader) {
+        var imageUploader = new ImageUploader('#J_UploaderBtn');
+        imageUploader.render();
+    })
+</script>
+</body>
+</html>
