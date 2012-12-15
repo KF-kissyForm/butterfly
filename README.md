@@ -68,6 +68,7 @@ Butterfly是完整的表单解决方案，自带表单验证、数据层、多�
     [!] 默认上传方式改成["ajax","iframe"]
     [-] 去掉data-config配置支持
     [-] 去掉不使用主题情况支持
+    [+] 新增RenderUploader，ImageUploader和FileUploader继承于RenderUploader
 
 ### V1.3.0 change
 
