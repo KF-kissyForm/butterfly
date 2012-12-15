@@ -318,7 +318,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             var self = this, types = Uploader.type,
                 UploadType;
             //如果type参数为auto，那么type=['ajax','flash','iframe']
-            if (type == types.AUTO) type = [types.AJAX, types.FLASH, types.IFRAME];
+            if (type == types.AUTO) type = [types.AJAX,types.IFRAME];
             //如果是数组，遍历获取浏览器支持的上传方式
             if (S.isArray(type) && type.length > 0) {
                 S.each(type, function (t) {
@@ -599,11 +599,11 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         /**
          * 是否开启多选支持，部分浏览器存在兼容性问题
          * @type Boolean
-         * @default true
+         * @default false
          * @since V1.2
          */
         multiple:{
-            value:true,
+            value:false,
             setter:function (v) {
                 var self = this, button = self.get('button');
                 if (!S.isEmptyObject(button) && S.isBoolean(v)) {
