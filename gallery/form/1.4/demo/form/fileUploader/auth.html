@@ -9,8 +9,8 @@
 <body>
 <h2>上传验证控制的demo</h2>
 <div class="grid">
-    <input type="image-uploader" class="g-u" id="J_AuthBtn" name="Filedata" value="上传图片"
-           maxSize="500" max="4" exceed="4" allowExts="jpg,png" required maxSize-msg="图片大小超过{maxSize}！" >
+    <input type="file" class="g-u" id="J_AuthBtn" name="Filedata" value="上传图片"
+           maxSize="500" max="4" allowExts="jpg,png" required maxSize-msg="图片大小超过{maxSize}！" size="144x142" >
 </div>
 <ul id="J_AuthQueue" class="grid">
 
@@ -33,14 +33,13 @@
         ]
     });
     var $ = S.Node.all;
-    KISSY.use('gallery/form/1.4/uploader/imageUploader', function (S, ImageUploader) {
-        var authImageUploader = new ImageUploader('#J_AuthBtn','#J_AuthQueue',{
+    KISSY.use('gallery/form/1.4/uploader/fileUploader', function (S, FileUploader) {
+        var authFileUploader = new FileUploader('#J_AuthBtn','#J_AuthQueue',{
             action:"upload.php",
-            urlsInputName:"authImageUrls",
-            allowRepeat:false,
+            urlsInputName:"authUrls",
             data:{'author':'minghe'}
         });
-        authImageUploader.on('render',function(ev){
+        authFileUploader.on('render',function(ev){
             var uploader = ev.uploader;
 
             var max = uploader.get('max');
@@ -60,7 +59,7 @@
                 alert(isPass);
             });
         });
-        authImageUploader.render();
+        authFileUploader.render();
     })
 
 </script>

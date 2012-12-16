@@ -257,7 +257,7 @@ KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Up
                     //拉取属性的验证配置
                     var value = $btn.attr(rule);
                     if(value){
-                        self._formatAuthConfig(rule,value);
+                        value = self._formatAuthConfig(rule,value);
                         authConfig[rule] = [value,msgs[rule] || ''];
                     }
 

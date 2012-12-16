@@ -238,6 +238,7 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
          * @return {Boolean} 是否通过
          */
         testAllowExt:function (file) {
+
             if (!S.isObject(file)) return false;
             var self = this,
                 fileName = file.name,
@@ -314,6 +315,7 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
          * @param {Object} file 文件对象
          */
         testMaxSize : function(file){
+            debugger;
             var self = this,
                 size = file.size,
                 rule = self.getRule('maxSize');
@@ -331,6 +333,9 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
 	            }
 	            return isAllow;
             }
+        },
+        testSize:function(file){
+
         },
         /**
          * 检验文件是否重复（检验文件名，很有可能存在误差，比如不同目录下的相同文件名会被判定为同一文件）
@@ -455,8 +460,9 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
 
 /**
  * changes:
+ * 明河：1.4
+ *           - 更改模块路径，将auth移到plugins下
  * 明河：2012.11.22
- *          - 更改模块路径，将auth移到plugins下
  *          - 去掉重复的代码，敲自己脑袋
  *          - 修正必须存在max的bug
  */
