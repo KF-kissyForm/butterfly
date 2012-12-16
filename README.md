@@ -69,6 +69,8 @@ Butterfly是完整的表单解决方案，自带表单验证、数据层、多�
     [-] 去掉data-config配置支持
     [-] 去掉不使用主题情况支持
     [+] 新增RenderUploader，ImageUploader和FileUploader继承于RenderUploader
+    [!] 修正_errorHandler报错的bug（daogouUploader主题）
+    [!] 去掉theme.js状态层的log提示
 
 ### V1.3.0 change
 

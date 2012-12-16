@@ -1,0 +1,437 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>FileUploader：异步文件上传组件</title>
+    <link rel="shortcut icon" href="http://docs.kissyui.com/kissy-dpl/base/assets/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap-responsive.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/docs.css"/>
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js" charset="utf-8"></script>
+    <script src="../../assets/feedback.js" charset="utf-8"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" charset="utf-8"></script>
+    <script src="../../assets/bootstrap.min.js" charset="utf-8"></script>
+    <script src="../../assets/scrollspy.js" charset="utf-8"></script>
+    <script src="../../assets/affix.js" charset="utf-8"></script>
+    <script src="../../assets/app.js" charset="utf-8"></script>
+</head>
+<body data-spy="scroll" data-target=".bs-docs-sidebar">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="http://www.36ria.com/demo/gal/gallery/form/1.2/demo.html"
+               id="logo">BUTTERFLY</a>
+
+            <div class="nav-collapse">
+
+                <ul class="nav">
+                    <li><a href="http://docs.kissyui.com/kissy-gallery/gallery/form/1.2/demo.html">首页</a></li>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">组件 <b
+                            class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/form/uploader/index.html">Uploader</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/form/limiter/index.html">Limiter</a>
+                            </li>
+                            <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/form/spinbox/index.html">SpinBox</a>
+                            </li>
+                            <li>
+                                <a href="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/form/auth/index.html">Auth</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/form/checkbox/index.html">checkbox</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/form/radio/index.html">radio</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="https://github.com/kissyteam/kissy-gallery/tree/master/gallery/form">源码</a></li>
+                    <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.2/doc/index.html">API文档</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a rel="tooltip" target="_blank" href="http://docs.kissyui.com/kissy-gallery/index.html">kissy
+                        gallery</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="header" class="jumbotron subhead">
+    <div class="row header-content">
+        <div class="span6">
+            <div>
+                <h1 class="title-h1">FileUploader </h1>
+
+                <p class="header-dec">异步文件上传组件</p>
+            </div>
+        </div>
+    </div>
+</header>
+<div id="content" class="container">
+<div class="row">
+<div class="span3 bs-docs-sidebar">
+    <ul class="nav nav-list bs-docs-sidenav">
+        <li><a data-href="" href="#imageUploaderDec"><i class="icon-chevron-right"></i>综述</a></li>
+        <li><a data-href="#demos" href="#demos"><i class="icon-chevron-right"></i>demo汇总</a></li>
+        <li><a data-href="#themes" href="#themes"><i class="icon-chevron-right"></i>组件内置的主题</a></li>
+        <li><a data-href="#init" href="#init"><i class="icon-chevron-right"></i>3种方式初始化组件</a></li>
+    </ul>
+</div>
+<div class="span9 scrollspy-area">
+<h2 id="imageUploaderDec">综述</h2>
+
+<p>FileUploader专门用于异步文件上传，兼容所有浏览。</p>
+
+<div class="alert alert-info">由于FileUploader接口和使用上没有太大差异，详细内容可以看<a
+        href="../uploader/imageUploader.html">ImageUploader文档</a>，下面拎出关键点做说明。
+</div>
+<div class="alert alert-info">异步图片上传请使用<a href="../uploader/imageUploader.html">ImageUploader</a>。</div>
+<h4>FileUploader的特性</h4>
+<ul>
+    <li>支持ajax、flash、iframe三方案，兼容所有浏览器。</li>
+    <li>多主题支持，可以自己定制主题</li>
+    <li>支持多选批量上传（默认不开启）</li>
+    <li>支持上传进度显示</li>
+    <li>支持取消上传</li>
+    <li>支持上传验证</li>
+</ul>
+
+<h2 id="demos">demo汇总</h2>
+
+<ul class="thumbnails">
+    <li class="span3">
+        <a href="./js-config-use.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                简单demo：js配置上传组件
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="./pro-config-use.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                简单demo：属性配置上传组件
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="./auth.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                上传验证控制的demo
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="./events.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                组件全部事件演示
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="default-data-show.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                渲染默认队列数据的demo
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="queue.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                图片队列控制的demo
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="flash-upload-type.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                只使用flash上传的demo
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="iframe-upload-type.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                只使用iframe上传的demo
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                常用属性控制
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                常用方法控制
+            </div>
+        </a>
+    </li>
+</ul>
+<h2 id="themes">FileUploader内置的主题</h2>
+<ul class="thumbnails">
+    <li class="span3">
+        <a href="theme-default.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                <h4>主题：default</h4>
+                <img alt="imageUploader" src="http://www.36ria.com/wp-content/uploads/2012/12/default.png">
+            </div>
+        </a>
+    </li>
+    <li class="span3">
+        <a href="theme-daogouUploader.html" class="demo-item" target="_blank">
+            <div class="thumbnail">
+                <h4>主题：daogouUploader</h4>
+                <img alt="refundUploader" src="http://www.36ria.com/wp-content/uploads/2012/12/daogouUploader.png">
+            </div>
+        </a>
+    </li>
+</ul>
+<h2 id="init">3种方式初始化组件</h2>
+
+<p>gallery的包配置是必不可少：</p>
+            <pre class='brush: js; '>
+KISSY.config({
+    packages:[
+        {
+            name:"gallery",
+            path:"http://a.tbcdn.cn/s/kissy/",
+            charset:"utf-8"
+        }
+    ]
+});
+            </pre>
+<p></p>
+
+<h3>1.使用js配置初始化组件</h3>
+
+<div class="bs-docs-example">
+    <form action="#" style="font-size:12px;">
+        <div class="grid">
+            <input type="file" class="g-u" id="J_JsUploaderBtn" value="上传文件" >
+        </div>
+        <ul id="J_JsUploaderQueue" class="grid">
+
+        </ul>
+    </form>
+</div>
+            <pre class='brush: xml; '>
+<div class="grid">
+    <input type="file" class="g-u" id="J_JsUploaderBtn" value="上传文件" >
+</div>
+<ul id="J_JsUploaderQueue" class="grid">
+
+</ul>
+            </pre>
+            <pre class='brush: js; '>
+   KISSY.use('gallery/form/1.4/uploader/fileUploader', function (S, FileUploader) {
+
+        var fileUploader = new FileUploader('#J_JsUploaderBtn','#J_JsUploaderQueue',{
+            // 文件域
+            name:"Filedata",
+            //处理上传的服务器端脚本路径
+            action:"upload.php",
+            //用于放服务器端返回的url的隐藏域
+            urlsInputName:"jsImageUrls",
+            //最多上传个数
+            //max:3,
+            //图片最大允许大小
+            maxSize:500
+        });
+        fileUploader.render();
+    })
+
+            </pre>
+<h4>配置参数说明</h4>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th style="width: 100px;">参数名</th>
+        <th style="width: 50px;">类型</th>
+        <th style="width: 100px;">默认值</th>
+        <th>描述</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>action</td>
+        <td>String</td>
+        <td>""</td>
+        <td>服务器端处理上传的路径
+        </td>
+    </tr>
+    <tr>
+        <td>name</td>
+        <td>String</td>
+        <td>Filedata</td>
+        <td>文件上传域name名，服务器端通过name来获取和处理上传数据
+        </td>
+    </tr>
+    <tr>
+        <td>urlsInputName</td>
+        <td>String</td>
+        <td>''</td>
+        <td>用于存放服务器端返回的文件路径的input（type="hidden"），当页面内不存在这个input时，组件会自动创建一个
+        </td>
+    </tr>
+    </tbody>
+</table>
+<div class="alert alert-info"><strong>PS:</strong> 这三个配置是最核心的配置，一般是必不可少，更多的接口说明请看<a
+        href="http://www.36ria.com/demo/gal/gallery/form/1.4/doc/symbols/Uploader.html" target="_blank">API
+    doc</a>，后面将逐步介绍更多API。
+</div>
+<h3>2.使用标签属性配置初始化</h3>
+
+<div class="bs-docs-example">
+    <form action="#" style="font-size:12px;">
+        <div class="grid">
+
+            <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片"
+                   queueTarget="#J_UploaderQueue"
+                   action="upload.php" urlsInputName="imageUrls">
+
+            <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
+            <input type="hidden" name="imageUrls">
+        </div>
+        <ul id="J_UploaderQueue" class="grid">
+
+        </ul>
+    </form>
+
+</div>
+<h4>1) 需要个input标签（type="image-uploader"）</h4>
+             <pre class='brush: xml; '>
+                <input type="image-uploader" class="g-u" id="J_UploaderBtn" name="Filedata" value="上传图片">
+             </pre>
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th style="width: 200px;">属性</th>
+        <th>描述</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td><code>type="image-uploader"</code></td>
+        <td>此属性为了配合Butterfly使用，表明此input为图片上传专用组件</td>
+    </tr>
+    <tr>
+        <td><code>id="J_UploaderBtn"</code></td>
+        <td>脚本实例化上传组件时使用的钩子</td>
+    </tr>
+    <tr>
+        <td><code>name="Filedata"</code></td>
+        <td>非常重要，文件上传域name名，服务器端通过name来获取和处理上传数据</td>
+    </tr>
+    <tr>
+        <td><code>value="上传图片"</code></td>
+        <td>上传按钮上的文案</td>
+    </tr>
+    </tbody>
+</table>
+<h4>2) 创建一个input（hidden）用于存放服务器端返回的url</h4>
+             <pre class='brush: xml; '>
+                    <input type="hidden" name="imageUrls">
+             </pre>
+<p>给上传按钮input加上<code>urlsInputName="imageUrls"</code>属性，这样当上传成功后图片url会被加入到这个隐藏域中（多个图片路径以逗号隔开）。</p>
+<h4>3) 创建一个空的图片队列</h4>
+             <pre class='brush: xml; '>
+                    <ul id="J_UploaderQueue" class="grid"></ul>
+             </pre>
+<p>给上传按钮input加上<code>queueTarget="#J_UploaderQueue"</code>属性，将上传按钮和上传队列关联起来，当选择完图片后，自动显示图片。</p>
+<h4>4) 配置服务器端参数</h4>
+
+<p>上传组件必须有服务器端脚本配合，所以需要个服务器端路径。可以使用<code>action</code>属性。</p>
+
+<p>可能你还需要向服务器post一些参数，比如用户名，商品id等，可以使使用<code>postData='{"author":"明河"}'</code>。</p>
+
+<h4>5) demo中完整的html结构</h4>
+            <pre class='brush: xml; '>
+                    <div class="grid">
+                        <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片"
+                               queueTarget="#J_UploaderQueue" action="upload.php" urlsInputName="imageUrls">
+                        <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
+                        <input type="hidden" name="imageUrls">
+                    </div>
+                    <ul id="J_UploaderQueue" class="grid">
+
+                    </ul>
+            </pre>
+<h4>6) 初始化FileUploader</h4>
+
+<p>配置下gallery包路径（为了利用淘宝cdn，可以快速引用butterfly库，所以将代码托管在kissy gallery下）。</p>
+            <pre class='brush: js; '>
+                var S = KISSY,
+                      path = "http://a.tbcdn.cn/s/kissy/";
+                KISSY.config({
+                    packages:[
+                        {
+                            name:"gallery",
+                            path:path,
+                            charset:"utf-8"
+                        }
+                    ]
+                });
+            </pre>
+<p>初始化FileUploader：</p>
+            <pre class='brush: js; '>
+            KISSY.use('gallery/form/1.4/uploader/imageUploader', function (S, FileUploader) {
+                new FileUploader('#J_UploaderBtn').render();
+            })
+            </pre>
+<div class="alert alert-info">
+    当实例化FileUploader时，组件会自动加载主题js和css文件，比如没用<code>theme</code>属性时，加载默认主题<code>theme="imageUploader"</code>，<code>gallery/form/1.4/uploader/themes/imageUploader/index-min.js</code>
+    和<code>gallery/form/1.4/uploader/themes/imageUploader/style.css</code>。
+</div>
+
+</div>
+</div>
+<script>
+var S = KISSY,
+//包路径，实际使用请直接配置为"http://a.tbcdn.cn/s/kissy/"
+        path = S.Config.debug && "../../../../../../" || "http://a.tbcdn.cn/s/kissy/";
+S.config({
+    packages:[
+        {
+            name:"gallery",
+            path:path,
+            charset:"utf-8"
+        }
+    ]
+});
+
+var $ = S.Node.all;
+KISSY.use('gallery/form/1.4/uploader/fileUploader', function (S, FileUploader) {
+    var fileUploader = new FileUploader('#J_JsUploaderBtn','#J_JsUploaderQueue',{
+        // 文件域
+        name:"Filedata",
+        //处理上传的服务器端脚本路径
+        action:"upload.php",
+        //用于放服务器端返回的url的隐藏域
+        urlsInputName:"jsImageUrls",
+        //最多上传个数
+        //max:3,
+        //图片最大允许大小
+        maxSize:500
+    });
+    fileUploader.render();
+})
+</script>
+
+<!-- 代码高亮 START  -->
+<link href='../../assets/syntaxhighlighter_3.0.83/sh.css' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="../../assets/syntaxhighlighter_3.0.83/sh.js"></script>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+<!-- 代码高亮 END  -->
+</body>
+</html>
+

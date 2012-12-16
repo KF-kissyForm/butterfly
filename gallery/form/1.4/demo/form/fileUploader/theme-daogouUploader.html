@@ -2,8 +2,9 @@
 <html>
 <head>
     <title>daogouUploader主题 </title>
+    <meta charset="utf-8"/>
     <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js" charset="utf-8"></script>
-    <link href='http://a.tbcdn.cn/tbsp/tbsp.css?t=20090602.css' rel='stylesheet' type='text/css' />
+    <link href='http://a.tbcdn.cn/tbsp/tbsp.css' rel='stylesheet' type='text/css' />
 </head>
 
 <body style="padding:20px;">
@@ -27,7 +28,7 @@
                 <div class="upload">
                     <input type="text" class="select-input J_FileName" value=""><div class="select-btn">选择文件</div>
                     <!--下面才是真正的上传按钮-->
-                    <a id="J_UploaderBtn" class="uploader-button" href="#"> 选择文件 </a>
+                    <input type="file" id="J_UploaderBtn" value="选择文件" class="uploader-button">
                     <input type="hidden" name="urls" value="">
                 </div>
             </div>
@@ -60,23 +61,20 @@
         ]
     });
 
-    KISSY.use('gallery/form/1.4/uploader/index', function (S, RenderUploader) {
-        var ru = new RenderUploader('#J_UploaderBtn', '#J_UploaderQueue',{
+    KISSY.use('gallery/form/1.4/uploader/fileUploader', function (S, FileUploader) {
+        var fileUploader = new FileUploader('#J_UploaderBtn', '#J_UploaderQueue',{
             theme:'daogouUploader',
             action:'upload.php',
             name:"Filedata",
             urlsInputName:"urls",
-            //禁用多选
-            multiple : false,
             //不使用自动上传
             autoUpload:false,
-            authConfig:{
-                "require":[true,"必须至少上传一个文件！"],
-                "max":[1, "每次最多上传{max}个文件！"],
-                "maxSize":[1000, "文件大小为{size}，文件太大！"]
-            }
+            required:true,
+            max:1,
+            maxSize:1024
         });
-        ru.on('init',function(ev){
+
+        fileUploader.on('render',function(ev){
             var uploader = ev.uploader;
             var queue = ev.queue;
             uploader.on('start',function(){
@@ -96,6 +94,8 @@
                 uploader.stop();
             })
         })
+
+        fileUploader.render();
     })
 </script>
 </body>

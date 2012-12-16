@@ -226,7 +226,6 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
             var $statusWrapper = ev.file.statusWrapper, $status,
                 file = ev.file, status = file.status;
             if (!$statusWrapper || !$statusWrapper.length) {
-                S.log('状态容器层不存在！');
                 return false;
             }
             $status = $statusWrapper.children('.status');
@@ -350,3 +349,8 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
     }});
     return Theme;
 }, {requires:['node', 'base']});
+/**
+ * changes:
+ * 明河：1.4
+ *           - 去掉状态层的log消息
+ */

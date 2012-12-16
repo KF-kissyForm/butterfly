@@ -108,8 +108,9 @@ KISSY.add('gallery/form/1.4/uploader/themes/daogouUploader/index', function (S, 
          * 文件处于上传错误状态时触发
          */
         _errorHandler:function(ev){
-            var msg = ev.msg,
-                id = ev.id;
+            var self = this;
+            var msg = ev.msg;
+            var id = ev.id;
             //打印错误消息
             $('.J_ErrorMsg_' + id).html(msg);
             self._showMsg(ev.file,'.J_ErrorMsg');
@@ -173,3 +174,8 @@ KISSY.add('gallery/form/1.4/uploader/themes/daogouUploader/index', function (S, 
     }});
     return Daogou;
 }, {requires:['node', '../../theme']});
+/**
+ * changes:
+ * 明河：1.4
+ *           - 修正_errorHandler报错的bug
+ */
