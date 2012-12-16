@@ -435,4 +435,4 @@ themeConfig:{
         }
     });
     return RenderUploader;
-}, {requires:['base', 'node', './base','./auth/base']});
+}, {requires:['base', 'node', './base','./plugins/auth/auth']});

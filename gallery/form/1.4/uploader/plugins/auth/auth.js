@@ -2,7 +2,7 @@
  * @fileoverview 文件上传验证
  * @author: 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/form/1.4/uploader/auth/base', function (S, Node,Base) {
+KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base) {
     var EMPTY = '', $ = Node.all,
         console = console || S, LOG_PREFIX = '[uploader-auth]:';
 
@@ -456,6 +456,7 @@ KISSY.add('gallery/form/1.4/uploader/auth/base', function (S, Node,Base) {
 /**
  * changes:
  * 明河：2012.11.22
+ *          - 更改模块路径，将auth移到plugins下
  *          - 去掉重复的代码，敲自己脑袋
  *          - 修正必须存在max的bug
  */
