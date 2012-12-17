@@ -161,7 +161,7 @@ KISSY.add('gallery/form/1.4/uploader/renderUploader',function (S, Base, Node, Up
                 self.set('authConfig', S.mix(authConfig,self.get('authConfig')));
             }
 
-            var configkeys = ['name','urlsInputName','autoUpload','postData','action','multiple','multipleLen','uploadType','disabled'];
+            var configkeys = ['name','urlsInputName','urlsTarget','autoUpload','postData','action','multiple','multipleLen','uploadType','disabled'];
             var serverConfig = {};
             S.each(configkeys,function(key){
                 var htmlKey = key;

@@ -334,9 +334,6 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
 	            return isAllow;
             }
         },
-        testSize:function(file){
-
-        },
         /**
          * 检验文件是否重复（检验文件名，很有可能存在误差，比如不同目录下的相同文件名会被判定为同一文件）
          * @param {Object} file 文件对象

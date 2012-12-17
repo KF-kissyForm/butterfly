@@ -445,10 +445,19 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
          * 向上传按钮容器内增加用于存储文件路径的input
          */
         _renderUrlsInput:function () {
-            var self = this, button = self.get('button'), inputWrapper = button.get('target'),
-                name = self.get('urlsInputName'),
-                urlsInput = new UrlsInput(inputWrapper, {name:name});
+            var self = this;
+            var button = self.get('button');
+            var inputWrapper = button.get('target');
+            var name = self.get('urlsInputName');
+            var urlsInput = new UrlsInput(inputWrapper, {name:name});
             urlsInput.render();
+
+            //TODO:需要测试
+            //合并urlsTarget参数
+            var $urlsTarget = self.get('urlsTarget');
+            if($urlsTarget.length){
+                urlsInput.set('input',$urlsTarget);
+            }
             return urlsInput;
         },
         /**
@@ -712,6 +721,26 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             }
         },
         /**
+         * 存放url路径的目标元素
+         * @type NodeList
+         * @default ''
+         */
+        urlsTarget:{
+            value:EMPTY,
+            getter:function(v){
+                return $(v);
+            },
+            setter:function(v){
+                var self = this;
+                var urlsInput = self.get('urlsInput');
+                var $target = $(v);
+                if($target.length && urlsInput){
+                    urlsInput.set('input',$target);
+                }
+                return $target;
+            }
+        },
+        /**
          * 存储文件路径的隐藏域的name名
          * @type String
          * @default ""
@@ -764,3 +793,8 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
     };
     return Uploader;
 }, {requires:['base', 'node', './urlsInput', './type/iframe', './type/ajax', './type/flash', './button/base', './button/swfButton', './queue']});
+/**
+ * changes:
+ * 明河：1.4
+ *           - 新增urlsTarget参数属性
+ */
