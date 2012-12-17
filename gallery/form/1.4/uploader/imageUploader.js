@@ -1,6 +1,6 @@
 /**
  * @fileoverview 运行文件上传组件
- * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
+ * @author 剑平（明河）<minghe36@126.com>
  **/
 KISSY.add('gallery/form/1.4/uploader/imageUploader', function (S, Base, Node, RenderUploader) {
     var EMPTY = '', $ = Node.all;
@@ -68,7 +68,7 @@ KISSY.add('gallery/form/1.4/uploader/imageUploader', function (S, Base, Node, Re
              * @type Array
              * @default ['default','daogouUploader']
              */
-            supportThemes:{value:['imageUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']},
+            supportThemes:{value:['default','imageUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']},
             /**
              * 主题引用路径，当值为""时，不使用uploader主题。非内置主题，值为模块路径，比如"refund/rfUploader"
              * @type String
@@ -103,8 +103,9 @@ KISSY.add('gallery/form/1.4/uploader/imageUploader', function (S, Base, Node, Re
 }, {requires:['base', 'node', './renderUploader' ]});
 /**
  * changes:
- * 明河：201212.11
+ * 明河：v1.4
  *           - 继承于新的RenderUploader
+ *           - 新增supportThemes
  * 明河：201212.11
  *          - 修正allowRepeat规则无效的bug
  * 明河：2012.11.22

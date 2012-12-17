@@ -12,7 +12,7 @@ KISSY.add('gallery/form/1.4/uploader/themes/singleImageUploader/index',function 
      * @extends Theme
      * @requires Theme
      * @requires  ProgressBar
-     * @author 苏河、紫英、明河
+     * @author 苏河、明河
      */
     function singleImageUploader(config) {
         var self = this;
@@ -27,15 +27,16 @@ KISSY.add('gallery/form/1.4/uploader/themes/singleImageUploader/index',function 
          */
         afterUploaderRender:function () {
             var self = this;
-
-            var uploader = self.get('uploader');
-            uploader.set('max',1);
-            uploader.set('multiple',false);
-
             self._renderFiledrop();
-
             var queue = self.get('queue');
             queue.on('add',self._addFileHandler,self);
+
+            //如果已经存在图片，先予以清理
+            var uploader = self.get('uploader');
+            uploader.on('select',function(){
+                var len = queue.get('files').length;
+                if(len) queue.clear();
+            })
         },
         /**
          * 在完成文件dom插入后执行的方法
@@ -288,3 +289,10 @@ KISSY.add('gallery/form/1.4/uploader/themes/singleImageUploader/index',function 
     }});
     return singleImageUploader;
 }, {requires:['node', '../../theme']});
+/**
+ * changes:
+ * 明河：1.4
+ *           - 当已经有图片存在时替换图片
+ *           - 去掉按钮禁用
+ */
+//TODO:待测试
