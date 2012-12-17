@@ -724,6 +724,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
          * 存放url路径的目标元素
          * @type NodeList
          * @default ''
+         * @since 1.4
          */
         urlsTarget:{
             value:EMPTY,
