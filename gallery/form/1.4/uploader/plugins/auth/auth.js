@@ -315,7 +315,6 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
          * @param {Object} file 文件对象
          */
         testMaxSize : function(file){
-            debugger;
             var self = this,
                 size = file.size,
                 rule = self.getRule('maxSize');

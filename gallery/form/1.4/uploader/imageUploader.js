@@ -37,8 +37,7 @@ KISSY.add('gallery/form/1.4/uploader/imageUploader', function (S, Base, Node, Re
             var authRules = ['required','max','allowExts','maxSize','allowRepeat'];
             //验证消息
             var msgs = self.get('authMsg');
-            var uploaderConfig = self.get('uploaderConfig');
-
+            var uploaderConfig = self.get('uploaderConfig') || {};
             S.each(authRules,function(rule){
                 //js配置验证
                 if(!S.isUndefined(uploaderConfig[rule])){
