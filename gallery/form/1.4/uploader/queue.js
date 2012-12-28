@@ -363,7 +363,7 @@ KISSY.add('gallery/form/1.4/uploader/queue', function (S, Node, Base) {
             //转换文件大小单位为（kb和mb）
             if (file.size && S.convertByteSize) file.textSize = S.convertByteSize(file.size);
             //状态
-            file.status = EMPTY;
+            file.status = 'waiting';
             files.push(file);
             return file;
         }

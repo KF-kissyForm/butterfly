@@ -29,6 +29,9 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
             var self = this;
             self._LoaderCss(function(){
                 self._addThemeCssName();
+                self._initQueue();
+                //加载插件
+                self._loadPlugins();
                 self.fire('render');
             });
         },
@@ -59,6 +62,8 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
             if (!target || !target.length) return false;
             target[isShow && 'fadeIn' || 'fadeOut'](duration, function () {
                 callback && callback.call(self);
+                //移除节点
+                if(!isShow) target.remove();
             });
         },
         /**
@@ -92,22 +97,6 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
 
         },
         /**
-         * 从路径隐藏域抓取文件，往队列添加文件后触发
-         * @param ev
-         */
-        _restoreHandler:function (ev) {
-
-        },
-        /**
-         * uploader实例化后执行
-         */
-        _UploaderRender:function (callback) {
-            var self = this;
-            self._initQueue();
-            //加载插件
-            self._loadPlugins(callback);
-        },
-        /**
          * 将主题名写入到队列和按钮目标容器，作为主题css样式起始
          */
         _addThemeCssName:function () {
@@ -123,12 +112,10 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
          * @return {Queue}
          */
         _initQueue:function () {
-            var self = this, queue = self.get('queue');
-            queue.set('fnAdd',function(index, file){
-                return self._addCallback(index, file);
-            });
+            var self = this;
+            var queue = self.get('queue');
             queue.set('theme', self);
-            queue.on('add', self._addFileHandler, self);
+            queue.on('add',self._queueAddHandler,self);
             queue.on('remove', self._removeFileHandler, self);
             queue.on('statusChange', function (ev) {
                 self._setStatusVisibility(ev);
@@ -152,25 +139,22 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
             });
         },
         /**
-         * 向队列添加完文件后触发的回调函数（在add事件前触发）
-         * @param {Number} index 文件索引值
-         * @param {Object} file 文件数据
-         * @return {Object} file
+         * 队列添加完一个文件后触发
+         * @param {Object} ev
          */
-        _addCallback:function (index, file) {
-            var self = this,
-                queue = self.get('queue'),
-                $target = self._appendFileDom(file);
+        _queueAddHandler:function (ev) {
+            var self = this;
+            var queue = self.get('queue');
+            var index = ev.index;
+            var file = ev.file;
+            var $target = self._appendFileDom(file);
             //将状态层容器写入到file数据
             queue.updateFile(index, {
                 target:$target,
                 statusWrapper:self._getStatusWrapper($target)
             });
-            //更换文件状态为等待
-            queue.fileStatus(index,'waiting');
             self.displayFile(true, $target);
             //给li下的按钮元素绑定事件
-            // TODO 这里的绑定事件应该只是imageUploader这个主题的吧，不应该放在公共的Theme下
             self._bindTriggerEvent(index, file);
             return queue.getFile(index);
         },
@@ -298,6 +282,27 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
          * @default ""
          */
         fileTpl:{value:EMPTY },
+        /**
+         * 验证消息
+         * @since 1.4
+         * @type Object
+         * @default {max:'每次最多上传{max}个文件！',
+                    maxSize:'文件大小为{size}，超过{maxSize}！',
+                    required:'至少上传一个文件！',
+                    require:'至少上传一个文件！',
+                    allowExts:'不支持{ext}格式！',
+                    allowRepeat:'该文件已经存在！'}
+         */
+        authMsg:{
+            value:{
+                max:'每次最多上传{max}个文件！',
+                maxSize:'文件大小为{size}，超过{maxSize}！',
+                required:'至少上传一个文件！',
+                require:'至少上传一个文件！',
+                allowExts:'不支持{ext}格式！',
+                allowRepeat:'该文件已经存在！'
+            }
+        },
         /**
          * 需要加载的插件，需要手动实例化
          * @type Array

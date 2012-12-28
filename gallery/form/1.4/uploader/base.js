@@ -6,7 +6,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
     var EMPTY = '', $ = Node.all, LOG_PREFIX = '[uploader]:';
 
     /**
-     * @name Uploader
+     * @name UploaderBase
      * @class 异步文件上传组件，支持ajax、flash、iframe三种方案
      * @constructor
      * @extends Base
@@ -22,16 +22,16 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
      * @param {Boolean} config.isAllowUpload 是否允许上传文件
      * @param {Boolean} config.autoUpload 是否自动上传
      * @example
-     * var uploader = new Uploader({button:button,queue:queue,serverConfig:{action:'test.php'}})
+     * var uploader = new UploaderBase({button:button,queue:queue,serverConfig:{action:'test.php'}})
      */
-    function Uploader(config) {
+    function UploaderBase(config) {
         var self = this;
         //调用父类构造函数
-        Uploader.superclass.constructor.call(self, config);
+        UploaderBase.superclass.constructor.call(self, config);
     }
 
 
-    S.mix(Uploader, /** @lends Uploader*/{
+    S.mix(UploaderBase, /** @lends UploaderBase*/{
         /**
          * 上传方式，{AUTO:'auto', IFRAME:'iframe', AJAX:'ajax', FLASH:'flash'}
          */
@@ -76,14 +76,14 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         }
     });
     /**
-     * @name Uploader#select
+     * @name UploaderBase#select
      * @desc  选择完文件后触发
      * @event
      * @param {Array} ev.files 文件完文件后返回的文件数据
      */
 
     /**
-     * @name Uploader#start
+     * @name UploaderBase#start
      * @desc  开始上传后触发
      * @event
      * @param {Number} ev.index 要上传的文件在队列中的索引值
@@ -91,7 +91,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
      */
 
     /**
-     * @name Uploader#progress
+     * @name UploaderBase#progress
      * @desc  正在上传中时触发，这个事件在iframe上传方式中不存在
      * @event
      * @param {Object} ev.file 文件数据
@@ -100,7 +100,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
      */
 
     /**
-     * @name Uploader#complete
+     * @name UploaderBase#complete
      * @desc  上传完成（在上传成功或上传失败后都会触发）
      * @event
      * @param {Number} ev.index 上传中的文件在队列中的索引值
@@ -109,7 +109,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
      */
 
     /**
-     * @name Uploader#success
+     * @name UploaderBase#success
      * @desc  上传成功后触发
      * @event
      * @param {Number} ev.index 上传中的文件在队列中的索引值
@@ -118,7 +118,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
      */
 
     /**
-     * @name Uploader#error
+     * @name UploaderBase#error
      * @desc  上传失败后触发
      * @event
      * @param {Number} ev.index 上传中的文件在队列中的索引值
@@ -128,66 +128,31 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
      */
 
     /**
-     * @name Uploader#cancel
+     * @name UploaderBase#cancel
      * @desc  取消上传后触发
      * @event
      * @param {Number} ev.index 上传中的文件在队列中的索引值
      */
 
     /**
-     * @name Uploader#uploadFiles
+     * @name UploaderBase#uploadFiles
      * @desc  批量上传结束后触发
      * @event
      */
 
     /**
-     * @name Uploader#restore
+     * @name UploaderBase#restore
      * @desc 添加默认数据到队列后触发
      * @event
      */
 
         //继承于Base，属性getter和setter委托于Base处理
-    S.extend(Uploader, Base, /** @lends Uploader.prototype*/{
-        /**
-         * 运行组件，实例化类后必须调用render()才真正运行组件逻辑
-         * @return {Uploader}
-         */
-        render:function () {
-            var self = this, serverConfig = self.get('serverConfig'),
-                type = self.get('type'),
-                UploadType = self.getUploadType(type), uploadType,
-                uploaderTypeEvent = UploadType.event,
-                button;
-            if (!UploadType) return false;
-            button = self._renderButton();
-            //路径input实例
-            self.set('urlsInput', self._renderUrlsInput());
-            self._renderQueue();
-            //如果是flash异步上传方案，增加swfUploader的实例作为参数
-            if (self.get('type') == Uploader.type.FLASH) {
-                S.mix(serverConfig, {swfUploader:button.get('swfUploader')});
-            }
-            serverConfig.fileDataName = self.get('name');
-            //实例化上传方式类
-            uploadType = new UploadType(serverConfig);
-            //监听上传器上传完成事件
-            uploadType.on(uploaderTypeEvent.SUCCESS, self._uploadCompleteHanlder, self);
-            uploadType.on(uploaderTypeEvent.ERROR, function(ev){
-                self.fire(event.ERROR, {status:ev.status, result:ev.result});
-            }, self);
-            //监听上传器上传进度事件
-            if (uploaderTypeEvent.PROGRESS) uploadType.on(uploaderTypeEvent.PROGRESS, self._uploadProgressHandler, self);
-            //监听上传器上传停止事件
-            uploadType.on(uploaderTypeEvent.STOP, self._uploadStopHanlder, self);
-            self.set('uploadType', uploadType);
-            self.fire(Uploader.event.RENDER);
-            return self;
-        },
+    S.extend(UploaderBase, Base, /** @lends UploaderBase.prototype*/{
         /**
          * 上传指定队列索引的文件
          * @param {Number} index 文件对应的在上传队列数组内的索引值
          * @example
-         * //上传队列中的第一个文件，uploader为Uploader的实例
+         * //上传队列中的第一个文件，uploader为UploaderBase的实例
          * uploader.upload(0)
          */
         upload:function (index) {
@@ -214,25 +179,25 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
                 return false;
             }
             //触发文件上传前事件
-            self.fire(Uploader.event.START, {index:index, file:file});
+            self.fire(UploaderBase.event.START, {index:index, file:file});
             //阻止文件上传
             if (!self.get('isAllowUpload')) return false;
             //设置当前上传的文件id
             self.set('curUploadIndex', index);
             //改变文件上传状态为start
-            queue.fileStatus(index, Uploader.status.START);
+            queue.fileStatus(index, UploaderBase.status.START);
             //开始上传
             uploadType.upload(uploadParam);
         },
         /**
          * 取消文件上传，当index参数不存在时取消当前正在上传的文件的上传。cancel并不会停止其他文件的上传（对应方法是stop）
          * @param {Number} index 队列数组索引
-         * @return {Uploader}
+         * @return {UploaderBase}
          */
         cancel:function (index) {
             var self = this, uploadType = self.get('uploadType'),
                 queue = self.get('queue'),
-                statuses = Uploader.status,
+                statuses = UploaderBase.status,
                 status = queue.fileStatus(index);
             if (S.isNumber(index) && status != statuses.SUCCESS) {
                 uploadType.stop();
@@ -247,7 +212,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         },
         /**
          * 停止上传动作
-         * @return {Uploader}
+         * @return {UploaderBase}
          */
         stop:function () {
             var self = this;
@@ -258,14 +223,14 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         /**
          * 批量上传队列中的指定状态下的文件
          * @param {String} status 文件上传状态名
-         * @return {Uploader}
+         * @return {UploaderBase}
          * @example
          * //上传队列中所有等待的文件
          * uploader.uploadFiles("waiting")
          */
         uploadFiles:function (status) {
             var self = this;
-            if (!S.isString(status)) status = Uploader.status.WAITING;
+            if (!S.isString(status)) status = UploaderBase.status.WAITING;
             self.set('uploadFilesStatus', status);
             self._uploaderStatusFile(status);
             return self;
@@ -273,15 +238,16 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         /**
          * 上传队列中的指定状态下的文件
          * @param {String} status 文件上传状态名
-         * @return {Uploader}
+         * @return {UploaderBase}
          */
         _uploaderStatusFile:function (status) {
             var self = this, queue = self.get('queue'),
                 fileIndexs = queue.getIndexs(status);
+            S.log(queue.get('files'));
             //没有存在需要上传的文件，退出上传
             if (!fileIndexs.length) {
                 self.set('uploadFilesStatus', EMPTY);
-                self.fire(Uploader.event.UPLOAD_FILES);
+                self.fire(UploaderBase.event.UPLOAD_FILES);
                 return false;
             }
             //开始上传等待中的文件
@@ -315,7 +281,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
          * @return {IframeType|AjaxType|FlashType}
          */
         getUploadType:function (type) {
-            var self = this, types = Uploader.type,
+            var self = this, types = UploaderBase.type,
                 UploadType;
             //如果type参数为auto，那么type=['ajax','flash','iframe']
             if (type == types.AUTO) type = [types.AJAX,types.IFRAME];
@@ -335,7 +301,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
          * @param {String} type 上传方式（根据type返回对应的上传类，比如iframe返回IframeType）
          */
         _getType:function (type) {
-            var self = this, types = Uploader.type, UploadType,
+            var self = this, types = UploaderBase.type, UploadType,
                 isSupportAjax = self.isSupportAjax(),
                 isSupportFlash = self.isSupportFlash();
             switch (type) {
@@ -368,7 +334,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
                 disabled = self.get('disabled'),
                 name = self.get('name'),
                 config = {name:name, multiple:multiple, disabled:disabled};
-            if (type == Uploader.type.FLASH) {
+            if (type == UploaderBase.type.FLASH) {
                 Button = SwfButton;
                 S.mix(config, {size:self.get('swfSize')});
             } else {
@@ -389,10 +355,6 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         _renderQueue:function () {
             var self = this, queue = new Queue(),
                 urlsInput = self.get('urlsInput');
-            if (!S.isObject(queue)) {
-                S.log(LOG_PREFIX + 'queue参数不合法');
-                return false;
-            }
             //将上传组件实例传给队列，方便队列内部执行取消、重新上传的操作
             queue.set('uploader', self);
             //监听队列的删除事件
@@ -421,7 +383,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
                 file.input = ev.input || file;
             });
             files = self._processExceedMultiple(files);
-            self.fire(Uploader.event.SELECT, {files:files});
+            self.fire(UploaderBase.event.SELECT, {files:files});
             //阻止文件上传
             if (!self.get('isAllowUpload')) return false;
             queue.add(files, function () {
@@ -443,28 +405,20 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         },
         /**
          * 向上传按钮容器内增加用于存储文件路径的input
+         * @return {UrlsInput}
          */
-        _renderUrlsInput:function () {
+        _renderUrlsInput:function ($target) {
             var self = this;
-            var button = self.get('button');
-            var inputWrapper = button.get('target');
-            var name = self.get('urlsInputName');
-            var urlsInput = new UrlsInput(inputWrapper, {name:name});
-            urlsInput.render();
-
-            //TODO:需要测试
-            //合并urlsTarget参数
-            var $urlsTarget = self.get('urlsTarget');
-            if($urlsTarget.length){
-                urlsInput.set('input',$urlsTarget);
-            }
+            if(!$target || !$target.length) return false;
+            var urlsInput = new UrlsInput($target);
+            self.set('urlsInput',urlsInput);
             return urlsInput;
         },
         /**
          * 当上传完毕后返回结果集的处理
          */
         _uploadCompleteHanlder:function (ev) {
-            var self = this, result = ev.result, status, event = Uploader.event,
+            var self = this, result = ev.result, status, event = UploaderBase.event,
                 queue = self.get('queue'), index = self.get('curUploadIndex');
             if (!S.isObject(result)) return false;
             //将服务器端的数据保存到队列中的数据集合
@@ -474,13 +428,13 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             // 只有上传状态为1时才是成功的
             if (status === 1) {
                 //修改队列中文件的状态为success（上传完成）
-                queue.fileStatus(index, Uploader.status.SUCCESS);
+                queue.fileStatus(index, UploaderBase.status.SUCCESS);
                 self._success(result.data);
                 self.fire(event.SUCCESS, {index:index, file:queue.getFile(index), result:result});
             } else {
                 var msg = result.msg || result.message || EMPTY;
                 //修改队列中文件的状态为error（上传失败）
-                queue.fileStatus(index, Uploader.status.ERROR, {msg:msg, result:result});
+                queue.fileStatus(index, UploaderBase.status.ERROR, {msg:msg, result:result});
                 self.fire(event.ERROR, {status:status, result:result, index:index, file:queue.getFile(index)});
             }
             //置空当前上传的文件在队列中的索引值
@@ -496,10 +450,10 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             var self = this, queue = self.get('queue'),
                 index = self.get('curUploadIndex');
             //更改取消上传后的状态
-            queue.fileStatus(index, Uploader.status.CANCEL);
+            queue.fileStatus(index, UploaderBase.status.CANCEL);
             //重置当前上传文件id
             self.set('curUploadIndex', EMPTY);
-            self.fire(Uploader.event.CANCEL, {index:index});
+            self.fire(UploaderBase.event.CANCEL, {index:index});
         },
         /**
          * 如果存在批量上传，则继续上传
@@ -519,8 +473,8 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
                 index = self.get('curUploadIndex'),
                 file = queue.getFile(index);
             S.mix(ev, {file:file});
-            queue.fileStatus(index, Uploader.status.PROGRESS, ev);
-            self.fire(Uploader.event.PROGRESS, ev);
+            queue.fileStatus(index, UploaderBase.status.PROGRESS, ev);
+            self.fire(UploaderBase.event.PROGRESS, ev);
         },
         /**
          * 上传成功后执行的回调函数
@@ -585,7 +539,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             });
             return files;
         }
-    }, {ATTRS:/** @lends Uploader.prototype*/{
+    }, {ATTRS:/** @lends UploaderBase.prototype*/{
         /**
          * Button按钮的实例
          * @type Button
@@ -604,7 +558,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
          * @default "auto"
          * @since V1.2 （当“type” : “auto”，等价于["ajax","flash","iframe"]）
          */
-        type:{value:Uploader.type.AUTO},
+        type:{value:UploaderBase.type.AUTO},
         /**
          * 是否开启多选支持，部分浏览器存在兼容性问题
          * @type Boolean
@@ -721,30 +675,10 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             }
         },
         /**
-         * 存放url路径的目标元素
-         * @type NodeList
-         * @default ''
-         * @since 1.4
-         */
-        urlsTarget:{
-            value:EMPTY,
-            getter:function(v){
-                return $(v);
-            },
-            setter:function(v){
-                var self = this;
-                var urlsInput = self.get('urlsInput');
-                var $target = $(v);
-                if($target.length && urlsInput){
-                    urlsInput.set('input',$target);
-                }
-                return $target;
-            }
-        },
-        /**
          * 存储文件路径的隐藏域的name名
          * @type String
          * @default ""
+         *
          */
         urlsInputName:{value:EMPTY},
         /**
@@ -755,7 +689,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         curUploadIndex:{value:EMPTY},
         /**
          * 上传方式实例
-         * @type UploaderType
+         * @type UploaderBaseType
          * @default {}
          */
         uploadType:{value:{}},
@@ -792,7 +726,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         } while (bytes > 99);
         return Math.max(bytes, 0.1).toFixed(1) + ['kB', 'MB', 'GB', 'TB', 'PB', 'EB'][i];
     };
-    return Uploader;
+    return UploaderBase;
 }, {requires:['base', 'node', './urlsInput', './type/iframe', './type/ajax', './type/flash', './button/base', './button/swfButton', './queue']});
 /**
  * changes:

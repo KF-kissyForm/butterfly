@@ -163,7 +163,27 @@ KISSY.add('gallery/form/1.4/uploader/themes/default/index', function (S, Node, T
          * @type Number
          * @default 100
          */
-        progressBarWidth:{value:100}
+        progressBarWidth:{value:100},
+        /**
+         * 验证消息
+         * @since 1.4
+         * @type Object
+         * @default {max:'每次最多上传{max}个文件！',
+                    maxSize:'文件大小为{size}，超过{maxSize}！',
+                    required:'至少上传一个文件！',
+                    require:'至少上传一个文件！',
+                    allowExts:'不支持{ext}格式！',
+                    allowRepeat:'该文件已经存在！'}
+         */
+        authMsg:{
+            value:{
+                max:'每次最多上传{max}个文件！',
+                maxSize:'文件大小为{size}，超过{maxSize}！',
+                required:'至少上传一个文件！',
+                allowExts:'不支持{ext}格式！',
+                allowRepeat:'该文件已经存在！'
+            }
+        }
     }});
     return DefaultTheme;
 }, {requires:['node', '../../theme']});

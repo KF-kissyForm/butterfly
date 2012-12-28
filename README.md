@@ -75,6 +75,7 @@ Butterfly是完整的表单解决方案，自带表单验证、数据层、多�
     [+] 新增新增urlsTarget参数属性
     [!] singleImageUploader当已经有图片存在时替换图片
     [!] singleImageUploader去掉max限制
+    [!] 重构UrlsInput，去掉create方法，不会自动创建urlsInput
 
 ### V1.3.0 change
 

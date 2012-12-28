@@ -10,7 +10,8 @@
 <h2>使用js传参方式上传图片</h2>
 
 <div class="grid">
-    <input type="image-uploader" class="g-u" id="J_JsUploaderBtn" value="上传图片" >
+    <input type="file" class="g-u" id="J_JsUploaderBtn" value="上传图片" name="Filedata" >
+    <input type="hidden" id="J_Urls" name="urls" />
 </div>
 <ul id="J_JsUploaderQueue" class="grid">
 
@@ -29,9 +30,9 @@
         ]
     });
 
-    KISSY.use('gallery/form/1.4/uploader/imageUploader', function (S, ImageUploader) {
+    KISSY.use('gallery/form/1.4/uploader/index', function (S, Uploader) {
 
-        var imageUploader = new ImageUploader('#J_JsUploaderBtn','#J_JsUploaderQueue',{
+        var uploader = new Uploader('#J_JsUploaderBtn',{
             // 文件域
             name:"Filedata",
             //处理上传的服务器端脚本路径
@@ -39,25 +40,13 @@
             //用于放服务器端返回的url的隐藏域
             urlsInputName:"jsImageUrls",
             //最多上传个数
-            //max:3,
+            max:3,
             //图片最大允许大小
             maxSize:500
         });
-        imageUploader.on('error',function(ev){
-            var uploader = ev.uploader;
-            var max = uploader.get('max');
-            var queue = uploader.get('queue');
-            var files = queue.getFiles('success');
-            if (ev.rule == 'max' && files.length >= max ) {
-                alert('队列已满，不能上传！');
-            }
-        });
-        imageUploader.on('render',function(ev){
-            var uploader = ev.uploader;
-            var allowRepeat = uploader.get('allowRepeat');
-            var max = uploader.get('max');
-        });
-        imageUploader.render();
+        uploader.UrlsInput('#J_Urls')
+                      .render()
+                     .theme('default',{queueTarget:'#J_JsUploaderQueue'});
     })
 
 </script>

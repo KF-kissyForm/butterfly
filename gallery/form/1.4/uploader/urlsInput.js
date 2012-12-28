@@ -16,43 +16,14 @@ KISSY.add('gallery/form/1.4/uploader/urlsInput',function(S, Node, Base) {
      * @param {String} config.tpl   隐藏域模板
      *
      */
-    function UrlsInput(wrapper, config) {
+    function UrlsInput(target, config) {
         var self = this;
         //调用父类构造函数
         UrlsInput.superclass.constructor.call(self, config);
-        self.set('wrapper', $(wrapper));
+        self.set('target',target);
     }
-
-    S.mix(UrlsInput, /**@lends UrlsInput*/ {
-        /**
-         * 隐藏域模板， '<input type="hidden" id="{name}" name="{name}" value="{value}" />'
-         *
-         */
-        TPL : '<input type="hidden" id="{name}" name="{name}" value="{value}" />'
-    });
     //继承于Base，属性getter和setter委托于Base处理
     S.extend(UrlsInput, Base, /** @lends UrlsInput.prototype*/{
-        /**
-         * 运行组件，实例化类后必须调用render()才真正运行组件逻辑
-         * @return {UrlsInput}
-         */
-        render : function() {
-            var self = this,$wrapper = self.get('wrapper'),
-                name = self.get('name'),
-                elInput = document.getElementsByName(name)[0];
-            if (!S.isObject($wrapper)) {
-                S.log(LOG_PREFIX + 'container参数不合法！');
-                return false;
-            }
-            //如果已经存在隐藏域，那么不自动创建
-            if(elInput){
-            	S.log(LOG_PREFIX + 'urls input found');
-                self.set('input',$(elInput));
-            }else{
-                self._create();
-            }
-            return self;
-        },
         /**
          * 向路径隐藏域添加路径
          * @param {String} url 路径
@@ -104,7 +75,7 @@ KISSY.add('gallery/form/1.4/uploader/urlsInput',function(S, Node, Base) {
          */
         parse: function(){
         	var self = this,
-        		input = self.get('input');
+        		input = self.get('target');
     		if(input){
     			var urls = $(input).val(),
     				split = self.get('split'),
@@ -124,7 +95,7 @@ KISSY.add('gallery/form/1.4/uploader/urlsInput',function(S, Node, Base) {
          */
         _val : function(){
             var self = this,urls = self.get('urls'),
-                $input = self.get('input'),
+                $input = self.get('target'),
                 //多个路径间的分隔符
                 split = self.get('split'),
                 sUrl = urls.join(split);
@@ -146,51 +117,15 @@ KISSY.add('gallery/form/1.4/uploader/urlsInput',function(S, Node, Base) {
                 }
             });
             return b;
-        },
-        /**
-         * 创建隐藏域
-         */
-        _create : function() {
-            var self = this,
-            	container = self.get('wrapper'),
-                tpl = self.get('tpl'),
-                name = self.get('name'), 
-                urls = self.get('urls'),
-                input;
-            if(!container || container.length <= 0){
-            	S.log(LOG_PREFIX + 'UrlsInput container not specified!', 'warn');
-            	return false;
-            }
-            if (!S.isString(tpl) || !S.isString('name')){
-                S.log(LOG_PREFIX + '_create()，tpl和name属性不合法！');
-                return false;
-            }
-            input = $(S.substitute(tpl, {name : name,value : urls}));
-            container.append(input);
-            self.set('input', input);
-            S.log(LOG_PREFIX + 'input created.');
-            return input;
         }
 
     }, {ATTRS : /** @lends UrlsInput.prototype*/{
-        /**
-         * 隐藏域名称
-         * @type String
-         * @default ""
-         */
-        name : {value : EMPTY},
         /**
          * 文件路径
          * @type Array
          * @default []
          */
         urls : { value : [] },
-        /**
-         * input模板
-         * @type String
-         * @default  '<input type="hidden" id="{name}" name="{name}" value="{value}" />'
-         */
-        tpl : {value : UrlsInput.TPL},
         /**
          * 多个路径间的分隔符
          * @type String
@@ -208,14 +143,17 @@ KISSY.add('gallery/form/1.4/uploader/urlsInput',function(S, Node, Base) {
          * @type KISSY.Node
          * @default ""
          */
-        input : {value : EMPTY},
-        /**
-         * 隐藏域容器
-         *@type KISSY.Node
-         * @default ""
-         */
-        wrapper : {value : EMPTY}
+        target : {value : EMPTY,
+            getter:function(v){
+                return $(v);
+            }
+        }
     }});
 
     return UrlsInput;
 }, {requires:['node','base']});
+/**
+ * changes:
+ * 明河：1.4
+ *           - 重构，去掉create方法，不会自动创建urlsInput
+ */
