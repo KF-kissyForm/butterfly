@@ -29,9 +29,9 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase) {
         var self = this;
         //调用父类构造函数
         Uploader.superclass.constructor.call(self, config);
-        if (target) self.set('target', target);
+        self.set('target', target);
+        self._init();
     }
-
 
     S.mix(Uploader, /** @lends Uploader*/{
         /**
@@ -161,7 +161,7 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase) {
          * 运行组件，实例化类后必须调用render()才真正运行组件逻辑
          * @return {Uploader}
          */
-        render:function () {
+        _init:function () {
             var self = this;
 
             var $target = self.get('target');
@@ -182,6 +182,7 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase) {
             var serverConfig = self.get('serverConfig');
             var uploadType;
             self._renderQueue();
+
             //如果是flash异步上传方案，增加swfUploaderBase的实例作为参数
             if (self.get('type') == UploaderBase.type.FLASH) {
                 S.mix(serverConfig, {swfUploaderBase:button.get('swfUploaderBase')});
@@ -199,7 +200,6 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase) {
             //监听上传器上传停止事件
             uploadType.on(uploaderTypeEvent.STOP, self._uploadStopHanlder, self);
             self.set('uploadType', uploadType);
-            self.fire(UploaderBase.event.RENDER);
             return self;
         },
         /**
@@ -221,10 +221,18 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase) {
             return $aBtn;
         },
         /**
+         *  加载并初始化插件
+         * @param plugins
+         * @param config
+         */
+        use:function(plugin,config){
+
+        },
+        /**
          * 设置存放服务器端返回的url的隐藏域
          * @return {Uploader}
          */
-        UrlsInput:function(target){
+        urlsInput:function(target){
             var self = this;
             var $target = $(target);
             if(!$target.length) {
@@ -287,7 +295,7 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase) {
                 theme.set('uploader',self);
                 theme.set('queue',self.get('queue'));
                 theme.on('render',function(){
-                    self.fire('themeLoad',{theme:theme});
+                    self.fire('themeLoad',{theme:theme,name:name});
                 });
                 theme.render();
             })
@@ -320,18 +328,6 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase) {
         target:{
             value:EMPTY,
             getter:function (v) {
-                return $(v);
-            }
-        },
-        /**
-         * 文件队列目标元素
-         * @since 1.4
-         * @default ""
-         * @type NodeList
-         */
-        queueTarget:{
-            value:EMPTY,
-            getter:function(v){
                 return $(v);
             }
         },
@@ -489,27 +485,6 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase) {
                 var uploadType = self.get('uploadType');
                 if (uploadType)uploadType.set('filter', v);
                 return v;
-            }
-        },
-        /**
-         * 存放url路径的目标元素
-         * @type NodeList
-         * @default ''
-         * @since 1.4
-         */
-        urlsTarget:{
-            value:EMPTY,
-            getter:function (v) {
-                return $(v);
-            },
-            setter:function (v) {
-                var self = this;
-                var urlsInput = self.get('urlsInput');
-                var $target = $(v);
-                if ($target.length && urlsInput) {
-                    urlsInput.set('input', $target);
-                }
-                return $target;
             }
         },
         /**

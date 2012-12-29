@@ -41,10 +41,10 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
          *
          */
         event:{
-            //运行
-            RENDER:'render',
             //选择完文件后触发
             SELECT:'select',
+            //向队列添加一个文件后触发
+            ADD:'add',
             //开始上传后触发
             START:'start',
             //正在上传中时触发
@@ -59,6 +59,8 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             CANCEL:'cancel',
             //上传失败后触发
             ERROR:'error',
+            //移除队列中的一个文件后触发
+            REMOVE:'remove',
             //初始化默认文件数据时触发
             RESTORE:'restore'
         },
@@ -357,10 +359,14 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
                 urlsInput = self.get('urlsInput');
             //将上传组件实例传给队列，方便队列内部执行取消、重新上传的操作
             queue.set('uploader', self);
+            queue.on('add',function(ev){
+                self.fire(UploaderBase.event.ADD,ev);
+            });
             //监听队列的删除事件
             queue.on('remove', function (ev) {
                 //删除该文件路径，sUrl为服务器端返回的文件路径，而url是客服端文件路径
                 if (ev.file.sUrl && urlsInput) urlsInput.remove(ev.file.sUrl);
+                self.fire(UploaderBase.event.REMOVE,ev);
             });
             self.set('queue', queue);
             return queue;

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <title>使用js传参方式上传图片</title>
-    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js" charset="utf-8"></script>
+    <script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy-min.js" charset="utf-8"></script>
 
 </head>
 <body>
@@ -37,16 +37,26 @@
             name:"Filedata",
             //处理上传的服务器端脚本路径
             action:"upload.php",
-            //用于放服务器端返回的url的隐藏域
-            urlsInputName:"jsImageUrls",
             //最多上传个数
             max:3,
             //图片最大允许大小
             maxSize:500
         });
-        uploader.UrlsInput('#J_Urls')
-                      .render()
-                     .theme('default',{queueTarget:'#J_JsUploaderQueue'});
+
+        //只有使用theme()方法才会触发
+        uploader.on('themeLoad',function(ev){
+            S.log(ev.name+'主题加载完毕！');
+            //打印主题的验证消息
+            S.log(ev.theme.get('authMsg'));
+        });
+        //向队列添加一个文件后触发
+        uploader.on('add',function(ev){
+            S.log(ev.file);
+        });
+        //用于存储服务器端返回的url
+        uploader.urlsInput('#J_Urls');
+        //设置主题
+        uploader.theme('default',{queueTarget:'#J_JsUploaderQueue'});
     })
 
 </script>

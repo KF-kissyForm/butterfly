@@ -72,10 +72,10 @@ Butterfly是完整的表单解决方案，自带表单验证、数据层、多�
     [!] 修正_errorHandler报错的bug（daogouUploader主题）
     [!] 去掉theme.js状态层的log提示
     [!] 将auth模块移到plugins下
-    [+] 新增新增urlsTarget参数属性
     [!] singleImageUploader当已经有图片存在时替换图片
     [!] singleImageUploader去掉max限制
     [!] 重构UrlsInput，去掉create方法，不会自动创建urlsInput
+    [+] uploader增加queue的add和remove事件
 
 ### V1.3.0 change
 
