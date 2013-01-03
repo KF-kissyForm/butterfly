@@ -28,8 +28,16 @@
 <div id="page">
     <form action="" id="J_Form" novalidate="novalidate">
         <div class="p-attribute">
+            <span class="spark">*</span><label for="ks-select0">类型</label>
+            <select class="ks-nomalbox" id="ks-select0" name="cp_movement" required="true">
+                <option value="">--请选择--</option>
+                <option value="34339:130593">类型1</option>
+                <option value="34339:130591">类型2</option>
+            </select>
+        </div>
+        <div class="p-attribute">
             <span class="spark">*</span><label for="ks-select1">机芯类型</label>
-            <select class="ks-combobox" id="ks-select1" name="cp_movement" required>
+            <select class="ks-combobox" id="ks-select1" name="cp_movement" required="true">
                 <option value="">--请选择--</option>
                 <option value="34339:130593">石英表</option>
                 <option value="34339:130591">机械表</option>
@@ -84,7 +92,7 @@
     });
 </script>
 <script type="text/javascript">
-    KISSY.use('gallery/form/1.3/combobox/index', function (S, ComboBox, Auth) {
+    KISSY.use('gallery/form/1.3/combobox/index', function (S, ComboBox) {
 //        var combobox = new ComboBox('.ks-combobox',{aria: true});
         var combobox = new ComboBox('.ks-combobox');
         combobox.render();
