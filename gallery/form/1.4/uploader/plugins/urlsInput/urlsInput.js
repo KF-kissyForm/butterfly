@@ -36,7 +36,8 @@ KISSY.add('gallery/form/1.4/uploader/plugins/urlsInput/urlsInput',function(S, No
 
             var queue = uploader.get('queue');
             queue.on('remove',self._fileRemoveHandler,self);
-            self.restore();
+            //渲染默认数据
+            if(self.get('autoRestore')) self.restore();
         },
         /**
          * 上传成功后向路径隐藏域添加路径
@@ -199,6 +200,14 @@ KISSY.add('gallery/form/1.4/uploader/plugins/urlsInput/urlsInput',function(S, No
         }
     }, {ATTRS : /** @lends UrlsInput.prototype*/{
         /**
+        * 插件名称
+        * @type String
+        * @default urlsInput
+        */
+        pluginId:{
+            value:'urlsInput'
+        },
+        /**
          * 上传组件实例
          * @type Uploader
          * @default ""
@@ -221,6 +230,14 @@ KISSY.add('gallery/form/1.4/uploader/plugins/urlsInput/urlsInput',function(S, No
                 self._val();
                 return v;
             }
+        },
+        /**
+        * 是否自动渲染默认数据
+        * @type Boolean
+        * @default true
+        */
+        autoRestore:{
+            value:true
         },
         /**
          * 文件路径隐藏input
