@@ -207,6 +207,7 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
         use:function (plugin, config) {
             var self = this;
             var oPlugin;
+            if(!plugin) return self;
             //如果使用的是内置插件，拼接插件路径
             //拼接的路径类似gallery/form/1.4/uploader/plugins/auth/auth
             if (!/\//.test(plugin)) {

@@ -49,21 +49,7 @@
         uploader.use('urlsInput',{target:'#J_Urls'});
 
         uploader.theme('default',{queueTarget:'#J_JsUploaderQueue'});
-/*
-        //只有使用theme()方法才会触发
-        uploader.on('themeLoad',function(ev){
-            S.log(ev.name+'主题加载完毕！');
-            //打印主题的验证消息
-            S.log(ev.theme.get('authMsg'));
-        });
-        //向队列添加一个文件后触发
-        uploader.on('add',function(ev){
-            S.log(ev.file);
-        });
-        //用于存储服务器端返回的url
-        uploader.urlsInput('#J_Urls');
-        //设置主题
-        uploader.theme('default',{queueTarget:'#J_JsUploaderQueue'});*/
+
     })
 
 </script>

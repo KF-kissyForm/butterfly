@@ -27,14 +27,12 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
          */
         render:function(){
             var self = this;
-            self._LoaderCss(function(){
-                self._addThemeCssName();
-                self._initQueue();
-                //加载插件
-                self._loadPlugins();
-                self._restore();
-                self.fire('render');
-            });
+            self._addThemeCssName();
+            self._initQueue();
+            self._usePlugins();
+            self._restore();
+            self._LoaderCss();
+            self.fire('render');
         },
         /**
          * 在上传组件运行完毕后执行的方法（对上传组件所有的控制都应该在这个函数内）
@@ -151,12 +149,12 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
                 cssUrl = self.get('cssUrl');
             //加载css文件
             if (cssUrl == EMPTY){
-                callback.call(self);
+                callback && callback.call(self);
                 return false;
             }
             S.use(cssUrl, function () {
                 S.log(cssUrl + '加载成功！');
-                callback.call(self);
+                callback && callback.call(self);
             });
         },
         /**
@@ -258,31 +256,14 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
             return $(hFile).appendTo($target).data('data-file', fileData);
         },
         /**
-         * 根据插件配置加载插件
+         * 使用插件
+         * @private
          */
-        _loadPlugins:function(callback){
-            var self = this,
-                plugins = self.get('plugins'),
-                oPlugin = self.get('oPlugin'),
-                //模块路径前缀
-                modPrefix = 'gallery/form/1.4/uploader/plugins/',
-                mods = [];
-            if(!plugins.length){
-                callback && callback.call(self,oPlugin);
-                return false;
-            }
-            //拼接模块路径
-            S.each(plugins,function(plugin){
-                mods.push(modPrefix+plugin+'/' +plugin);
-            });
-            S.use(mods.join(','),function(){
-                 S.each(arguments,function(arg,i){
-                     // 类排除S
-                     if(i>=1) oPlugin[plugins[i-1]] = arg;
-                 });
-                self.set('oPlugin',oPlugin);
-                callback && callback.call(self,oPlugin);
-            })
+        _usePlugins:function(){
+            var self = this;
+            var plugins = self.get('use');
+            var uploader = self.get('uploader');
+            uploader.use(plugins);
         }
     }, {ATTRS:/** @lends Theme.prototype*/{
         /**
@@ -291,6 +272,12 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
          * @default ""
          */
         name:{value:EMPTY},
+        /**
+        * 使用插件
+        * @type String
+        * @default ''
+        */
+        use:{value:EMPTY},
         /**
          * css模块路径
          * @type String
@@ -325,29 +312,11 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
             }
         },
         /**
-         * 需要加载的插件，需要手动实例化
-         * @type Array
-         * @default []
-         */
-        plugins:{value:[]},
-        /**
-         * 插件类集合
-         * @type Array
-         * @default []
-         */
-        oPlugin:{value:{}},
-        /**
          * 队列目标元素（一般是ul），队列的实例化过程在Theme中
          * @type String
          * @default ""
          */
         queueTarget:{value:EMPTY},
-        /**
-         * 动画速度
-         * @type Number
-         * @default 0.3
-         */
-        duration:{value:0.3},
         /**
          * Queue（上传队列）实例
          * @type Queue
@@ -359,19 +328,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
          * @type Uploader
          * @default ""
          */
-        uploader:{value:EMPTY},
-        /**
-         * Button 按钮实例（_init()下并不存在）
-         * @type Button
-         * @default ""
-         */
-        button:{value:EMPTY},
-        /**
-         * Auth（上传验证）实例
-         * @type Auth
-         * @default ""
-         */
-        auth:{value:EMPTY}
+        uploader:{value:EMPTY}
     }});
     return Theme;
 }, {requires:['node', 'base']});
@@ -380,4 +337,5 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
  * 明河：1.4
  *           - 去掉状态层的log消息
  *           - 增加默认渲染数据操作
+ *           - 去掉插件加载
  */
