@@ -32,6 +32,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
                 self._initQueue();
                 //加载插件
                 self._loadPlugins();
+                self._restore();
                 self.fire('render');
             });
         },
@@ -95,6 +96,26 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
          */
         _errorHandler:function (ev) {
 
+        },
+        /**
+         * 渲染默认数据
+         * @private
+         */
+        _restore:function(){
+            var self = this;
+            var uploader = self.get('uploader');
+            var urlsInput = uploader.getPlugin('urlsInput');
+            if(!urlsInput) return false;
+            var autoRestore = urlsInput.get('autoRestore');
+            if(!autoRestore) return false;
+
+            var queue = uploader.get('queue');
+            var files = queue.get('files');
+            if(!files.length) return false;
+
+            S.each(files,function(file){
+                self._appendFileDom(file);
+            })
         },
         /**
          * 将主题名写入到队列和按钮目标容器，作为主题css样式起始
@@ -234,7 +255,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
                 hFile;
             if (!$target.length) return false;
             hFile = S.substitute(tpl, fileData);
-            return $(hFile).hide().appendTo($target).data('data-file', fileData);
+            return $(hFile).appendTo($target).data('data-file', fileData);
         },
         /**
          * 根据插件配置加载插件
@@ -358,4 +379,5 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
  * changes:
  * 明河：1.4
  *           - 去掉状态层的log消息
+ *           - 增加默认渲染数据操作
  */

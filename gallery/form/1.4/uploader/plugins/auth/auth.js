@@ -14,11 +14,9 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
      * @param {Uploader} uploader *，上传组件实例
      * @param {Object} config 配置
      */
-    function Auth(uploader, config) {
+    function Auth(config) {
         var self = this;
-        config = S.merge({uploader:uploader}, config);
         Auth.superclass.constructor.call(self, config);
-        self._init();
     }
     S.mix(Auth,/** @lends Auth*/{
         /**
@@ -69,13 +67,11 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
         /**
          * 初始化
          */
-        _init:function () {
-            var self = this, uploader = self.get('uploader'),
-                queue = uploader.get('queue');
-            if (uploader == EMPTY) {
-                console.log(LOG_PREFIX + 'uploader不可以为空！');
-                return false;
-            }
+        pluginInitializer:function (uploader) {
+            if(!uploader) return false;
+            var self = this;
+            self.set('uploader',uploader);
+            var queue = uploader.get('queue');
             self._setSwfButtonExt();
             self._addUploaderAttrs();
 
@@ -211,26 +207,12 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
          * 检验是否必须上传一个文件
          * @return {Boolean}
          */
-        testRequire : function(){
-            var self = this,uploader = self.get('uploader'),
-                urlsInput = uploader.get('urlsInput'),
-                urls = urlsInput.get('urls'),
-                rule = self.getRule('required') || self.getRule('require'),
-                isRequire = rule ? rule[0] : false,
-                isHasUrls = urls.length > 0;
-            if(!isRequire) return true;
-            if(!isHasUrls){
-                S.log(LOG_PREFIX + rule[1]);
-                self._fireUploaderError('required',rule);
-            }
-            return isHasUrls;
-        },
-        /**
-         * 检验是否必须上传一个文件
-         * @return {Boolean}
-         */
         testRequired:function(){
-            return this.testRequire();
+            var self = this;
+            var uploader = self.get('uploader');
+            var queue = uploader.get('queue');
+            var files = queue.getFiles('success');
+            return files.length > 0;
         },
         /**
          * 测试是否是允许的文件上传类型
@@ -433,14 +415,105 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
                         queue.remove(index);
                     }
                 })
+        },
+        /**
+         * 获取/设置指定规则的验证消息
+          * @param {String} rule 规则名
+         * @param {String} msg  消息
+         * @return {String}
+         */
+        msg:function(rule,msg){
+            var self = this;
+            if(!S.isString(rule)) return self;
+            var msgs = self.get('msgs');
+            if(!S.isString(msg)){
+                return msgs[rule];
+            }
+
+            msgs[rule] = msg;
+            return msg;
+        },
+        _processRuleConfig:function(rule,config){
+            var self = this;
+            if(!S.isString(rule)) return self;
+            //demo max:[o,''达到最大上传数！]带有消息参数需要设置下消息
+            if(S.isArray(config)){
+               self.msg(rule,config[1]);
+            }
+            return self;
         }
     }, {ATTRS:/** @lends Auth.prototype*/{
+        /**
+         * 插件名称
+         * @type String
+         * @default auth
+         */
+        pluginId:{
+            value:'auth'
+        },
         /**
          * 上传组件实例
          * @type Uploader
          * @default ""
          */
         uploader:{ value:EMPTY },
+        /**
+         * 至少上传一个文件验证规则配置
+         * @type Boolean
+         * @default ''
+         */
+        required:{value:EMPTY},
+        /**
+         * 最大允许上传数验证规则配置
+         * @type Boolean
+         * @default ''
+         */
+        max:{value:EMPTY},
+        /**
+         *  文件格式验证规则配置
+         * @type Boolean
+         * @default ''
+         */
+        allowExts:{value:EMPTY},
+        /**
+         * 文件大小验证规则配置
+         * @type Boolean
+         * @default ''
+         */
+        maxSize:{value:EMPTY},
+        /**
+         *  文件重复性验证规则配置
+         * @type Boolean
+         * @default ''
+         */
+        allowRepeat:{value:EMPTY},
+        /**
+         *
+         * @type Boolean
+         * @default ''
+         */
+        size:{value:EMPTY},
+        /**
+         * 验证消息配置
+         * @type Object
+         * @default {
+            max:'每次最多上传{max}个文件！',
+            maxSize:'文件大小为{size}，超过{maxSize}！',
+            required:'至少上传一个文件！',
+            require:'至少上传一个文件！',
+            allowExts:'不支持{ext}格式！',
+            allowRepeat:'该文件已经存在！'
+        }
+         */
+        msgs:{value:{
+            max:'每次最多上传{max}个文件！',
+            maxSize:'文件大小为{size}，超过{maxSize}！',
+            required:'至少上传一个文件！',
+            require:'至少上传一个文件！',
+            allowExts:'不支持{ext}格式！',
+            allowRepeat:'该文件已经存在！'
+        }
+        },
         /**
          * 上传验证规则，每个规则都是一个数组，数组第一个值为规则，第二个值为错误消息
          * @type Object
@@ -458,6 +531,8 @@ KISSY.add('gallery/form/1.4/uploader/plugins/auth/auth', function (S, Node,Base)
  * changes:
  * 明河：1.4
  *           - 更改模块路径，将auth移到plugins下
+ *           - 重构验证类，以rich base插件的形式出现
+ *           - 去掉testRequire方法，并通过queue的file进行验证
  * 明河：2012.11.22
  *          - 去掉重复的代码，敲自己脑袋
  *          - 修正必须存在max的bug

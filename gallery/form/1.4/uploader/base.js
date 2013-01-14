@@ -2,7 +2,7 @@
  * @fileoverview 异步文件上传组件
  * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
  **/
-KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, IframeType, AjaxType, FlashType, HtmlButton, SwfButton, Queue) {
+KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, IframeType, AjaxType, FlashType, HtmlButton, SwfButton, Queue) {
     var EMPTY = '', $ = Node.all, LOG_PREFIX = '[uploader]:';
 
     /**
@@ -355,8 +355,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
          * @return {Queue} 队列实例
          */
         _renderQueue:function () {
-            var self = this, queue = new Queue(),
-                urlsInput = self.get('urlsInput');
+            var self = this, queue = new Queue();
             //将上传组件实例传给队列，方便队列内部执行取消、重新上传的操作
             queue.set('uploader', self);
             queue.on('add',function(ev){
@@ -364,8 +363,6 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             });
             //监听队列的删除事件
             queue.on('remove', function (ev) {
-                //删除该文件路径，sUrl为服务器端返回的文件路径，而url是客服端文件路径
-                if (ev.file.sUrl && urlsInput) urlsInput.remove(ev.file.sUrl);
                 self.fire(UploaderBase.event.REMOVE,ev);
             });
             self.set('queue', queue);
@@ -408,17 +405,6 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             return S.filter(files, function (file, index) {
                 return index < multipleLen;
             });
-        },
-        /**
-         * 向上传按钮容器内增加用于存储文件路径的input
-         * @return {UrlsInput}
-         */
-        _renderUrlsInput:function ($target) {
-            var self = this;
-            if(!$target || !$target.length) return false;
-            var urlsInput = new UrlsInput($target);
-            self.set('urlsInput',urlsInput);
-            return urlsInput;
         },
         /**
          * 当上传完毕后返回结果集的处理
@@ -489,61 +475,11 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         _success:function (data) {
             if (!S.isObject(data)) return false;
             var self = this, url = data.url,
-                urlsInput = self.get('urlsInput'),
                 fileIndex = self.get('curUploadIndex'),
                 queue = self.get('queue');
-            if (!S.isString(url) || !S.isObject(urlsInput)) return false;
+            if (!S.isString(url)) return false;
             //追加服务器端返回的文件url
             queue.updateFile(fileIndex, {'sUrl':url});
-            //向路径隐藏域添加路径
-            urlsInput.add(url);
-        },
-        /**
-         * 添加默认数据到队列，不带参数的情况下，抓取restoreHook容器内的数据，添加到队列内
-         * @param {Array} data 文件数据
-         */
-        restore:function (data) {
-            var self = this,
-                queue = self.get('queue'),
-                urlsInput = self.get('urlsInput');
-            if (!data) data = self._getRestoreData();
-            if (!data.length) return false;
-
-            S.each(data, function (file) {
-                //向队列添加文件
-                var fileData = queue.add(file);
-                var id = fileData.id;
-                var index = queue.getFileIndex(id);
-                //改变文件状态为成功
-                queue.fileStatus(index, 'success', {index:index, id:id, file:fileData});
-            });
-        },
-        /**
-         * 抓取restoreHook容器内的数据
-         * @return {Array}
-         */
-        _getRestoreData:function () {
-            var self = this;
-            var urlsInput = self.get('urlsInput');
-            var urls = urlsInput.parse();
-            var files = [];
-            S.each(urls,function(url){
-                //伪造数据结构
-                files.push({
-                    name:url,
-                    type:'restore',
-                    url : url,
-                    sUrl : url,
-                    result:{
-                        status:1,
-                        data:{
-                            name:url,
-                            url : url
-                        }
-                    }
-                });
-            });
-            return files;
         }
     }, {ATTRS:/** @lends UploaderBase.prototype*/{
         /**
@@ -681,13 +617,6 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
             }
         },
         /**
-         * 存储文件路径的隐藏域的name名
-         * @type String
-         * @default ""
-         *
-         */
-        urlsInputName:{value:EMPTY},
-        /**
          *  当前上传的文件对应的在数组内的索引值，如果没有文件正在上传，值为空
          *  @type Number
          *  @default ""
@@ -733,9 +662,9 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, UrlsInput, 
         return Math.max(bytes, 0.1).toFixed(1) + ['kB', 'MB', 'GB', 'TB', 'PB', 'EB'][i];
     };
     return UploaderBase;
-}, {requires:['base', 'node', './urlsInput', './type/iframe', './type/ajax', './type/flash', './button/base', './button/swfButton', './queue']});
+}, {requires:['base', 'node', './type/iframe', './type/ajax', './type/flash', './button/base', './button/swfButton', './queue']});
 /**
  * changes:
  * 明河：1.4
- *           - 新增urlsTarget参数属性
+ *           - Uploader上传组件的核心部分
  */
