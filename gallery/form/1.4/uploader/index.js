@@ -208,18 +208,24 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
             var self = this;
             var oPlugin;
             if(!plugin) return self;
-            //如果使用的是内置插件，拼接插件路径
-            //拼接的路径类似gallery/form/1.4/uploader/plugins/auth/auth
-            if (!/\//.test(plugin)) {
-                plugin = PLUGIN_PREFIX+plugin + '/' +plugin;
-            }
-            S.use(plugin,function(S,Plugin){
-                S.mix(config,{uploader:self});
-                oPlugin = new Plugin(config);
-                if (oPlugin['pluginInitializer']) {
-                    oPlugin['pluginInitializer'](self);
+            var plugins = plugin.split(',');
+            S.each(plugins,function(p,i){
+                //如果使用的是内置插件，拼接插件路径
+                //拼接的路径类似gallery/form/1.4/uploader/plugins/auth/auth
+                if (!/\//.test(p)) {
+                    plugins[i] = PLUGIN_PREFIX+plugin + '/' +plugin;
                 }
-                self.get('plugins').push(oPlugin);
+            });
+            S.use(plugins.join(','),function(){
+                var args = S.makeArray(arguments).slice(1);
+                S.each(args,function(Plugin){
+                    var c = S.merge(config,{uploader:self});
+                    oPlugin = new Plugin(c);
+                    if (oPlugin['pluginInitializer']) {
+                        oPlugin['pluginInitializer'](self);
+                    }
+                    self.get('plugins').push(oPlugin);
+                });
             });
             return self;
         },
