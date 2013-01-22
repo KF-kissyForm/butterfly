@@ -12,15 +12,9 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
      * @class 异步文件上传组件，支持ajax、flash、iframe三种方案
      * @constructor
      * @extends Base
-     * @requires UrlsInput
      * @requires IframeType
      * @requires  AjaxType
      * @param {Object} config 组件配置（下面的参数为配置项，配置会写入属性，详细的配置说明请看属性部分）
-     * @param {Button} config.button *，Button按钮的实例
-     * @param {Queue} config.queue *，Queue队列的实例
-     * @param {String|Array} config.type *，采用的上传方案
-     * @param {Object} config.serverConfig *，服务器端配置
-     * @param {String} config.urlsInputName *，存储文件路径的隐藏域的name名
      * @param {Boolean} config.isAllowUpload 是否允许上传文件
      * @param {Boolean} config.autoUpload 是否自动上传
      * @example
@@ -34,6 +28,15 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
      * @desc  选择完文件后触发
      * @event
      * @param {Array} ev.files 文件完文件后返回的文件数据
+     */
+
+    /**
+     * @name Uploader#add
+     * @desc  向队列添加文件后触发
+     * @since 1.4
+     * @event
+     * @param {Number} ev.index 文件在队列中的索引值
+     * @param {Object} ev.file 文件数据
      */
 
     /**
@@ -95,9 +98,12 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
      */
 
     /**
-     * @name Uploader#restore
-     * @desc 添加默认数据到队列后触发
+     * @name Uploader#remove
+     * @desc  从队列中删除文件后触发
+     * @since 1.4
      * @event
+     * @param {Number} ev.index 文件在队列中的索引值
+     * @param {Object} ev.file 文件数据
      */
 
     /**
@@ -176,28 +182,6 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
             $btn.remove();
             self.set('target', $aBtn);
             return $aBtn;
-        },
-        /**
-         * 设置存放服务器端返回的url的隐藏域
-         * @return {Uploader}
-         */
-        urlsInput:function (target) {
-            var self = this;
-            var $target = $(target);
-            if (!$target.length) {
-                S.log('urlsInput()参数有误！');
-                return self;
-            }
-            //如果已经存在UrlsInput的实例，直接修改隐藏域目标
-            var urlsInput = self.get('urlsInput');
-            if (urlsInput) {
-                urlsInput.set('input', $target);
-                return self;
-            }
-
-            urlsInput = self._renderUrlsInput($target);
-            self.set('urlsInput', urlsInput);
-            return self;
         },
         /**
          * 使用插件
@@ -467,12 +451,6 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
             }
         },
         /**
-         * 存储文件路径的隐藏域的name名
-         * @type String
-         * @default ""
-         */
-        urlsInputName:{value:EMPTY},
-        /**
          *  当前上传的文件对应的在数组内的索引值，如果没有文件正在上传，值为空
          *  @type Number
          *  @default ""
@@ -509,5 +487,6 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
  * changes:
  * 明河：1.4
  *           - 重构模块
- *           - 新增urlsTarget参数属性
+ *           - 去掉urlsInputName参数
+ *           - 新增add和remove事件
  */

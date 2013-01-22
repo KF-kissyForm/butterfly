@@ -19,13 +19,15 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
         var self = this;
         //调用父类构造函数
         Theme.superclass.constructor.call(self, config);
+        self._init();
     }
 
     S.extend(Theme, Base, /** @lends Theme.prototype*/{
         /**
-         * 组件运行
+         * 初始化
+         * @private
          */
-        render:function(){
+        _init:function(){
             var self = this;
             self._addThemeCssName();
             self._initQueue();
@@ -35,10 +37,9 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
             self.fire('render');
         },
         /**
-         * 在上传组件运行完毕后执行的方法（对上传组件所有的控制都应该在这个函数内）
-         * @param {Uploader} uploader
+         * 运行主题（供主题扩展使用）
          */
-        afterUploaderRender:function (uploader) {
+        render:function(){
 
         },
         /**
@@ -133,7 +134,6 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
         _initQueue:function () {
             var self = this;
             var queue = self.get('queue');
-            queue.set('theme', self);
             queue.on('add',self._queueAddHandler,self);
             queue.on('remove', self._removeFileHandler, self);
             queue.on('statusChange', function (ev) {
