@@ -243,16 +243,8 @@ KISSY.add('gallery/form/1.4/uploader/queue', function (S, Node, Base) {
             }
             //状态一直直接返回
             if(curStatus == status) return self;
-
             //更新状态
             self.updateFile(index,{status:status});
-
-            statusMethod = '_'+status+'Handler';
-            //如果主题存在对应的状态变更监听器，予以执行
-            if(theme && S.isFunction(theme[statusMethod])){
-                args = S.merge({uploader:self.get('uploader'),index:index,file:file,id:file.id},args);
-                theme[statusMethod].call(theme,args);
-            }
             self.fire(Queue.event.FILE_STATUS,{index : index,status : status,args:args,file:file});
             return  self;
         },
@@ -392,14 +384,13 @@ KISSY.add('gallery/form/1.4/uploader/queue', function (S, Node, Base) {
          * @type Uploader
          * @default ""
          */
-        uploader:{value:EMPTY},
-        /**
-         * 主题实例
-         * @type Theme
-         * @default ""
-         */
-        theme:{value:EMPTY}
+        uploader:{value:EMPTY}
     }});
 
     return Queue;
 }, {requires:['node', 'base']});
+/**
+ * changes:
+ * 明河：1.4
+ *           - 去掉与Theme的耦合
+ */
