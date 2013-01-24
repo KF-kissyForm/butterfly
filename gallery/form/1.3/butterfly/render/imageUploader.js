@@ -23,7 +23,7 @@ KISSY.add(function (S, Node,RenderUi,ImageUploader) {
             if (!$target || !$target.length) return false;
 
             var imageUploader = new ImageUploader($target);
-            self.fireBeforeRenderEvent();
+            self.fireBeforeRenderEvent(imageUploader);
             imageUploader.on('render',function(ev){
                 //组件准备完成
                 self.set('isReady',true);

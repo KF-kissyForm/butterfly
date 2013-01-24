@@ -4,21 +4,6 @@
  **/
 KISSY.add('gallery/form/1.3/uploader/imageUploader',function (S, Base, Node, RenderUploader,Auth) {
     var EMPTY = '', $ = Node.all;
-
-    /**
-     * 主要用于data-valid的解析，为了和Butterfly的uth保持统一
-     * @param cfg
-     * @return {*}
-     */
-    function toJSON(cfg) {
-        cfg = cfg.replace(/'/g, '"');
-        try {
-            eval("cfg=" + cfg);
-        } catch (e) {
-            S.log('data-valid json is invalid');
-        }
-        return cfg;
-    }
     /**
      * @name ImageUploader
      * @class 异步文件上传入口文件，会从按钮的data-config='{}' 伪属性中抓取组件配置
@@ -241,14 +226,9 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             var msgs = self.get('authMsg');
             var uploaderConfig = self.get('uploaderConfig');
 
-            //标签上伪属性的消息配置
-            var sMsgs = $btn.attr('data-valid');
-            //合并验证消息
-            if(sMsgs) S.mix(msgs,toJSON(sMsgs));
-
             S.each(authRules,function(rule){
                 //js配置验证
-                if(uploaderConfig[rule]){
+                if(!S.isUndefined(uploaderConfig[rule])){
                     authConfig[rule] = [uploaderConfig[rule],msgs[rule] || ''];
                 }else{
                    //拉取属性的验证配置
@@ -278,8 +258,6 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
             });
             //默认允许上传的图片格式
             if(!authConfig['allowExts']) authConfig['allowExts'] = [self._setAllowExts(defaultAllowExts),msgs['allowExts'] || ''];
-            //默认不允许上传重复图片
-            if(!authConfig['allowRepeat']) authConfig['allowRepeat'] =  [false,msgs['allowRepeat'] || ''] ;
              return authConfig;
         },
         /**
@@ -356,3 +334,10 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
     });
     return ImageUploader;
 }, {requires:['base', 'node','./index','./auth/base' ]});
+/**
+ * changes:
+ * 明河：201212.11
+ *          - 修正allowRepeat规则无效的bug
+ * 明河：2012.11.22
+ *          - 去掉默认不允许图片重复的验证
+ */

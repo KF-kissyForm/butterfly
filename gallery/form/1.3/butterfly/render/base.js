@@ -1,15 +1,16 @@
 /**
- * @fileoverview ³õÊ¼»¯uiµÄ»ùÀà
- * @author  ½£Æ½£¨Ã÷ºÓ£©<minghe36@gmail.com>
+ * @fileoverview åˆå§‹åŒ–uiçš„åŸºç±»
+ * @author  å‰‘å¹³ï¼ˆæ˜æ²³ï¼‰<minghe36@gmail.com>
  */
 KISSY.add(function (S, Node,Base) {
     var EMPTY = '';
     /**
-     *  ³õÊ¼»¯uiµÄ»ùÀà
+     *  åˆå§‹åŒ–uiçš„åŸºç±»
      * @constructor
      */
     function RenderUi(config) {
         var self = this;
+        self._guid = S.guid();
         RenderUi.superclass.constructor.call(self, config);
         self._init();
     }
@@ -21,30 +22,47 @@ KISSY.add(function (S, Node,Base) {
     });
     S.extend(RenderUi, Base, /** @lends RenderUi.prototype*/{
         /**
-         * ³õÊ¼»¯
+         * åˆå§‹åŒ–
          * @private
          */
-         _init:function(){
+        _init:function(){
 
-         },
-        /**
-         * ´¥·¢×é¼ş³õÊ¼»¯Ç°µÄÊÂ¼ş
-         * @return this
-         */
-        fireBeforeRenderEvent:function(){
-            this.fire(RenderUi.event.BEFORE_RENDER,this.eventObject());
-            return this;
         },
         /**
-         * ´¥·¢×é¼ş³õÊ¼»¯ºóµÄÊÂ¼ş
+         * è¿è¡Œui
+         * @param {Object} ui
+         * @private
+         */
+        _render:function(ui){
+            var self = this;
+            self.fireBeforeRenderEvent(ui);
+            ui.render();
+            self.fireRenderEvent();
+            return self;
+        },
+        /**
+         * è§¦å‘ç»„ä»¶åˆå§‹åŒ–å‰çš„äº‹ä»¶
+         * @param {Object} ui uiå®ä¾‹
+         * @return this
+         */
+        fireBeforeRenderEvent:function(ui){
+            var self = this;
+            self.set('ui',ui);
+            this.fire(RenderUi.event.BEFORE_RENDER,self.eventObject());
+            return self;
+        },
+        /**
+         * è§¦å‘ç»„ä»¶åˆå§‹åŒ–åçš„äº‹ä»¶
          * @return this
          */
         fireRenderEvent:function(){
-            this.fire(RenderUi.event.RENDER,this.eventObject());
-            return this;
+            var self = this;
+            self.addUi();
+            self.fire(RenderUi.event.RENDER,self.eventObject());
+            return self;
         },
         /**
-         * ´¥·¢ÊÂ¼şÊ±´«µİµÄ¶ÔÏó
+         * è§¦å‘äº‹ä»¶æ—¶ä¼ é€’çš„å¯¹è±¡
          * @return {Object}
          */
         eventObject:function(){
@@ -55,8 +73,8 @@ KISSY.add(function (S, Node,Base) {
             return {ui : ui,isReady:isReady,target:target};
         },
         /**
-         * »ñÈ¡Ö¸¶¨uiµÄÅäÖÃ
-         * @param {String} uiName uiÃû³Æ
+         * è·å–æŒ‡å®šuiçš„é…ç½®
+         * @param {String} uiName uiåç§°
          * @return {Object}
          */
         getConfig:function(uiName){
@@ -65,29 +83,68 @@ KISSY.add(function (S, Node,Base) {
             var uiConfig = self.get('uiConfig');
             if(!S.isString(uiName) || !uiConfig[uiName]) return config;
             return uiConfig[uiName];
+        },
+        /**
+         * å‘uié›†åˆæ·»åŠ ui
+         */
+        addUi:function(){
+            var self = this;
+            var uis = self.get('uis');
+            if(!S.isObject(uis)) return {};
+
+            var name = self.get('name');
+            var ui = self.get('ui');
+            if(!uis[name])  uis[name] = ui;
+            return self;
+        },
+        removeUi:function(){
+            var self = this;
+            var uis = self.get('uis');
+            var name = self.get('name');
+            var ui = self.get('ui');
+            delete uis[name];
+            return self;
         }
     },{
         ATTRS:/** @lends RenderUi.prototype*/{
             /**
-             * ÊÇ·ñ³õÊ¼»¯Íê±Ï
+            * uiå¯¹åº”çš„è¡¨å•å…ƒç´ æ ‡è¯†
+            * @type String
+            * @default ''
+            */
+            name:{
+                value:EMPTY,
+                getter:function(v){
+                    var self = this;
+                    var $el = self.get('target');
+                    v = $el.attr('id') || $el.attr('name') || self._guid || '';
+                    return v;
+                }
+            },
+            /**
+             * æ˜¯å¦åˆå§‹åŒ–å®Œæ¯•
              * @type {Boolean}
              * @default false
              */
             isReady:{value:false},
             /**
-             * uiµÄÄ¿±êÔªËØ
+             * uiçš„ç›®æ ‡å…ƒç´ 
              * @type {NodeList}
              * @default ''
              */
             target:{value:EMPTY },
             /**
-             * uiÊµÀı
+             * uiå®ä¾‹
              * @type {Object}
              * @default ''
              */
             ui:{value:EMPTY},
             /**
-             * uiÅäÖÃ
+             * è¡¨å•å†…æ‰€æœ‰uiç»„ä»¶å®ä¾‹é›†åˆ
+             */
+            uis:{value:{}},
+            /**
+             * uié…ç½®
              * @type {Object}
              * @default {}
              */

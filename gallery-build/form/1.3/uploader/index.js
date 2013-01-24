@@ -130,38 +130,21 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
             S.each(defaultRules,function(aRule,key){
                 var hasRule = !S.isUndefined(rules[key]);
                 var ruleVal = hasRule && rules[key][0] || null;
-                if(!hasRule){
-                    rules[key] = [ruleVal,aRule[1]];
+                if(hasRule){
+                    uploader.addAttr(key,{
+                        value:ruleVal,
+                        getter:function(v){
+                            if(key == 'allowExts') v = self.getAllowExts(v);
+                            return v;
+                        },
+                        setter:function(v){
+                            var rules = self.get('rules');
+                            if(key == 'allowExts') v = self.setAllowExts(v);
+                            rules[key][0] = v;
+                            return v;
+                        }
+                    });
                 }
-                uploader.addAttr(key,{
-                    value:ruleVal,
-                    getter:function(v){
-                        if(key == 'allowExts') v = self.getAllowExts(v);
-                        return v;
-                    },
-                    setter:function(v){
-                        var rules = self.get('rules');
-                        debugger;
-                        if(key == 'allowExts') v = self.setAllowExts(v);
-                        rules[key][0] = v;
-                        return v;
-                    }
-                });
-            });
-            S.each(rules,function(val,rule){
-                uploader.addAttr(rule,{
-                    value:val[0],
-                    getter:function(v){
-                        if(rule == 'allowExts') v = self.getAllowExts(v);
-                        return v;
-                    },
-                    setter:function(v){
-                        var rules = self.get('rules');
-                        if(rule == 'allowExts') v = self.setAllowExts(v);
-                        rules[rule][0] = v;
-                        return v;
-                    }
-                });
             });
         },
         /**
@@ -309,6 +292,8 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
                 rule = self.getRule('max'),
                 msg;
             if(rule){
+                //不存在max的配置
+                if(!rule[0]) return true;
             	var isPass = len < rule[0];
 	            //达到最大允许上传数
 	            if(!isPass){
@@ -466,7 +451,14 @@ KISSY.add('gallery/form/1.3/uploader/auth/base', function (S, Node,Base) {
         }
     }});
     return Auth;
-}, {requires:['node','base']});/**
+}, {requires:['node','base']});
+
+/**
+ * changes:
+ * 明河：2012.11.22
+ *          - 去掉重复的代码，敲自己脑袋
+ *          - 修正必须存在max的bug
+ *//**
  * @fileoverview 异步文件上传组件
  * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
  **/

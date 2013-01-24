@@ -77,15 +77,15 @@
     </header>
     <div id="content">
         <div style="margin:20px 0;">
-            <input type="text" value="40.00" class="ks-spinbox" data-range="2.00" data-max="88.00" data-min="1">
+            <input type="text" value="40.00" class="ks-spinbox" data-range="2.00" data-max="88.00" data-min="1" data-hasdecimal="true">
         </div>
         <!-- / -->
         <div>
-            <input type="text" value="60.00" class="ks-spinbox" data-range="12.00" data-max="88.00" data-min="10">
+            <input type="text" value="60" class="ks-spinbox" data-range="12.00" data-max="88.00" data-min="10">
         </div>
         <!-- / -->
         <pre class='brush: xml;'>
-            <input type="text" value="40.00" class="ks-spinbox" data-range="2.00" data-max="88.00" data-min="1">
+            <input type="text" value="40" class="ks-spinbox" data-range="2.00" data-max="88.00" data-min="1">
         </pre>
         <pre class='brush: js;'>
              KISSY.use('gallery/form/1.3/spinbox/index,node', function (S, SpinBox, Node) {
@@ -108,7 +108,7 @@
 </script>
 <script type="text/javascript">
     KISSY.use('gallery/form/1.3/spinbox/index,node', function (S, SpinBox, Node) {
-        var spinbox = new SpinBox('.ks-spinbox', {ariaLabel:'出价框，请输入价格'});
+        var spinbox = new SpinBox('.ks-spinbox', {ariaLabel:'出价框，请输入价格',onValueChange:function(e){alert(e.target.val());}});
         spinbox.render();
     })
 </script>
