@@ -253,10 +253,8 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
             //引入主题
             S.use(theme, function (S, Theme) {
                 //合并配置
-                S.mix(config, {buttonTarget:self.get('target')});
+                S.mix(config, {uploader:self,queue:self.get('queue'),buttonTarget:self.get('target')});
                 theme = new Theme(config);
-                theme.set('uploader', self);
-                theme.set('queue', self.get('queue'));
                 theme.on('render', function () {
                     self.fire('themeLoad', {theme:theme, name:name});
                 });

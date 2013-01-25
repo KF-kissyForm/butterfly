@@ -23,18 +23,9 @@ KISSY.add('gallery/form/1.4/uploader/themes/default/index', function (S, Node, T
     S.extend(DefaultTheme, Theme, /** @lends DefaultTheme.prototype*/{
         /**
          * 在上传组件运行完毕后执行的方法（对上传组件所有的控制都应该在这个函数内）
-         * @param {Uploader} uploader
          */
-        afterUploaderRender:function (uploader) {
+        render:function () {
 
-        },
-        /**
-         * 获取状态容器
-         * @param {KISSY.NodeList} target 文件的对应的dom（一般是li元素）
-         * @return {KISSY.NodeList}
-         */
-        _getStatusWrapper:function(target){
-            return target && target.children('.J_FileStatus') || $('');
         },
         /**
          * 文件处于等待上传状态时触发
@@ -138,7 +129,7 @@ KISSY.add('gallery/form/1.4/uploader/themes/default/index', function (S, Node, T
             '<li id="queue-file-{id}" class="clearfix" data-name="{name}">' +
                 '<div class="f-l sprite file-icon"></div>' +
                 '<div class="f-l">{name}</div>' +
-                '<div class="f-l status-wrapper J_FileStatus">' +
+                '<div class="f-l status-wrapper">' +
                     '<div class="status waiting-status">等待上传，<a class="J_Upload_{id}" href="#Upload">点此上传</a> </div>' +
                     '<div class="status start-status progress-status success-status clearfix">' +
                         '<div class="J_ProgressBar_{id} f-l uploader-progress"><img class="loading" src="http://img01.taobaocdn.com/tps/i1/T1F5tVXjRfXXXXXXXX-16-16.gif" alt="loading" /></div>' +

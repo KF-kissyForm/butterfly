@@ -26,17 +26,6 @@ KISSY.add('gallery/form/1.4/uploader/queue', function (S, Node, Base) {
 
     S.mix(Queue, /**@lends Queue*/ {
         /**
-         * TODO:多余？
-         * 模板
-         */
-        tpl:{
-            DEFAULT:'<li id="queue-file-{id}" class="clearfix" data-name="{name}">' +
-                '<div class="f-l sprite file-icon"></div>' +
-                '<div class="f-l">{name}</div>' +
-                '<div class="f-l file-status J_FileStatus"></div>' +
-                '</li>'
-        },
-        /**
          * 支持的事件
          */
         event:{
@@ -51,9 +40,7 @@ KISSY.add('gallery/form/1.4/uploader/queue', function (S, Node, Base) {
             //当改变文件状态后触发
             FILE_STATUS : 'statusChange',
             //更新文件数据后触发
-            UPDATE_FILE : 'updateFile',
-            // 恢复文件后触发
-            RESTORE: 'restore'
+            UPDATE_FILE : 'updateFile'
         },
         /**
          * 文件的状态
@@ -67,14 +54,7 @@ KISSY.add('gallery/form/1.4/uploader/queue', function (S, Node, Base) {
             ERROR : 'error',
             RESTORE: 'restore'
         },
-        //样式
-        cls:{
-            QUEUE:'ks-uploader-queue'
-        },
-        hook:{
-            //状态
-            STATUS:'.J_FileStatus'
-        },
+        //文件唯一id前缀
         FILE_ID_PREFIX:'file-'
     });
     /**
@@ -115,12 +95,6 @@ KISSY.add('gallery/form/1.4/uploader/queue', function (S, Node, Base) {
      * @event
      * @param {Number} ev.index 文件在队列中的索引值
      * @param {Object} ev.file 文件数据
-     */
-    /**
-     * @name Queue#restore
-     * @desc  恢复文件后触发
-     * @event
-     * @param {Array} ev.files 文件数据集合
      */
     //继承于Base，属性getter和setter委托于Base处理
     S.extend(Queue, Base, /** @lends Queue.prototype*/{
@@ -393,4 +367,5 @@ KISSY.add('gallery/form/1.4/uploader/queue', function (S, Node, Base) {
  * changes:
  * 明河：1.4
  *           - 去掉与Theme的耦合
+ *           - 去掉restore
  */
