@@ -34,8 +34,8 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
             self._bind();
             self._LoaderCss(function(){
                 self._restore();
+                self.fire('init');
             });
-            self.fire('render');
         },
         /**
          * 运行主题（供主题扩展使用）
@@ -114,7 +114,9 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
                 file.target = self._appendFileDom(file);
                 self._setStatusVisibility(file);
                 if(self._successHandler) self._successHandler({file:file});
-            })
+            });
+
+            return self;
         },
         /**
          * 将主题名写入到队列和按钮目标容器，作为主题css样式起始
@@ -126,6 +128,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
             if (name == EMPTY) return false;
             if($queueTarget.length)  $queueTarget.addClass(name + classSuffix.QUEUE);
             $btn.addClass(name + classSuffix.BUTTON);
+            return self;
         },
         /**
          * 监听uploader的事件
@@ -163,7 +166,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
             //处理消息层的显影
             var status = file.status;
             var $target = file.target;
-            $status = $target.all('.'+status+'-status');
+            var $status = $target.all('.'+status+'-status');
             if($status.length){
                 $target.all('.status').hide();
                 $status.show();

@@ -255,10 +255,10 @@ KISSY.add('gallery/form/1.4/uploader/index', function (S, Node, UploaderBase, Ri
                 //合并配置
                 S.mix(config, {uploader:self,queue:self.get('queue'),buttonTarget:self.get('target')});
                 theme = new Theme(config);
-                theme.on('render', function () {
+                theme.on('init', function () {
+                    theme.render();
                     self.fire('themeLoad', {theme:theme, name:name});
                 });
-                theme.render();
             })
         },
         /**
