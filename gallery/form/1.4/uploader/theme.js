@@ -4,9 +4,12 @@
  **/
 
 KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBase) {
-    var EMPTY = '', $ = Node.all,
-        //主题样式名前缀
-        classSuffix = {BUTTON:'-button', QUEUE:'-queue'};
+    var EMPTY = '';
+    var $ = Node.all;
+    //主题样式名前缀
+    var classSuffix = {BUTTON:'-button', QUEUE:'-queue'};
+    //html中拉取主题模版的容器的type：<script type="text/uploader-theme"></script>
+    var HTML_THEME = 'text/uploader-theme';
 
     /**
      * @name Theme
@@ -30,6 +33,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
         _init:function(){
             var self = this;
             self._addThemeCssName();
+            self._tplFormHtml();
             self._usePlugins();
             self._bind();
             self._LoaderCss(function(){
@@ -219,7 +223,32 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
             if(plugins == EMPTY) return false;
             var uploader = self.get('uploader');
             uploader.use(plugins);
+            return self;
+        },
+        /**
+         * 从html中拉取模版
+         * @private
+         * @return {String}
+         */
+        _tplFormHtml:function(){
+            var self = this;
+            var tpl = self.get('fileTpl');
+            var $target = $(self.get('queueTarget'));
+            var hasHtmlTpl = false;
+            if(!$target.length) return false;
+
+            var $tpl = $target.all('script');
+            $tpl.each(function(el){
+                  if(el.attr('type') == HTML_THEME){
+                      hasHtmlTpl = true;
+                      tpl = el.html();
+                      self.set('fileTpl',tpl);
+                  }
+            });
+
+            return tpl;
         }
+
     }, {ATTRS:/** @lends Theme.prototype*/{
         /**
          *  主题名
@@ -293,4 +322,5 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
  *           - 去掉状态层的log消息
  *           - 增加默认渲染数据操作
  *           - 去掉插件加载
+ *           - 增加从html拉取模版的功能
  */
