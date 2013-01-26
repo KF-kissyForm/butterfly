@@ -116,8 +116,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
                 //将存在的文件数据渲染到队列DOM中，状态为success
                 file.status = 'success';
                 file.target = self._appendFileDom(file);
-                self._setStatusVisibility(file);
-                if(self._successHandler) self._successHandler({file:file});
+                self._renderHandler('_successHandler',{file:file});
             });
 
             return self;
@@ -149,16 +148,33 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
             });
 
             var handler;
+            var handlerName;
+            var extend = self.get('extend');
             S.each(uploaderEvents,function(event){
-                handler = self['_'+event+'Handler'];
+                handlerName = '_'+event+'Handler';
+                handler = self[handlerName];
                 if(handler){
                     uploader.on(event,function(ev){
-                        self._setStatusVisibility(ev.file);
-                        handler(ev);
+                        self._renderHandler(handlerName,ev);
                     });
                 }
             })
 
+        },
+        /**
+         * 运行监听器方法
+         * @private
+         */
+        _renderHandler:function(handlerName,ev){
+            var self = this;
+            var extend = self.get('extend');
+            var handler = self[handlerName];
+            self._setStatusVisibility(ev.file);
+            if(S.isObject(extend) && S.isFunction(extend[handlerName])){
+                extend[handlerName].call(self,ev);
+            }else{
+                handler(ev);
+            }
         },
         /**
          * 设置各个状态下的消息可见性
@@ -275,6 +291,12 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
          */
         fileTpl:{value:EMPTY },
         /**
+        * 覆盖主题方法集合
+        * @type Object
+        * @default ''
+        */
+        extend:{value:EMPTY},
+        /**
          * 验证消息
          * @since 1.4
          * @type Object
@@ -319,8 +341,9 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
 /**
  * changes:
  * 明河：1.4
- *           - 去掉状态层的log消息
+ *           - 去掉状态层概念和log消息
  *           - 增加默认渲染数据操作
  *           - 去掉插件加载
  *           - 增加从html拉取模版的功能
+ *           - 增加从外部快速覆盖主题监听器的功能
  */
