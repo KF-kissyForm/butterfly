@@ -37,66 +37,24 @@ KISSY.add('gallery/form/1.4/uploader/themes/default/index', function (S, Node, T
          * 文件处于开始上传状态时触发
          */
         _startHandler : function(ev){
-             var self = this,
-                 uploader = ev.uploader,
-                 index = ev.index,
-                 queue = self.get('queue'),
-                 //上传方式
-                 uploadType = uploader.get('type'),
-                 //进度条容器
-                 $progressBar = $('.J_ProgressBar_' + ev.id);
-            //如果是ajax或flash异步上传，加入进度条
-            if(uploadType == 'ajax' || uploadType == 'flash'){
-                var ProgressBar = self.get('oPlugin').progressBar,progressBar;
-                if(ProgressBar){
-                    progressBar = new ProgressBar($progressBar,{width:self.get('progressBarWidth')});
-                    progressBar.on('change',function(ev){
-                        //百分百进度隐藏进度条
-                        if(ev.value == 100){
-                            progressBar.hide();
-                        }
-                    });
-                    progressBar.render();
-
-                }
-                //将进度条实例写入到队列的文件数据上备用
-                queue.updateFile(index,{progressBar:progressBar});
-            }
 
         },
         /**
          * 文件处于正在上传状态时触发
          */
         _progressHandler:function(ev){
-            var file = ev.file,
-                //已加载字节数
-                loaded = ev.loaded,
-                //总字节数
-                total = ev.total,
-                val = Math.ceil((loaded/total) * 100),
-                progressBar = file.progressBar;
-            if(!progressBar) return false;
-            //处理进度
-            progressBar.set('value',val);
+
         },
         /**
          * 文件处于上传成功状态时触发
          */
         _successHandler:function(ev){
-            var file = ev.file,
-                id = file.id,
-                $del = $(".J_Del_" + id),
-                $cancel = $(".J_Cancel_" + id),
-                progressBar = file.progressBar;
+            var file = ev.file;
+            var id = file.id;
+            var $del = $(".J_Del_" + id);
+            var $cancel = $(".J_Cancel_" + id);
             $del.show();
-            $cancel.hide();
-            //不存在进度条直接予以隐藏
-            if(!progressBar){
-                $('.J_ProgressBar_'+id).hide();
-                return false;
-            }
-            //处理进度
-            progressBar.set('value',100);
+           $cancel.hide();
         },
         /**
          * 文件处于上传错误状态时触发
@@ -142,19 +100,13 @@ KISSY.add('gallery/form/1.4/uploader/themes/default/index', function (S, Node, T
             '</li>'
         },
         /**
-         * 需要加载的插件，需要手动实例化
-         * @type Array
-         * @default [''progressBar'] 进度条
+         * 引入的插件
+         * @type String
+         * @default 'proBars' 进度条
          */
-        plugins:{
-            value:['progressBar']
+        use:{
+            value:'proBars'
         },
-        /**
-         * 进度条宽度
-         * @type Number
-         * @default 100
-         */
-        progressBarWidth:{value:100},
         /**
          * 验证消息
          * @since 1.4

@@ -73,8 +73,7 @@ KISSY.add('gallery/form/1.4/uploader/base', function (S, Base, Node, IframeType,
             PROGRESS:'progress',
             SUCCESS:'success',
             CANCEL:'cancel',
-            ERROR:'error',
-            RESTORE:'restore'
+            ERROR:'error'
         }
     });
     /**

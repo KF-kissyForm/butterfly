@@ -3,7 +3,7 @@
  * @author 剑平（明河）<minghe36@126.com>
  **/
 
-KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBase) {
+KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
     var EMPTY = '';
     var $ = Node.all;
     //主题样式名前缀
@@ -140,26 +140,19 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
         _bind:function(){
             var self = this;
             var uploader = self.get('uploader');
-            var uploaderEvents = UploaderBase.event;
-            if(!S.isObject(uploaderEvents)) return false;
+            var uploaderEvents = ['add','remove','select','start','progress','success','error','complete'];
 
-            uploader.on(uploaderEvents.ADD,function(ev){
-                 self._appendFileDom(ev.file);
+            uploader.on(uploaderEvents[0],function(ev){
+                var $target = self._appendFileDom(ev.file);
+                var queue = uploader.get('queue');
+                queue.updateFile(ev.index,{target:$target});
             });
-
-            var handler;
-            var handlerName;
-            var extend = self.get('extend');
-            S.each(uploaderEvents,function(event){
-                handlerName = '_'+event+'Handler';
-                handler = self[handlerName];
-                if(handler){
-                    uploader.on(event,function(ev){
-                        self._renderHandler(handlerName,ev);
-                    });
-                }
+            S.each(uploaderEvents,function(e){
+                uploader.on(e,function(ev){
+                    var handlerName = '_'+ev.type+'Handler';
+                    self._renderHandler(handlerName,ev);
+                });
             })
-
         },
         /**
          * 运行监听器方法
@@ -173,7 +166,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
             if(S.isObject(extend) && S.isFunction(extend[handlerName])){
                 extend[handlerName].call(self,ev);
             }else{
-                handler(ev);
+                handler && handler(ev);
             }
         },
         /**
@@ -234,6 +227,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
          * @private
          */
         _usePlugins:function(){
+            //TODO：需要优化
             var self = this;
             var plugins = self.get('use');
             if(plugins == EMPTY) return false;
@@ -337,7 +331,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base,UploaderBas
         uploader:{value:EMPTY}
     }});
     return Theme;
-}, {requires:['node', 'base','./base']});
+}, {requires:['node', 'base']});
 /**
  * changes:
  * 明河：1.4
