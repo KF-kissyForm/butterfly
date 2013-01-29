@@ -116,15 +116,16 @@ KISSY.add('gallery/form/1.4/uploader/queue', function (S, Node, Base) {
             //如果存在多个文件，需要批量添加文件
             if (files.length > 0) {
                 fileData=[];
+                var uploader =self.get('uploader');
                 var len = self.get('files').length;
-                var hasMax = S.isNumber(uploader.get('max'));
+                var hasMax = uploader.get('max') > 0;
                 S.each(files,function(file, index){
                     if(!hasMax){
                         fileData.push(self._addFile(file));
                     }else{
                         //增加是否超过判断
                         //#128 https://github.com/kissyteam/kissy-gallery/issues/128 by 翰文
-                        var max = self.get('max');
+                        var max = uploader.get('max');
                         if (max >= len + index + 1) {
                             fileData.push(self._addFile(file));
                         }
