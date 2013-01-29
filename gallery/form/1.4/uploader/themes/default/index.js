@@ -28,16 +28,39 @@ KISSY.add('gallery/form/1.4/uploader/themes/default/index', function (S, Node, T
 
         },
         /**
-         * 文件处于等待上传状态时触发
+         * 向队列中添加一个文件后触发
          */
-       _waitingHandler:function(ev){
+        _addHandler : function(ev){
+            var self = this;
+            var id = ev.file.id;
+            var index = ev.index;
+            var uploader = self.get('uploader');
+            var queue = uploader.get('queue');
+            //删除链接
+            var $del = $(".J_Del_" + id);
+            //取消链接
+            var $cancel = $(".J_Cancel_" + id);
+            //上传链接
+            var $upload = $('.J_Upload_' + id);
 
-        },
-        /**
-         * 文件处于开始上传状态时触发
-         */
-        _startHandler : function(ev){
+            //点击取消
+            $cancel.on('click', function (ev) {
+                ev.preventDefault();
+                uploader.cancel(index);
+            });
 
+            //点击删除
+            $del.on('click', function (ev) {
+                ev.preventDefault();
+                //删除队列中的文件
+                queue.remove(index);
+            });
+
+            //点击上传
+            $upload.on('click', function (ev) {
+                ev.preventDefault();
+                uploader.upload(index);
+            });
         },
         /**
          * 文件处于正在上传状态时触发
@@ -60,8 +83,8 @@ KISSY.add('gallery/form/1.4/uploader/themes/default/index', function (S, Node, T
          * 文件处于上传错误状态时触发
          */
         _errorHandler:function(ev){
-            var msg = ev.msg,
-                id = ev.id;
+            var msg = ev.msg;
+            var id = ev.id;
             //打印错误消息
             $('.J_ErrorMsg_' + id).html(msg);
         }

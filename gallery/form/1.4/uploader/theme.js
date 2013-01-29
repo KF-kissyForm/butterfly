@@ -147,6 +147,11 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
                 var queue = uploader.get('queue');
                 queue.updateFile(ev.index,{target:$target});
             });
+
+            uploader.on(uploaderEvents[1],function(ev){
+                self._removeFileDom(ev.file);
+            });
+
             S.each(uploaderEvents,function(e){
                 uploader.on(e,function(ev){
                     var handlerName = '_'+ev.type+'Handler';
@@ -166,7 +171,7 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
             if(S.isObject(extend) && S.isFunction(extend[handlerName])){
                 extend[handlerName].call(self,ev);
             }else{
-                handler && handler(ev);
+                handler && handler.call(self,ev);
             }
         },
         /**
@@ -220,7 +225,19 @@ KISSY.add('gallery/form/1.4/uploader/theme', function (S, Node, Base) {
             var hFile;
             if (!$target.length) return false;
             hFile = S.substitute(tpl, fileData);
-            return $(hFile).appendTo($target).data('data-file', fileData);
+            return $(hFile).hide().appendTo($target).fadeIn(0.4).data('data-file', fileData);
+        },
+        /**
+         *  移除文件DOM
+         * @private
+         */
+        _removeFileDom:function(file){
+            if(!S.isObject(file)) return false;
+            var $target = file.target;
+            if(!$target || !$target.length) return false;
+            $target.fadeOut(0.4,function(){
+                $target.remove();
+            })
         },
         /**
          * 使用插件
