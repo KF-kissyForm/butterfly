@@ -13,33 +13,14 @@
  <ul>
      <li>作者：明河</li>
      <li>设计：明河</li>
-     <li>描述：v1.3新增主题，不同于1.2版的主题，具有更强的通用性</li>
-     <li>兼容：chrome、firefox</li>
+     <li>描述：图片上传专用主题</li>
+     <li>兼容：chrome、firefox、IE9、IE8、IE6</li>
  </ul>
- <script type="text/uploader-restore" id="J_ImageRestore">
-     [
-     {"name":"icon_evil.gif",
-     "size":1446,
-     "type":"image/gif",
-     "result":{
-     "status":1,
-     "data":{
-     "name":"icon_evil.gif",
-     "url":"http://tp4.sinaimg.cn/1653905027/180/5601547226/1",
-     "item_id":"42458"
-     }
-     }
-     }
-     ]
- </script>
-
  <div class="grid">
 
-     <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue"
-            action="upload.php" urlsInputName="imageUrls" max="3" maxSize="500"  restoreHook="#J_ImageRestore">
-
+     <input class="g-u" id="J_UploaderBtn" name="Filedata" type="file" value="上传图片" action="upload.php" max="3" maxSize="500">
      <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
-     <input type="hidden" name="imageUrls">
+     <input type="hidden" name="imageUrls" id="J_Images">
  </div>
  <ul id="J_UploaderQueue" class="grid">
 
@@ -59,9 +40,26 @@
             ]
         });
 
-        KISSY.use('gallery/form/1.4/uploader/imageUploader', function (S, ImageUploader) {
-            var imageUploader = new ImageUploader('#J_UploaderBtn');
-            imageUploader.render();
+        S.use('gallery/form/1.4/uploader/index', function (S, Uploader) {
+            var uploader = new Uploader('#J_JsUploaderBtn',{
+                // 文件域
+                name:"Filedata",
+                //处理上传的服务器端脚本路径
+                action:"upload.php"
+            });
+
+            uploader.use('auth',{
+                //最多上传个数
+                max:3,
+                //图片最大允许大小
+                maxSize:500
+            });
+
+            uploader.use('urlsInput',{target:'#J_Images'});
+
+            uploader.theme('imageUploader',{
+                queueTarget:'#J_UploaderQueue'
+            });
         })
 	</script>
  </body>

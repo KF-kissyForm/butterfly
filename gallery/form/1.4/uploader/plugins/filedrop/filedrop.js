@@ -17,9 +17,7 @@ KISSY.add('gallery/form/1.4/uploader/plugins/filedrop/filedrop', function (S, No
      */
     var FileDrop = function (config) {
         var self = this;
-        // console.log(config);
         FileDrop.superclass.constructor.call(self, config);
-//        console.log($(config.target), self.get('target'));
         self.set('mode', getMode());
     };
 
@@ -43,13 +41,12 @@ KISSY.add('gallery/form/1.4/uploader/plugins/filedrop/filedrop', function (S, No
 
     S.extend(FileDrop, Base, /** @lends FileDrop.prototype*/ {
         /**
-         * 运行
+         * 插件初始化
          */
-        render:function () {
-//            console.log('render', this.get('target'));
-            var self = this,mode = self.get('mode'),
-                uploader = self.get('uploader'),
-                $dropArea;
+        pluginInitializer:function (uploader) {
+            var self = this;
+            var mode = self.get('mode');
+            var $dropArea;
             if(uploader.get('type') == 'flash'){
                 S.log('flash上传方式不支持拖拽！');
                 self.set('isSupport',false);
@@ -60,19 +57,15 @@ KISSY.add('gallery/form/1.4/uploader/plugins/filedrop/filedrop', function (S, No
                 self.set('isSupport',false);
                 return false;
             }
-            if(!uploader){
-                S.log('缺少Uploader的实例！');
-                return false;
-            }
+            var target = uploader.get('target');
+            self.set('target',target);
             $dropArea = self._createDropArea();
-            if($dropArea.length){
-                $dropArea.on('click',self._clickHandler,self);
-            }
+            $dropArea.on('click',self._clickHandler,self);
             //当uploader的禁用状态发生改变后显隐拖拽区域
             uploader.on('afterDisabledChange',function(ev){
                 self[ev.newVal && 'hide' || 'show']();
             });
-            self.fire('afterRender', {'buttonTarget':self.get('buttonWrap')});
+            self.fire('render', {'buttonTarget':self.get('buttonWrap')});
         },
         /**
          * 显示拖拽区域
@@ -89,11 +82,6 @@ KISSY.add('gallery/form/1.4/uploader/plugins/filedrop/filedrop', function (S, No
             var self = this,
                 dropContainer = self.get('dropContainer');
             dropContainer.hide();
-        },
-        /**
-         * ?
-         */
-        reset:function () {
         },
         /**
          * 创建拖拽区域
@@ -161,8 +149,6 @@ KISSY.add('gallery/form/1.4/uploader/plugins/filedrop/filedrop', function (S, No
             });
             self.fire(event.AFTER_DROP, {files:files});
             uploader._select({files:files});
-        },
-        _setDisabled:function () {
         }
     }, {
         ATTRS:/** @lends FileDrop.prototype*/{
@@ -184,11 +170,7 @@ KISSY.add('gallery/form/1.4/uploader/plugins/filedrop/filedrop', function (S, No
              */
             tpl:{
                 value:{
-                    supportDrop:'<div class="drop-wrapper">' +
-                        '<p>直接拖拽图片到这里，</p>' +
-                        '<p class="J_ButtonWrap">或者' +
-                        '</p>' +
-                        '</div>',
+                    supportDrop:'<div class="drop-wrapper"></div>',
                     notSupportDropIe:'<div class="drop-wrapper">' +
                         '<p>您的浏览器只支持传统的图片上传，</p>' +
                         '<p class="suggest J_ButtonWrap">推荐使用chrome浏览器或firefox浏览器' +
@@ -221,3 +203,8 @@ KISSY.add('gallery/form/1.4/uploader/plugins/filedrop/filedrop', function (S, No
 
     return FileDrop;
 }, {requires:['node', 'base']});
+/**
+ * changes:
+ * 明河：1.4
+ *           - 重构成rich base的插件
+ */

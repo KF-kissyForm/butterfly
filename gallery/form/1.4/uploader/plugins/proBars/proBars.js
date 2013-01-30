@@ -23,10 +23,7 @@ KISSY.add('gallery/form/1.4/uploader/plugins/proBars/proBars',function(S, Node, 
          * 组件支持的事件
          */
         event : {
-            RENDER : 'render',
-            CHANGE : 'change',
-            SHOW : 'show',
-            HIDE : 'hide'
+            RENDER : 'render'
         }
     });
     S.extend(ProBars, Base, /** @lends ProBars.prototype*/{
