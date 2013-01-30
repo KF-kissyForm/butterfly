@@ -75,7 +75,7 @@ KISSY.add('gallery/uploader/1.4/plugins/urlsInput/urlsInput',function(S, Node, B
             var self = this,urls = self.get('urls'),
                 //判断路径是否已经存在
                 isExist = self.isExist(url);
-            //TODO:第一个路径会出现为空的情况，日后完善
+            //TODO:防止第一个路径会出现为空的情况
             if(urls[0] == EMPTY) urls = [];
             if(isExist){
                 S.log(LOG_PREFIX + 'add()，文件路径已经存在！');
@@ -92,6 +92,7 @@ KISSY.add('gallery/uploader/1.4/plugins/urlsInput/urlsInput',function(S, Node, B
          * @return {Array} urls 删除后的路径
          */
         remove : function(url){
+            //TODO:如果文件名中包含非法字符，正则无法匹配到
             if(!url) return false;
             var self = this,urls = self.get('urls'),
                 isExist = self.isExist(url) ,

@@ -134,13 +134,17 @@ KISSY.add(function (S, Node, Theme) {
          * 删除图片后触发
          */
         _delHandler:function(ev){
-             var self = this,uploader = self.get('uploader'),queue = self.get('queue'),
-                 file = $(ev.target).data('data-file'),index = queue.getFileIndex(file.id),
-                 status = file.status;
+             var self = this;
+            var uploader = self.get('uploader');
+            var queue = uploader.get('queue');
+            var file = $(ev.target).data('data-file');
+            var index = queue.getFileIndex(file.id);
+            var status = file.status;
             //如果文件还在上传，取消上传
              if(status == 'start' || status == 'progress'){
                  uploader.cancel(index);
              }
+            queue.remove(index);
             //统计允许上传文件个数
             self._setCount();
         },
