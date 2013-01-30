@@ -205,7 +205,16 @@ KISSY.add('gallery/uploader/1.4/plugins/preview/preview', function (S, D, E,Base
 
             return self.data;
         }
-    });
+    },{ATTRS:{
+        /**
+         * 插件名称
+         * @type String
+         * @default preview
+         */
+        pluginId:{
+            value:'preview'
+        }
+    }});
 
     return Preview;
 

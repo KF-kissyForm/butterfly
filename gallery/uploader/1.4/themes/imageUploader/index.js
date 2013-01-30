@@ -45,8 +45,10 @@ KISSY.add(function (S, Node, Theme) {
             //点击删除按钮
             $delBtn.on('click',self._delHandler,self);
 
-            //显示图片容器
-            $('.J_Pic_' + id).show();
+            //显示图片预览
+            var $img = $('.J_Pic_' + id);
+            $img.show();
+            self.preview($img);
         },
         /**
          * 文件处于开始上传状态时触发
@@ -85,6 +87,18 @@ KISSY.add(function (S, Node, Theme) {
              self._setDisplayMsg(true,ev.file);
              //向控制台打印错误消息
              S.log(msg);
+        },
+        /**
+         * 图片预览
+         *
+         */
+        preview:function($img){
+            var self = this;
+            var uploader = self.get('uploader');
+            var oPreview = uploader.getPlugin('preview');
+            var target = uploader.get('fileInput');
+            oPreview.preview(target,$img);
+            return self;
         },
         /**
          * 显示“你还可以上传几张图片”
@@ -182,7 +196,7 @@ KISSY.add(function (S, Node, Theme) {
                     '<a href="javascript:void(0);"><img class="J_Pic_{id}" src="" /></a>' +
                 '</div>' +
                 '<div class=" J_Mask_{id} pic-mask"></div>' +
-                '<div class="status-wrapper J_FileStatus">' +
+                '<div class="status-wrapper">' +
                     '<div class="status waiting-status"><p>等待上传，请稍候</p></div>' +
                     '<div class="status start-status progress-status success-status">' +
                         '<div class="J_ProgressBar_{id}"><s class="loading-icon"></s>上传中...</div>' +
@@ -196,10 +210,10 @@ KISSY.add(function (S, Node, Theme) {
         /**
          * 引入的插件
          * @type String
-         * @default 'proBars' 进度条
+         * @default 'proBars,filedrop,preview'
          */
         use:{
-            value:'proBars,filedrop'
+            value:'proBars,filedrop,preview'
         },
         /**
          * 统计上传张数的容器

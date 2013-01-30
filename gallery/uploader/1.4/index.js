@@ -293,6 +293,20 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             }
         },
         /**
+         * 文件域
+         * @type NodeList
+         * @since 1.4
+         * @default ""
+         */
+        fileInput:{
+            value:EMPTY,
+            getter:function(v){
+                var self = this;
+                var $target = self.get('target');
+                return $target.all('.file-input');
+            }
+        },
+        /**
          * 主题实例
          * @type Theme
          * @since 1.4
@@ -460,12 +474,6 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          * @default {}
          */
         uploadType:{value:{}},
-        /**
-         * UrlsInput实例
-         * @type UrlsInput
-         * @default ""
-         */
-        urlsInput:{value:EMPTY},
         /**
          * 存在批量上传文件时，指定的文件状态
          * @type String

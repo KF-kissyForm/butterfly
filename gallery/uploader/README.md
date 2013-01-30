@@ -1,9 +1,7 @@
-#
+# Uploader
 
-Butterfly是完整的表单解决方案，自带表单验证、数据层、多表单主题支持和丰富的表单ui。
-
-- 版本：1.4（基于kissy1.2）
-- 作者：明河、紫英、张挺、牧云、易敛、飞绿、伯方
+- 版本：1.4（基于kissy1.3）
+- 作者：明河、紫英、飞绿
 - <a href="http://butterfly.36ria.com/1.4/demo.html" target="_blank">Butterfly教程</a>
 
 <img src="http://www.36ria.com/wp-content/uploads/2012/11/butterfly.png" />

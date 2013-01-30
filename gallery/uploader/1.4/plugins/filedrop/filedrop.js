@@ -152,6 +152,14 @@ KISSY.add('gallery/uploader/1.4/plugins/filedrop/filedrop', function (S, Node, B
         }
     }, {
         ATTRS:/** @lends FileDrop.prototype*/{
+            /**
+             * 插件名称
+             * @type String
+             * @default 'filedrop'
+             */
+            pluginId:{
+                value:'filedrop'
+            },
             target:{
                 value:EMPTY
             },
