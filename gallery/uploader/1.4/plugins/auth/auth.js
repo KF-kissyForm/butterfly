@@ -3,8 +3,22 @@
  * @author: 剑平（明河）<minghe36@126.com>
  **/
 KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
-    var EMPTY = '', $ = Node.all,
-        console = console || S, LOG_PREFIX = '[uploader-auth]:';
+    var EMPTY = '';
+    var $ = Node.all;
+
+    /**
+     * 转换文件大小字节数
+     * @param {Number} bytes 文件大小字节数
+     * @return {String} 文件大小
+     */
+    function convertByteSize(bytes) {
+        var i = -1;
+        do {
+            bytes = bytes / 1024;
+            i++;
+        } while (bytes > 99);
+        return Math.max(bytes, 0.1).toFixed(1) + ['kB', 'MB', 'GB', 'TB', 'PB', 'EB'][i];
+    }
 
     /**
      * @name Auth
@@ -296,6 +310,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
         /**
          * 检验是否超过允许最大文件大小，留意iframe上传方式此验证无效
          * @param {Object} file 文件对象
+         * @return Boolean
          */
         testMaxSize : function(file){
             var self = this;
@@ -307,7 +322,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             var isAllow = size <= maxSize;
             if(!isAllow){
                 var msg = self.msg('maxSize');
-                msg = S.substitute(msg,{maxSize:S.convertByteSize(maxSize),size : file.textSize});
+                msg = S.substitute(msg,{maxSize:convertByteSize(maxSize),size : file.textSize});
                 self._fireUploaderError('maxSize',[maxSize,msg],file);
             }
             return isAllow;
