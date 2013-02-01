@@ -268,52 +268,49 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
          * @return {Boolean}
          */
         testMax:function () {
-            var self = this, uploader = self.get('uploader'),
-                queue = uploader.get('queue'),
-                successFiles = queue.getFiles('success'),
-                len = successFiles.length,
-                rule = self.getRule('max'),
-                msg;
-            if(rule){
-                //不存在max的配置
-                if(!rule[0]) return true;
-            	var isPass = len < rule[0];
-	            //达到最大允许上传数
-	            if(!isPass){
-                    //禁用按钮
-	                uploader.set('disabled',true);
-	                uploader.set('isAllowUpload', false);
-                    msg = S.substitute(rule[1],{max : rule[0]});
-                    self._fireUploaderError('max',[rule[0],msg]);
-	            }else{
-                    uploader.set('disabled',false);
-	                uploader.set('isAllowUpload', true);
-	            }
-	            return isPass;
+            var self = this;
+            var max = self.get('max');
+            if(max == EMPTY) return true;
+
+            var uploader = self.get('uploader');
+            var queue = uploader.get('queue');
+            //获取已经上传成功的文件
+            var successFiles = queue.getFiles('success');
+            var len = successFiles.length;
+            var isPass = len < max;
+            //达到最大允许上传数
+            if(!isPass){
+                //禁用按钮
+                uploader.set('disabled',true);
+                uploader.set('isAllowUpload', false);
+
+                var msg = self.msg('max');
+                msg = S.substitute(msg,{max : max});
+                self._fireUploaderError('max',[max,msg]);
+            }else{
+                uploader.set('disabled',false);
+                uploader.set('isAllowUpload', true);
             }
+            return isPass;
         },
         /**
          * 检验是否超过允许最大文件大小，留意iframe上传方式此验证无效
          * @param {Object} file 文件对象
          */
         testMaxSize : function(file){
-            var self = this,
-                size = file.size,
-                rule = self.getRule('maxSize');
-            if(rule){
-                var uploader = self.get('uploader');
-                if(S.UA.ie && uploader.get('type') == 'iframe'){
-                    return true;
-                }
-            	var maxSize = Number(rule[0]) * 1024,
-	                isAllow = size <= maxSize,
-	                msg;
-	            if(!isAllow){
-	                msg = S.substitute(rule[1],{maxSize:S.convertByteSize(maxSize),size : file.textSize});
-                    self._fireUploaderError('maxSize',[rule[0],msg],file);
-	            }
-	            return isAllow;
+            var self = this;
+            var size = file.size;
+            var maxSize = self.get('maxSize');
+            if(maxSize == EMPTY || !size) return true;
+            var uploader = self.get('uploader');
+            maxSize = maxSize * 1024;
+            var isAllow = size <= maxSize;
+            if(!isAllow){
+                var msg = self.msg('maxSize');
+                msg = S.substitute(msg,{maxSize:S.convertByteSize(maxSize),size : file.textSize});
+                self._fireUploaderError('maxSize',[maxSize,msg],file);
             }
+            return isAllow;
         },
         /**
          * 检验文件是否重复（检验文件名，很有可能存在误差，比如不同目录下的相同文件名会被判定为同一文件）
@@ -383,11 +380,11 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
          * @param file
          */
         _fireUploaderError:function(ruleName,rule,file){
-            var self = this,
-                uploader = self.get('uploader'),
-                queue = uploader.get('queue'),
-                params = {status:-1,rule:ruleName},
-                index = -1;
+            var self = this;
+            var uploader = self.get('uploader');
+            var queue = uploader.get('queue');
+            var params = {status:-1,rule:ruleName};
+            var index = -1;
             if(file){
                 index = queue.getFileIndex(file.id);
                 S.mix(params,{file:file,index:index});
