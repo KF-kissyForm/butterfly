@@ -372,7 +372,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
         msg:function(rule,msg){
             var self = this;
             if(!S.isString(rule)) return self;
-            var msgs = self.get('msgs');
+            var msgs = self.get('msg');
             if(!S.isString(msg)){
                 return msgs[rule];
             }
@@ -452,22 +452,13 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             allowRepeat:'该文件已经存在！'
         }
          */
-        msgs:{value:{
+        msg:{value:{
             max:'每次最多上传{max}个文件！',
             maxSize:'文件大小为{size}，超过{maxSize}！',
             required:'至少上传一个文件！',
             allowExts:'不支持{ext}格式！',
             allowRepeat:'该文件已经存在！'
         }
-        },
-        /**
-         * 上传验证规则，每个规则都是一个数组，数组第一个值为规则，第二个值为错误消息
-         * @type Object
-         * @default  { allowExts:[ {desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"}, '不支持{ext}格式的文件上传！' ], require:[false, '必须至少上传一个文件！'], max:[3, '每次最多上传{max}个文件！'], maxSize:[1000, '文件大小为{size}，文件太大！'], allowRepeat:[false, '该文件已经存在！'] } }
-         *
-         */
-        rules:{
-            value : Auth.defaultRules
         }
     }});
     return Auth;

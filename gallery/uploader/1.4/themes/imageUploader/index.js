@@ -229,7 +229,6 @@ KISSY.add(function (S, Node, Theme) {
                 max:'每次最多上传{max}个图片！',
                 maxSize:'图片大小为{size}，超过{maxSize}！',
                 required:'至少上传一张图片！',
-                require:'至少上传一张图片！',
                 allowExts:'不支持{ext}格式！',
                 allowRepeat:'该图片已经存在！'
             }

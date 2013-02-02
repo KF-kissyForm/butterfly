@@ -475,12 +475,6 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          */
         uploadType:{value:{}},
         /**
-         * 存在批量上传文件时，指定的文件状态
-         * @type String
-         * @default ""
-         */
-        uploadFilesStatus:{value:EMPTY},
-        /**
          * 强制设置flash的尺寸，只有在flash上传方式中有效，比如{width:100,height:100}，默认为自适应按钮容器尺寸
          * @type Object
          * @default {}

@@ -646,24 +646,11 @@ KISSY.add('gallery/uploader/1.4/base', function (S, Base, Node, IframeType, Ajax
          */
         swfSize:{value:{}}
     }});
-
-    /**
-     * 转换文件大小字节数
-     * @param {Number} bytes 文件大小字节数
-     * @return {String} 文件大小
-     */
-    S.convertByteSize = function (bytes) {
-        var i = -1;
-        do {
-            bytes = bytes / 1024;
-            i++;
-        } while (bytes > 99);
-        return Math.max(bytes, 0.1).toFixed(1) + ['kB', 'MB', 'GB', 'TB', 'PB', 'EB'][i];
-    };
     return UploaderBase;
 }, {requires:['base', 'node', './type/iframe', './type/ajax', './type/flash', './button/base', './button/swfButton', './queue']});
 /**
  * changes:
  * 明河：1.4
  *           - Uploader上传组件的核心部分
+ *           - 去掉 S.convertByteSize
  */

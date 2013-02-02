@@ -36,6 +36,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             self._tplFormHtml();
             self._usePlugins();
             self._bind();
+            self._setAuthMsg();
             self._LoaderCss(function(){
                 self._restore();
                 self.fire('init');
@@ -273,6 +274,21 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             });
 
             return tpl;
+        },
+        /**
+         * 设置验证消息
+         * @private
+         */
+        _setAuthMsg:function(){
+            var self = this;
+            var msg = self.get('authMsg');
+            if(S.isEmptyObject(msg)) return  false;
+
+            var uploader = self.get('uploader');
+            //获取验证插件
+            var auth = uploader.getPlugin('auth');
+            if(!auth) return false;
+            auth.set('msg',msg);
         }
 
     }, {ATTRS:/** @lends Theme.prototype*/{
@@ -310,22 +326,9 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          * 验证消息
          * @since 1.4
          * @type Object
-         * @default {max:'每次最多上传{max}个文件！',
-                    maxSize:'文件大小为{size}，超过{maxSize}！',
-                    required:'至少上传一个文件！',
-                    require:'至少上传一个文件！',
-                    allowExts:'不支持{ext}格式！',
-                    allowRepeat:'该文件已经存在！'}
          */
         authMsg:{
-            value:{
-                max:'每次最多上传{max}个文件！',
-                maxSize:'文件大小为{size}，超过{maxSize}！',
-                required:'至少上传一个文件！',
-                require:'至少上传一个文件！',
-                allowExts:'不支持{ext}格式！',
-                allowRepeat:'该文件已经存在！'
-            }
+            value:{}
         },
         /**
          * 队列目标元素（一般是ul），队列的实例化过程在Theme中
@@ -356,4 +359,5 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
  *           - 去掉插件加载
  *           - 增加从html拉取模版的功能
  *           - 增加从外部快速覆盖主题监听器的功能
+ *           - 增加主题配置验证消息的功能
  */
