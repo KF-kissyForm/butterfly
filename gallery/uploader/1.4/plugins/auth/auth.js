@@ -234,32 +234,31 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
          * @return {Boolean} 是否通过
          */
         testAllowExt:function (file) {
-
             if (!S.isObject(file)) return false;
-            var self = this,
-                fileName = file.name,
-                allowExts = self.getRule('allowExts'),
-                exts = [],
-                fileExt, msg,
-                isAllow;
-            if (!S.isArray(allowExts)) return false;
-            //扩展名数组
-            exts = self._getExts(allowExts[0].ext);
+            var self = this;
+            var fileName = file.name;
+            var allowExts = self.get('allowExts');
+            if (allowExts === EMPTY) return true;
 
-            isAllow = _isAllowUpload(fileName);
+            //扩展名数组
+            var exts = allowExts.split(',');
+
+            var isAllow = _isAllowUpload(exts,fileName);
             //如果不是支持的文件格式，出现错误
             if(!isAllow){
-                fileExt = _getFileExt(fileName);
-                msg = S.substitute(allowExts[1],{ext : fileExt});
-                self._fireUploaderError('allowExts',[allowExts[0],msg],file);
+                var fileExt = _getFileExt(fileName);
+                var msg = self.msg('allowExts');
+                msg = S.substitute(msg,{ext : fileExt});
+                self._fireUploaderError('allowExts',[allowExts,msg],file);
             }
             /**
              * 是否允许上传
              * @param {String} fileName 文件名
              * @return {Boolean}
              */
-            function _isAllowUpload(fileName) {
-                var isAllow = false, reg;
+            function _isAllowUpload(exts,fileName) {
+                var isAllow = false;
+                var reg;
                 S.each(exts, function (ext) {
                     reg = new RegExp('^.+\.' + ext + '$');
                     //存在该扩展名
@@ -546,6 +545,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
  *           - 更改模块路径，将auth移到plugins下
  *           - 重构验证类，以rich base插件的形式出现
  *           - 去掉testRequire方法，并通过queue的file进行验证
+ *           - 重写allowExts
  * 明河：2012.11.22
  *          - 去掉重复的代码，敲自己脑袋
  *          - 修正必须存在max的bug
