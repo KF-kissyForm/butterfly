@@ -334,26 +334,27 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
          */
         testRepeat : function(file){
             if(!S.isObject(file)) return false;
-            var self = this,
-                fileName = file.name,
-                rule = self.getRule('allowRepeat');
-            if(rule){
-            	var isAllowRepeat = rule[0],
-	                uploader = self.get('uploader'),
-	                queue = uploader.get('queue'),
-	                //上传成功的文件
-	                files = queue.getFiles('success'),
-	                isRepeat = false ;
-	            //允许重复文件名，直接返回false
-	            if(isAllowRepeat) return false;
-	            S.each(files,function(f){
-	                if(f.name == fileName && f.size == file.size){
-                        self._fireUploaderError('allowRepeat',rule,file);
-	                    return isRepeat = true;
-	                }
-	            });
-	            return isRepeat;
-            }
+            var self = this;
+            var fileName = file.name;
+            var allowRepeat = self.get('allowRepeat');
+            if(allowRepeat === EMPTY) return false;
+
+            var uploader = self.get('uploader');
+            var queue = uploader.get('queue');
+            var files = queue.getFiles('success');
+            var isRepeat = false ;
+            //文件名相同，且文件大小相同
+            S.each(files,function(f){
+                if(f.name == fileName){
+                    if(f.size){
+                        if(f.size == file.size) self._fireUploaderError('allowRepeat',[allowRepeat,self.msg('allowRepeat')],file);
+                    }else{
+                        self._fireUploaderError('allowRepeat',[allowRepeat,self.msg('allowRepeat')],file);
+                    }
+                    return isRepeat = true;
+                }
+            });
+            return isRepeat;
         },
         /**
          * 设置flash按钮的文件格式过滤
