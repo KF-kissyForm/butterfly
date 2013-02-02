@@ -81,7 +81,7 @@ KISSY.add(function (S, Node, Theme) {
          */
         _errorHandler:function (ev) {
             var self = this,msg = ev.msg,
-                id = ev.id;
+                id = ev.file.id;
             //打印错误消息
             $('.J_ErrorMsg_' + id).html(msg);
              self._setDisplayMsg(true,ev.file);
@@ -218,6 +218,21 @@ KISSY.add(function (S, Node, Theme) {
          */
         use:{
             value:'proBars,filedrop,preview'
+        },
+        /**
+         * 验证消息
+         * @type Object
+         * @default {}
+         */
+        authMsg:{
+            value:{
+                max:'每次最多上传{max}个图片！',
+                maxSize:'图片大小为{size}，超过{maxSize}！',
+                required:'至少上传一张图片！',
+                require:'至少上传一张图片！',
+                allowExts:'不支持{ext}格式！',
+                allowRepeat:'该图片已经存在！'
+            }
         },
         /**
          * 统计上传张数的容器

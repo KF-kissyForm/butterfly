@@ -5,7 +5,8 @@
 KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
     var EMPTY = '';
     var $ = Node.all;
-
+    var SUPPORT_RULES = ['max','maxSize','allowRepeat','allowExts'];
+    var ERROR_EVENT = 'error';
     /**
      * 转换文件大小字节数
      * @param {Number} bytes 文件大小字节数
@@ -32,42 +33,6 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
         var self = this;
         Auth.superclass.constructor.call(self, config);
     }
-    S.mix(Auth,/** @lends Auth*/{
-        /**
-         * 事件
-         */
-        event : {
-            ERROR : 'error'
-        },
-        /**
-         * 默认规则配置
-         */
-        defaultRules:{
-            /**
-             * 允许上传的文件格式，如果是使用flash上传方式，在选择文件时就可以过滤格式
-             */
-            allowExts:[
-                {desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"},
-                '不支持{ext}格式的文件上传！'
-            ],
-            /**
-             * 是否必须上传个文件
-             */
-            required:[false, '必须至少上传一个文件！'],
-            /**
-             * 允许的最大上传数
-             */
-            max:[3, '每次最多上传{max}个文件！'],
-            /**
-             * 文件最大大小，单位为kb
-             */
-            maxSize:[1000, '文件大小为{size}，文件太大！'],
-            /**
-             * 允许重复上传相同文件
-             */
-            allowRepeat:[false, '该文件已经存在！']
-        }
-    });
     /**
      * @name Auth#error
      * @desc  当验证出错时触发
@@ -102,13 +67,9 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
 
             queue.on('add',function(ev){
                 var file = ev.file;
-                var type = file.type;
-                if(type != 'restore'){
-                    var isPass = true;
-                    isPass = self.testAllowExt(file);
-                    if(isPass) isPass = self.testMaxSize(file);
-                    if(isPass) self.testRepeat(file);
-                }
+                var isPass = self.testAllowExt(file);
+                if(isPass) isPass = self.testMaxSize(file);
+                if(isPass) self.testRepeat(file);
             });
             queue.on('remove',function(ev){
                 var file = ev.file,status = file.status;
@@ -135,22 +96,18 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
         _addUploaderAttrs:function(){
             var self = this;
             var uploader = self.get('uploader');
-            var rules = self.get('rules');
-            var defaultRules = Auth.defaultRules;
-            S.each(defaultRules,function(aRule,key){
-                var hasRule = !S.isUndefined(rules[key]);
-                var ruleVal = hasRule && rules[key][0] || null;
+            var defaultRules = SUPPORT_RULES;
+            S.each(defaultRules,function(r,key){
+                var hasRule = self.get(r) !== EMPTY;
+                var ruleVal = hasRule && self.get(r)  || null;
                 if(hasRule){
                     uploader.addAttr(key,{
                         value:ruleVal,
                         getter:function(v){
-                            if(key == 'allowExts') v = self.getAllowExts(v);
                             return v;
                         },
                         setter:function(v){
-                            var rules = self.get('rules');
-                            if(key == 'allowExts') v = self.setAllowExts(v);
-                            rules[key][0] = v;
+                            self.set(r,v);
                             return v;
                         }
                     });
@@ -176,36 +133,12 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             return {desc:desc,ext:ext};
         },
         /**
-         * 获取简化的图片格式，举例：将{desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"}转成jpg,jpeg,png,gif,bmp
-         * @param exts
-         * @return String
-         */
-        getAllowExts:function(exts){
-            if(!S.isObject(exts)) return exts;
-            var allExt = exts['ext'];
-            exts = allExt.split(';');
-            var arrExt = [];
-            S.each(exts,function(ext){
-                arrExt.push(ext.replace('*.',''));
-            });
-            return arrExt.join(',');
-        },
-        /**
          * 验证上传数、是否必须上传
          * @return {Boolean}
          */
         testAll : function(){
             var self = this;
             return self.testRequire() && self.testMax();
-        },
-        /**
-         * 获取指定规则
-         * @param {String} ruleName 规则名
-         * @return {Array}
-         */
-        getRule : function(ruleName){
-            var self = this,rules = self.get('rules');
-            return rules[ruleName];
         },
         /**
          * 判断上传方式
@@ -360,11 +293,13 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
          * @return {Auth}
          */
         _setSwfButtonExt:function () {
-            var self = this, uploader = self.get('uploader'),
-                allowExts = self.getRule('allowExts'),
-                button = uploader.get('button'),
-                isFlashType = self.isUploaderType('flash');
-            if (!isFlashType || !S.isArray(allowExts)) return false;
+            var self = this;
+            var uploader = self.get('uploader');
+            var allowExts = self.get('allowExts');
+            var button = uploader.get('button');
+            var isFlashType = self.isUploaderType('flash');
+            if (!isFlashType || allowExts ===   EMPTY) return false;
+            allowExts = self.setAllowExts(allowExts);
             //设置文件过滤
             if(button) button.set('fileFilters', allowExts[0]);
             return self;
@@ -407,7 +342,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             //result是为了与uploader的error事件保持一致
             if(rule) S.mix(params,{msg : rule[1],value : rule[0],result:{}});
             queue.fileStatus(index, 'error', params);
-            self.fire(Auth.event.ERROR,params);
+            self.fire(ERROR_EVENT,params);
             uploader.fire('error',params);
         },
         /**
@@ -521,7 +456,6 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             max:'每次最多上传{max}个文件！',
             maxSize:'文件大小为{size}，超过{maxSize}！',
             required:'至少上传一个文件！',
-            require:'至少上传一个文件！',
             allowExts:'不支持{ext}格式！',
             allowRepeat:'该文件已经存在！'
         }
@@ -546,6 +480,9 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
  *           - 重构验证类，以rich base插件的形式出现
  *           - 去掉testRequire方法，并通过queue的file进行验证
  *           - 重写allowExts
+ *           - 去掉getAllowExts
+ *           - 重写_setSwfButtonExt
+ *           - 去掉getRule
  * 明河：2012.11.22
  *          - 去掉重复的代码，敲自己脑袋
  *          - 修正必须存在max的bug
