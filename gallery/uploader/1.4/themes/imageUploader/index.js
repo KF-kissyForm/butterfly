@@ -220,8 +220,18 @@ KISSY.add(function (S, Node, Theme) {
             value:'proBars,filedrop,preview'
         },
         /**
+         * 允许上传的文件类型
+         * @since 1.4
+         * @type String
+         * @default jpg,png,gif,jpeg
+         */
+        allowExts:{
+            value:'jpg,png,gif,jpeg'
+        },
+        /**
          * 验证消息
          * @type Object
+         * @since 1.4
          * @default {}
          */
         authMsg:{

@@ -36,7 +36,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             self._tplFormHtml();
             self._usePlugins();
             self._bind();
-            self._setAuthMsg();
+            self._setAuth();
             self._LoaderCss(function(){
                 self._restore();
                 self.fire('init');
@@ -276,10 +276,10 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             return tpl;
         },
         /**
-         * 设置验证消息
+         * 设置验证
          * @private
          */
-        _setAuthMsg:function(){
+        _setAuth:function(){
             var self = this;
             var msg = self.get('authMsg');
             if(S.isEmptyObject(msg)) return  false;
@@ -289,6 +289,11 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             var auth = uploader.getPlugin('auth');
             if(!auth) return false;
             auth.set('msg',msg);
+
+            var allowExts = self.get('allowExts');
+            if(allowExts !== EMPTY){
+                auth.set('allowExts',allowExts);
+            }
         }
 
     }, {ATTRS:/** @lends Theme.prototype*/{
