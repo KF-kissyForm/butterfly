@@ -70,19 +70,20 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
                 var isPass = self.testAllowExt(file);
                 if(isPass) isPass = self.testMaxSize(file);
                 if(isPass) self.testRepeat(file);
+                if(isPass) self.testWidthHeight(file);
             });
             queue.on('remove',function(ev){
                 var file = ev.file,status = file.status;
                 //删除的是已经成功上传的文件，需要重新检验最大允许上传数
                 if(status == 'success') self.testMax() && self.testRequired();
             });
-            queue.on('statusChange',function(ev){
-                var status = ev.status;
-                //如果已经是禁用上传状态，阻止后面文件的上传，并予以移除
-                if(status == 'start' && uploader.get('disabled')){
+            uploader.on('start',function(){
+                if(uploader.get('disabled')){
                     self._maxStopUpload();
                 }
-                if(status == 'success') self.testMax();
+            });
+            uploader.on('success',function(){
+                self.testMax();
             });
             uploader.on('error', function (ev) {
                 //允许继续上传文件
@@ -289,6 +290,16 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             return isRepeat;
         },
         /**
+         * 检验图片的宽度和高度是否符合要求
+         * @param {Object} file 文件对象
+         * @return {Boolean}
+         */
+        testWidthHeight:function(file){
+            var self = this;
+            var fileName = file.name;
+
+        },
+        /**
          * 设置flash按钮的文件格式过滤
          * @return {Auth}
          */
@@ -435,11 +446,11 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
          */
         allowRepeat:{value:EMPTY},
         /**
-         *
+         *  限制文件宽度高度验证规则配置，比如160x160
          * @type Boolean
          * @default ''
          */
-        size:{value:EMPTY},
+        widthHeight:{value:''},
         /**
          * 验证消息配置
          * @type Object
