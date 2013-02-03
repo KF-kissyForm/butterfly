@@ -97,8 +97,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
         _addUploaderAttrs:function(){
             var self = this;
             var uploader = self.get('uploader');
-            var defaultRules = SUPPORT_RULES;
-            S.each(defaultRules,function(r,key){
+            S.each(SUPPORT_RULES,function(r,key){
                 var hasRule = self.get(r) !== EMPTY;
                 var ruleVal = hasRule && self.get(r)  || null;
                 if(hasRule){
@@ -296,8 +295,72 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
          */
         testWidthHeight:function(file){
             var self = this;
-            var fileName = file.name;
+            var wh = self.get('widthHeight');
+            if(wh === EMPTY) return true;
 
+            var uploader = self.get('uploader');
+            //禁止图片上传（图片尺寸的验证过程是异步的）
+            uploader.set('isAllowUpload',false);
+            //array [width,height]
+            var widthHeight = self._formatWidthHeight(wh);
+            //文件数据，IE9下不存在
+            var fileData = file.data;
+            if(!S.isEmptyObject(fileData)){
+                //读取图片数据
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    var data = e.target.result;
+                    //加载图片获取图片真实宽度和高度
+                    var image = new Image();
+                    image.onload=function(){
+                        var width = image.width;
+                        var height = image.height;
+                        if(width != Number(widthHeight[0]) || height != Number(widthHeight[1])){
+                            //触发错误消息
+                            var msg = self.msg('widthHeight');
+                            msg = S.substitute(msg,{wh:wh});
+                            self._fireUploaderError('widthHeight',[widthHeight,msg],file);
+                        }else{
+                            //重新开始上传图片
+                            uploader.set('isAllowUpload',true);
+                            var index = uploader.get('queue').getFileIndex(file.id);
+                            uploader.upload(index);
+                        }
+                    };
+                    image.src= data;
+                };
+                reader.readAsDataURL(fileData);
+            }else{
+                //IE下使用滤镜来处理图片尺寸控制
+                //文件name中IE下是完整的图片本地路径
+                var input = uploader.get('target').all('input').getDOMNode();
+                input.select();
+                var src = document.selection.createRange().text;
+                src = src.replace(/[)'"%]/g, function (s) {
+                    return escape(escape(s));
+                });
+                var $img = $('<div />').appendTo('body');
+                $img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale',src='" + src + "')";
+                $img.zoom = 1;
+            }
+        },
+        /**
+         * 将widthHeight配置转成数组
+         * @private
+         * @param {String} wh
+         * @return Array
+         */
+        _formatWidthHeight:function(wh){
+            var widthHeight = [];
+            if(!S.isString(wh)) return [];
+            var s = ['x','X','_','-'];
+            S.each(s,function(sp){
+                var reg = new RegExp(sp);
+                if(reg.test(wh)){
+                    widthHeight = wh.split(sp);
+                }
+            });
+            return widthHeight;
         },
         /**
          * 设置flash按钮的文件格式过滤
