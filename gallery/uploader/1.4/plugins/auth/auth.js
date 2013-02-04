@@ -315,17 +315,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
                     image.onload=function(){
                         var width = image.width;
                         var height = image.height;
-                        if(width != Number(widthHeight[0]) || height != Number(widthHeight[1])){
-                            //触发错误消息
-                            var msg = self.msg('widthHeight');
-                            msg = S.substitute(msg,{wh:wh});
-                            self._fireUploaderError('widthHeight',[widthHeight,msg],file);
-                        }else{
-                            //重新开始上传图片
-                            uploader.set('isAllowUpload',true);
-                            var index = uploader.get('queue').getFileIndex(file.id);
-                            uploader.upload(index);
-                        }
+                        _test(width,height);
                     };
                     image.src= data;
                 };
@@ -336,12 +326,31 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
                 var input = uploader.get('target').all('input').getDOMNode();
                 input.select();
                 var src = document.selection.createRange().text;
-                src = src.replace(/[)'"%]/g, function (s) {
-                    return escape(escape(s));
-                });
-                var $img = $('<div />').appendTo('body');
-                $img.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale',src='" + src + "')";
-                $img.zoom = 1;
+                var img = $('<img style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image);width:300px;visibility:hidden;"  />').appendTo('body').getDOMNode();
+                img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
+                var width = img.offsetWidth;
+                var height = img.offsetHeight;
+                _test(width,height);
+                $(img).remove();
+            }
+            /**
+             * 比对图片尺寸
+             * @param width
+             * @param height
+             * @private
+             */
+            function _test(width,height){
+                if(Number(width) != Number(widthHeight[0]) || Number(height) != Number(widthHeight[1])){
+                    //触发错误消息
+                    var msg = self.msg('widthHeight');
+                    msg = S.substitute(msg,{wh:wh});
+                    self._fireUploaderError('widthHeight',[widthHeight,msg],file);
+                }else{
+                    //重新开始上传图片
+                    uploader.set('isAllowUpload',true);
+                    var index = uploader.get('queue').getFileIndex(file.id);
+                    uploader.upload(index);
+                }
             }
         },
         /**
