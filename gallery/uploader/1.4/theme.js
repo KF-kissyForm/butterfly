@@ -130,7 +130,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
                 $queueTarget = $(self.get('queueTarget')),
                 $btn = $(self.get('buttonTarget'));
             if (name == EMPTY) return false;
-            if($queueTarget.length)  $queueTarget.addClass(name + classSuffix.QUEUE);
+            if($queueTarget.length)  $queueTarget.addClass('ks-uploader-queue ' + name + classSuffix.QUEUE);
             $btn.addClass(name + classSuffix.BUTTON);
             return self;
         },

@@ -197,7 +197,7 @@ KISSY.add(function (S, Node, Theme) {
         fileTpl:{value:
             '<li id="queue-file-{id}" class="g-u" data-name="{name}">' +
                 '<div class="pic">' +
-                    '<a href="javascript:void(0);"><img class="J_Pic_{id}" src="" /></a>' +
+                    '<a href="javascript:void(0);"><img class="J_Pic_{id} preview-img" src="" /></a>' +
                 '</div>' +
                 '<div class=" J_Mask_{id} pic-mask"></div>' +
                 '<div class="status-wrapper">' +

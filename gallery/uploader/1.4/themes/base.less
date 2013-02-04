@@ -91,3 +91,10 @@ button::-moz-focus-inner{ border:0; padding:0; margin:0; }
 .ks-uploader-button{
     text-decoration: none;
 }
+//预览图片设置
+.ks-uploader-queue .preview-img{
+  filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale);
+  //必须带有默认宽度，不然无法显示预览图片
+  width:300px;
+  overflow: hidden;
+}
