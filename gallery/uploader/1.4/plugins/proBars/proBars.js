@@ -36,7 +36,14 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/proBars',function(S, Node, Base,
             var self = this;
             var uploadType = uploader.get('type');
             //iframe上传方式是不支持进度条的
-            if(uploadType == 'iframe') return false;
+            if(uploadType == 'iframe'){
+                //隐藏进度条
+                uploader.on('success',function(ev){
+                    var $target = $('.'+PRE+ev.file.id);
+                    $target.hide();
+                });
+                return false;
+            }
 
             uploader.on('start',function(ev){
                 self.add(ev.file.id);
@@ -134,4 +141,5 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/proBars',function(S, Node, Base,
  * changes:
  * 明河：1.4
  *           - 新增模块，配合rich base的插件机制使用
+ *           - 新增iframe时隐藏进度条
  */

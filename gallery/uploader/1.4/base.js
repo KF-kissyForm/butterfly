@@ -244,7 +244,6 @@ KISSY.add('gallery/uploader/1.4/base', function (S, Base, Node, IframeType, Ajax
         _uploaderStatusFile:function (status) {
             var self = this, queue = self.get('queue'),
                 fileIndexs = queue.getIndexs(status);
-            S.log(queue.get('files'));
             //没有存在需要上传的文件，退出上传
             if (!fileIndexs.length) {
                 self.set('uploadFilesStatus', EMPTY);

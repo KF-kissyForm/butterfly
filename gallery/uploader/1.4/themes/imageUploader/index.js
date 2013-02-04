@@ -66,11 +66,11 @@ KISSY.add(function (S, Node, Theme) {
          * 文件处于上传成功状态时触发
          */
         _successHandler:function (ev) {
-            var self = this,
-                file = ev.file,
-                id = file.id,
-                //服务器端返回的数据
-                result = file.result;
+            var self = this;
+            var file = ev.file;
+            var id = file.id;
+            //服务器端返回的数据
+            var result = file.result;
             self._setCount();
             //获取服务器返回的图片路径写入到src上
             if(result) self._changeImageSrc(ev.id,result);
@@ -171,7 +171,7 @@ KISSY.add(function (S, Node, Theme) {
                 $img = $('.J_Pic_' + id);
             if(!S.isObject(data)) return false;
             url = data.url;
-            if($img.attr('src') == EMPTY || S.UA.safari){
+            if(S.UA.safari){
                 $img.show();
                 $img.attr('src',url);
             }
