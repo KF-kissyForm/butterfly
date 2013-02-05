@@ -73,7 +73,7 @@ KISSY.add(function (S, Node, Theme) {
             var result = file.result;
             self._setCount();
             //获取服务器返回的图片路径写入到src上
-            if(result) self._changeImageSrc(ev.id,result);
+            if(result) self._changeImageSrc(ev);
             $('.J_Mask_'+id).hide();
         },
          /**
@@ -104,17 +104,19 @@ KISSY.add(function (S, Node, Theme) {
          * 显示“你还可以上传几张图片”
          */
         _setCount:function(){
-            var self = this,
-                //用于显示上传数的容器
-                elCount = $(self.get('elCount')),
-                len = self.getFilesLen(),
-                auth = self.get('auth') ;
+            var self = this;
+            //用于显示上传数的容器
+            var elCount = self.get('elCount');
+            if(!elCount.length) return false;
+            var uploader = self.get('uploader');
+            var auth = uploader.getPlugin('auth') ;
             if(!auth) return false;
-            var rules = auth.get('rules'),
-                //max的值类似[5, '最多上传{max}个文件！']
-                max = rules.max;
+
+            var max = auth.get('max');
             if(!max) return false;
-            if(elCount.length) elCount.text(max[0]-len);
+
+            var len = self.getFilesLen();
+            elCount.text(Number(max)-len);
         },
         /**
          * 显示/隐藏遮罩层（遮罩层在出现状态消息的时候出现）
@@ -163,15 +165,14 @@ KISSY.add(function (S, Node, Theme) {
         },
         /**
          * 将服务器返回的图片路径写到预览图片区域，部分浏览器不支持图片预览
-         * @param {String} id  文件id
-         * @param {Object} result  服务器端返回的结果集
           */
-        _changeImageSrc:function(id,result){
-            var data = result.data,url,
-                $img = $('.J_Pic_' + id);
-            if(!S.isObject(data)) return false;
-            url = data.url;
-            if(S.UA.safari){
+        _changeImageSrc:function(ev){
+            var file = ev.file;
+            var id = file.id;
+            var result = ev.result;
+            var url = result.url;
+            if(file.status == 'restore' || S.UA.safari){
+                var $img = $('.J_Pic_' + id);
                 $img.show();
                 $img.attr('src',url);
             }
@@ -249,7 +250,12 @@ KISSY.add(function (S, Node, Theme) {
          * @type KISSY.NodeList
          * @default '#J_UploadCount'
          */
-        elCount:{value:'#J_UploadCount'}
+        elCount:{
+            value:'#J_UploadCount',
+            getter:function(v){
+                return $(v);
+            }
+        }
     }});
     return ImageUploader;
 }, {requires:['node', '../../theme']});

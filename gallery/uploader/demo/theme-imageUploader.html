@@ -17,6 +17,7 @@
 <div class="grid">
     <input type="file" class="g-u" id="J_JsUploaderBtn" value="上传图片" name="Filedata" >
     <input type="hidden" id="J_Urls" name="urls" value="" />
+    <div class="g-u">还可以上传<span id="J_UploadCount">3</span>张图片</div>
 </div>
 <ul id="J_JsUploaderQueue" class="grid">
 
@@ -48,7 +49,7 @@
             //最多上传个数
             max:3,
             //图片最大允许大小
-            maxSize:500
+            maxSize:100
         });
 
         uploader.use('urlsInput',{target:'#J_Urls'});
