@@ -65,8 +65,8 @@ if(!$isExceedSize && $result){
     $arr = array(
         'status' => 1,
         'type' => $type,
-        'data' => array('name' => $_FILES[$fileInput]['name'],
-                        'url' => $dir.$_FILES[$fileInput]['name'])
+        'name' => $_FILES[$fileInput]['name'],
+        'url' => $dir.$_FILES[$fileInput]['name']
     );
 }else if($isExceedSize){
     $arr = array(
