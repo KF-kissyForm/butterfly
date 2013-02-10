@@ -97,6 +97,7 @@ KISSY.add(function (S, Node, Theme) {
             var uploader = self.get('uploader');
             var oPreview = uploader.getPlugin('preview');
             var target = uploader.get('fileInput');
+            if(!oPreview) return false;
             oPreview.preview(target,$img);
             return self;
         },
@@ -171,8 +172,8 @@ KISSY.add(function (S, Node, Theme) {
             var id = file.id;
             var result = ev.result;
             var url = result.url;
-            if(file.status == 'restore' || S.UA.safari){
-                var $img = $('.J_Pic_' + id);
+            var $img = $('.J_Pic_' + id);
+            if($img.attr('src') == EMPTY || S.UA.safari){
                 $img.show();
                 $img.attr('src',url);
             }

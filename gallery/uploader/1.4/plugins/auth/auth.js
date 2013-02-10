@@ -5,7 +5,7 @@
 KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
     var EMPTY = '';
     var $ = Node.all;
-    var SUPPORT_RULES = ['max','maxSize','allowRepeat','allowExts','required'];
+    var SUPPORT_RULES = ['max','maxSize','allowRepeat','allowExts','required','widthHeight'];
     var ERROR_EVENT = 'error';
     /**
      * 转换文件大小字节数

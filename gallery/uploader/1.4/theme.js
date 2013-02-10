@@ -113,11 +113,12 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             var files = queue.get('files');
             if(!files.length) return false;
 
-            S.each(files,function(file){
+            S.each(files,function(file,i){
                 //将存在的文件数据渲染到队列DOM中，状态为success
                 file.status = 'success';
-                file.target = self._appendFileDom(file);
-                self._renderHandler('_successHandler',{file:file});
+                uploader.fire('add',{file:file,index:i});
+                self._renderHandler('_successHandler',{file:file,result:file.result});
+                self._hideStatusDiv(file);
             });
 
             return self;
@@ -182,12 +183,12 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
         _setStatusVisibility:function (file) {
             var self = this;
             if(!S.isObject(file)) return self;
+            self._hideStatusDiv(file);
             //处理消息层的显影
             var status = file.status;
             var $target = file.target;
             var $status = $target.all('.'+status+'-status');
             if($status.length){
-                $target.all('.status').hide();
                 $status.show();
             }
             //处理队列元素的状态样式
@@ -197,6 +198,15 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             });
             $target.addClass(status);
             return self;
+        },
+        /**
+         * 隐藏消息层
+         * @private
+         */
+        _hideStatusDiv:function(file){
+            if(!S.isObject(file)) return false;
+            var $target = file.target;
+            $target.all('.status').hide();
         },
         /**
          * 加载css文件

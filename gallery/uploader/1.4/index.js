@@ -178,7 +178,12 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             var text = $btn.val() || '上传文件';
             var btnHtml = S.substitute(self.get('btnTpl'), {text:text});
             var $aBtn = $(btnHtml).insertAfter($btn);
-
+            //将按钮上name配置到属性上（Button实例必须用到）
+            if(!self.get('name') && $btn.attr('name')){
+                  self.set('name',$btn.attr('name'));
+            }
+            //用于tagConfig插件解析按钮上的组件配置
+            self.set('_oldInput',$btn.clone());
             $btn.remove();
             self.set('target', $aBtn);
             return $aBtn;

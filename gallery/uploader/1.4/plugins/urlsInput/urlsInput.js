@@ -47,9 +47,7 @@ KISSY.add('gallery/uploader/1.4/plugins/urlsInput/urlsInput',function(S, Node, B
             var self = this;
             var result = ev.result;
             if(!S.isObject(result)) return false;
-            var data = result.data;
-            if(!S.isObject(data)) return false;
-            var url = data.url;
+            var url = result.url;
             self.add(url);
             return self;
         },
@@ -190,10 +188,8 @@ KISSY.add('gallery/uploader/1.4/plugins/urlsInput/urlsInput',function(S, Node, B
                     name:url, type:'restore', url:url, sUrl:url,
                     result:{
                         status:1,
-                        data:{
-                            name:url,
-                            url : url
-                        }
+                        name:url,
+                        url : url
                     }
                 });
             });
