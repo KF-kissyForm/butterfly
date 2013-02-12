@@ -11,18 +11,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
      * @name Uploader
      * @class 异步文件上传组件，支持ajax、flash、iframe三种方案
      * @constructor
-     * @extends Base
-     * @requires IframeType
-     * @requires  AjaxType
-     * @param {Object} config 组件配置（下面的参数为配置项，配置会写入属性，详细的配置说明请看属性部分）
-     * @param {Boolean} config.isAllowUpload 是否允许上传文件
-     * @param {Boolean} config.autoUpload 是否自动上传
-     * @example
-     * var uploader = new Uploader({button:button,queue:queue,serverConfig:{action:'test.php'}})
      */
-
-    var type = {AUTO:'auto', IFRAME:'iframe', AJAX:'ajax', FLASH:'flash'};
-
     /**
      * @name Uploader#select
      * @desc  选择完文件后触发
@@ -133,36 +122,11 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
                 return false;
             }
 
-            var type = self.get('type');
-            var UploadType = self.getUploadType(type);
-            if (!UploadType) return false;
-
             //生成模拟按钮，并实例化按钮类
             self._replaceBtn();
-            var button = self._renderButton();
-
-            var uploaderTypeEvent = UploadType.event;
-            var serverConfig = self.get('serverConfig');
-            var uploadType;
+            self._renderButton();
             self._renderQueue();
-
-            //如果是flash异步上传方案，增加swfUploaderBase的实例作为参数
-            if (self.get('type') == UploaderBase.type.FLASH) {
-                S.mix(serverConfig, {swfUploaderBase:button.get('swfUploaderBase')});
-            }
-            serverConfig.fileDataName = self.get('name');
-            //实例化上传方式类
-            uploadType = new UploadType(serverConfig);
-            //监听上传器上传完成事件
-            uploadType.on(uploaderTypeEvent.SUCCESS, self._uploadCompleteHanlder, self);
-            uploadType.on(uploaderTypeEvent.ERROR, function (ev) {
-                self.fire(event.ERROR, {status:ev.status, result:ev.result});
-            }, self);
-            //监听上传器上传进度事件
-            if (uploaderTypeEvent.PROGRESS) uploadType.on(uploaderTypeEvent.PROGRESS, self._uploadProgressHandler, self);
-            //监听上传器上传停止事件
-            uploadType.on(uploaderTypeEvent.STOP, self._uploadStopHanlder, self);
-            self.set('uploadType', uploadType);
+            self._renderUploaderCore();
             return self;
         },
         /**
@@ -398,26 +362,15 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             }
         },
         /**
-         * 服务器端配置。action：服务器处理上传的路径；data： post给服务器的参数，通常需要传递用户名、token等信息
-         * @type Object
-         * @default  {action:EMPTY, data:{}, dataType:'json'}
-         */
-        serverConfig:{value:{action:EMPTY, data:{}, dataType:'json'}},
-        /**
          * 服务器处理上传的路径
          * @type String
          * @default ''
          */
         action:{
             value:EMPTY,
-            getter:function (v) {
-                return self.get('serverConfig').action;
-            },
             setter:function (v) {
-                if (S.isString(v)) {
-                    var self = this;
-                    self.set('serverConfig', S.mix(self.get('serverConfig'), {action:v}));
-                }
+                var self = this, uploadType = self.get('uploadType');
+                if (S.isFunction(uploadType)) uploadType.set('action', v);
                 return v;
             }
         },
@@ -429,20 +382,10 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          */
         data:{
             value:{},
-            getter:function () {
-                var self = this, uploadType = self.get('uploadType'),
-                    data = self.get('serverConfig').data || {};
-                if (uploadType) {
-                    data = uploadType.get('data');
-                }
-                return data;
-            },
             setter:function (v) {
                 if (S.isObject(v)) {
                     var self = this, uploadType = self.get('uploadType');
-                    self.set('serverConfig', S.mix(self.get('serverConfig'), {data:v}));
                     if (S.isFunction(uploadType)) uploadType.set('data', v);
-
                 }
                 return v;
             }

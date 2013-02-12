@@ -276,6 +276,38 @@ KISSY.add('gallery/uploader/1.4/base', function (S, Base, Node, IframeType, Ajax
             return S.isArray(fpv) && fpv.length > 0;
         },
         /**
+         *  运行上传核心类（根据不同的上传方式，有所差异）
+         * @private
+         */
+        _renderUploaderCore:function(){
+            var self = this;
+            var type = self.get('type');
+            var UploadType = self.getUploadType(type);
+            if (!UploadType) return false;
+
+            var serverConfig = {action:self.get('action'),data:self.get('data'),dataType:'json'};
+            var button = self.get('button');
+            //如果是flash异步上传方案，增加swfUploaderBase的实例作为参数
+            if (self.get('type') == UploaderBase.type.FLASH) {
+                S.mix(serverConfig, {swfUploaderBase:button.get('swfUploaderBase')});
+            }
+            serverConfig.fileDataName = self.get('name');
+            var uploadType = new UploadType(serverConfig);
+            var uploaderTypeEvent = UploadType.event;
+            //监听上传器上传完成事件
+            uploadType.on(uploaderTypeEvent.SUCCESS, self._uploadCompleteHanlder, self);
+            uploadType.on(uploaderTypeEvent.ERROR, function (ev) {
+                self.fire(event.ERROR, {status:ev.status, result:ev.result});
+            }, self);
+            //监听上传器上传进度事件
+            if (uploaderTypeEvent.PROGRESS) uploadType.on(uploaderTypeEvent.PROGRESS, self._uploadProgressHandler, self);
+            //监听上传器上传停止事件
+            uploadType.on(uploaderTypeEvent.STOP, self._uploadStopHanlder, self);
+            self.set('uploadType', uploadType);
+
+            return uploadType;
+        },
+        /**
          * 获取上传方式类（共有iframe、ajax、flash三种方式）
          * @type {String} type 上传方式
          * @return {IframeType|AjaxType|FlashType}
@@ -534,56 +566,6 @@ KISSY.add('gallery/uploader/1.4/base', function (S, Base, Node, IframeType, Ajax
                 var self = this, button = self.get('button');
                 if (!S.isEmptyObject(button) && S.isBoolean(v)) {
                     button.set('disabled', v);
-                }
-                return v;
-            }
-        },
-        /**
-         * 服务器端配置。action：服务器处理上传的路径；data： post给服务器的参数，通常需要传递用户名、token等信息
-         * @type Object
-         * @default  {action:EMPTY, data:{}, dataType:'json'}
-         */
-        serverConfig:{value:{action:EMPTY, data:{}, dataType:'json'}},
-        /**
-         * 服务器处理上传的路径
-         * @type String
-         * @default ''
-         */
-        action:{
-            value:EMPTY,
-            getter:function (v) {
-                return self.get('serverConfig').action;
-            },
-            setter:function (v) {
-                if (S.isString(v)) {
-                    var self = this;
-                    self.set('serverConfig', S.mix(self.get('serverConfig'), {action:v}));
-                }
-                return v;
-            }
-        },
-        /**
-         * 此配置用于动态修改post给服务器的数据，会覆盖serverConfig的data配置
-         * @type Object
-         * @default {}
-         * @since V1.2.6
-         */
-        data:{
-            value:{},
-            getter:function () {
-                var self = this, uploadType = self.get('uploadType'),
-                    data = self.get('serverConfig').data || {};
-                if (uploadType) {
-                    data = uploadType.get('data');
-                }
-                return data;
-            },
-            setter:function (v) {
-                if (S.isObject(v)) {
-                    var self = this, uploadType = self.get('uploadType');
-                    self.set('serverConfig', S.mix(self.get('serverConfig'), {data:v}));
-                    if (S.isFunction(uploadType)) uploadType.set('data', v);
-
                 }
                 return v;
             }
