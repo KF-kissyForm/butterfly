@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>KF/TextBox</title>
+    <link rel="shortcut icon" href="http://docs.kissyui.com/kissy-dpl/base/assets/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap-responsive.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="../../assets/docs.css"/>-->
+    <link rel="stylesheet" type="text/css" href="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/assets/docs.css"/>
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js" charset="utf-8"></script>
+    <!--<script src="../../assets/feedback.js" charset="utf-8"></script>-->
+    <script src="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/assets/feedback.js" charset="utf-8"></script>
+    <script src="http://bootswatch.com/assets/js/jquery.js" charset="utf-8"></script>
+    <script src="http://bootswatch.com/assets/js/bootstrap-dropdown.js" charset="utf-8"></script>
+    <script src="http://bootswatch.com/assets/js/bootstrap-scrollspy.js" charset="utf-8"></script>
+    <!--<script src="../../assets/app.js" charset="utf-8"></script>-->
+    <script src="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/assets/app.js" charset="utf-8"></script>
+
+</head>
+<body data-spy="scroll" data-target=".subnav" data-offset="50">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo.html" id="logo">BUTTERFLY</a>
+
+            <div class="nav-collapse">
+
+                <ul class="nav">
+                    <li><a href="http://docs.kissyui.com/kissy-gallery/gallery/form/1.3/demo.html">首页</a></li>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">组件 <b
+                            class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/uploader/index.html">Uploader</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/limiter/index.html">Limiter</a>
+                            </li>
+                            <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/spinbox/index.html">SpinBox</a>
+                            </li>
+                            <li>
+                                <a href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/auth/index.html">Auth</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/checkbox/index.html">checkbox</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/radio/index.html">radio</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/textbox/index.html">textbox</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="https://github.com/kissyteam/kissy-gallery/tree/master/gallery/form">源码</a></li>
+                    <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.3/doc/index.html">API文档</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a rel="tooltip" target="_blank" href="http://docs.kissyui.com/kissy-gallery/index.html">kissy
+                        gallery</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <header id="header" class="jumbotron subhead">
+        <h1 class="title-h1">Textbox
+            <small>文本输入框组件</small>
+        </h1>
+
+        <div class="subnav">
+            <ul class="nav nav-pills">
+                <li class="active"><a href="#use">使用</a></li>
+                <li><a href="#fucntions">内置功能</a></li>
+                <li><a href="#types">类型</a></li>
+                <li><a href="#styling">样式</a></li>
+            </ul>
+        </div>
+        <div class="dec">
+            <p>作者：牧云</p>
+
+            <p><strong>Textbox</strong>是一个基于kissy1.2的文本输入框封装组件。</p>
+        </div>
+
+
+    </header>
+
+    <div id="content" class="row">
+        <div class="span8">
+            <h3>使用</h3>
+            <h4>HTML</h4>
+            <pre class='brush: html; '>
+                <div id="textbox">
+                    <input type="text" placeholder=""/>
+                </div>
+            </pre>
+            <h4>JavaScript</h4>
+            <h5>配置包</h5>
+            <pre class='brush: js; '>
+                KISSY.config({
+                    packages: [{
+                        name:"gallery",
+                        path:"../../../../../../",
+                        charset:"utf-8"
+                    }]
+                });
+            </pre>
+            <h5>实例化</h5>
+            <pre class='brush: js; '>
+                KISSY.use('gallery/form/1.3/textbox/index', function (S, TextBox) {
+                var textbox = new TextBox('#textbox');
+                textbox.render();
+             })
+            </pre>
+            <h3>内置功能：</h3>
+            <ul>
+                <li>聚焦时自动全选文本，默认关闭；</li>
+                <li>禁用粘贴，默认关闭；</li>
+                <li>内容改变时（例如键入、粘贴、动态赋值等操作），自动去除左右空格（trim），默认开启；</li>
+                <li>动态改变maxLength时，截断多余内容；</li>
+                <li>
+                    兼容Placeholder行为。原生的Placeholder功能会在输入框键入内容的时候才会隐藏Placeholder，模拟的目前只会在focus的时候隐藏Placeholder。可以选择统一使用模拟的实现方式；
+                </li>
+                <li>封装了<a href="http://dev.w3.org/html5/spec-preview/constraints.html#the-constraint-validation-api"
+                          target="_blank">The Constraint Validation API</a>，兼容required和pattern属性；
+                </li>
+                <li>输入内容的时候显示一个弹层，根据输入内容动态显示信息，默认关闭。</li>
+            </ul>
+
+            <h3>扩展类型：</h3>
+            <ul>
+                <li>号码输入框，只允许输入数字；</li>
+                <li>QQ号输入框，有效的QQ号是4-10位的数字；</li>
+                <li>
+                    电话号码输入框，可以选择支持的号码类型，手机号码，固定电话号码，还是两者皆可。有效的手机号码是11位的数字。有效的固定电话号码必须包含区号（3-4位），加上7-8位的号码，总长度在10-12位之间。
+                </li>
+            </ul>
+
+            <h3>配置与示例：</h3>
+            <ul>
+                <li>
+                    <a href="./select-all-on-focus.html" target="_blank">selectAllOnFocus</a>
+                </li>
+                <li>
+                    <a href="./placeholder.html" target="_blank">placeholder</a>
+                </li>
+                <li>
+                    <a href="./auto-trim.html" target="_blank">autoTrim</a>
+                </li>
+                <li>
+                    <a href="./paste.html" target="_blank">paste</a>
+                </li>
+                <li>
+                    <a href="./required.html" target="_blank">required</a>
+                </li>
+                <li>
+                    <a href="./pattern.html" target="_blank">pattern</a>
+                </li>
+                <li>
+                    <a href="./number-textbox.html" target="_blank">NumberTextBox</a>
+                </li>
+                <li>
+                    <a href="./qqnumber-textbox.html" target="_blank">QQNumberTextBox</a>
+                </li>
+                <li>
+                    <a href="./phonenumber-textbox.html" target="_blank">PhoneNumberTextBox</a>
+                </li>
+            </ul>
+
+            <h3>TODO：</h3>
+            <ul>
+                <li>Placeholder模拟加强</li>
+                <li>Role & ARIA-ATTR</li>
+                <li>textarea</li>
+                <li>type=email</li>
+                <li>type=url</li>
+                <li>type=password</li>
+            </ul>
+
+
+        </div>
+
+    </div>
+
+    <div id="footer">
+        &copy; Copyright 2012-2012, KF小组.
+    </div>
+</div>
+<!-- 代码高亮 START  -->
+<link href='../../assets/syntaxhighlighter_3.0.83/sh.css' rel='stylesheet'
+      type='text/css'/>
+<script type="text/javascript"
+        src="../../assets/syntaxhighlighter_3.0.83/sh.js"></script>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+<!-- 代码高亮 END  -->
+</body>
+</html>
