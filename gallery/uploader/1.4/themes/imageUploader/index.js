@@ -80,8 +80,11 @@ KISSY.add(function (S, Node, Theme) {
          * 文件处于上传错误状态时触发
          */
         _errorHandler:function (ev) {
-            var self = this,msg = ev.msg,
-                id = ev.file.id;
+             var self = this;
+             var msg = ev.msg;
+             var file = ev.file;
+             if(!file) return false;
+             var id = ev.file.id;
             //打印错误消息
             $('.J_ErrorMsg_' + id).html(msg);
              self._setDisplayMsg(true,ev.file);

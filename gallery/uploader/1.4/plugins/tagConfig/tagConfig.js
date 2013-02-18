@@ -34,7 +34,6 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
             self._setUploaderConfig();
             self._setAuthConfig();
 
-            alert(uploader.get('uploadType').get('action'));
         },
         /**
          * 设置上传配置
