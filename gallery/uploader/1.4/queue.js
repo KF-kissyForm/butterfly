@@ -244,7 +244,6 @@ KISSY.add('gallery/uploader/1.4/queue', function (S, Node, Base) {
             var self = this, files = self.get('files'),
                 file = files[index];
             if (!S.isPlainObject(file)){
-                S.log('getFile():文件数据为空！');
                 file = {};
             }
             return file;
