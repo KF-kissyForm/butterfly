@@ -232,7 +232,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
                 theme = new Theme(config);
                 theme.on('init', function () {
                     theme.render();
-                    self.fire('themeLoad', {theme:theme, name:name});
+                    self.fire('themeRender', {theme:theme, name:name});
                 });
             })
         },

@@ -48,6 +48,14 @@
         uploader.use('urlsInput',{target:'#J_Urls'});
         //使用标签上的配置，会覆盖js的配置
         uploader.use('tagConfig');
+
+        uploader.on('themeRender',function(){
+            S.log('action:'+uploader.get('action'));
+            S.log(uploader.get('data'));
+            var auth = uploader.getPlugin('auth');
+            S.log(auth.get('max'));
+            S.log(auth.get('maxSize'));
+        });
         uploader.theme('imageUploader',{
             queueTarget:'#J_UploaderQueue'
         });
