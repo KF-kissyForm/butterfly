@@ -321,7 +321,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          * @default "auto"
          * @since V1.2 （当“type” : “auto”，等价于["ajax","flash","iframe"]）
          */
-        type:{value:type.AUTO},
+        type:{value:'auto'},
         /**
          * 是否开启多选支持，部分浏览器存在兼容性问题
          * @type Boolean
@@ -370,7 +370,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             value:EMPTY,
             setter:function (v) {
                 var self = this, uploadType = self.get('uploadType');
-                if (S.isFunction(uploadType)) uploadType.set('action', v);
+                uploadType.set('action', v);
                 return v;
             }
         },
@@ -385,7 +385,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             setter:function (v) {
                 if (S.isObject(v)) {
                     var self = this, uploadType = self.get('uploadType');
-                    if (S.isFunction(uploadType)) uploadType.set('data', v);
+                    uploadType.set('data', v);
                 }
                 return v;
             }
