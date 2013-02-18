@@ -171,7 +171,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             var self = this;
             var fileName = file.name;
             var allowExts = self.get('allowExts');
-            if (allowExts === EMPTY) return true;
+            if (!allowExts) return true;
 
             //扩展名数组
             var exts = allowExts.split(',');

@@ -370,7 +370,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             value:EMPTY,
             setter:function (v) {
                 var self = this, uploadType = self.get('uploadType');
-                uploadType.set('action', v);
+                if(uploadType) uploadType.set('action', v);
                 return v;
             }
         },
@@ -425,9 +425,9 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
         /**
          * 上传方式实例
          * @type UploaderType
-         * @default {}
+         * @default ''
          */
-        uploadType:{value:{}},
+        uploadType:{value:EMPTY},
         /**
          * 强制设置flash的尺寸，只有在flash上传方式中有效，比如{width:100,height:100}，默认为自适应按钮容器尺寸
          * @type Object

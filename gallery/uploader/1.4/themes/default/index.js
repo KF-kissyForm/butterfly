@@ -83,8 +83,10 @@ KISSY.add('gallery/uploader/1.4/themes/default/index', function (S, Node, Theme)
          * 文件处于上传错误状态时触发
          */
         _errorHandler:function(ev){
+            var file = ev.file;
+            if(!file) return false;
+            var id = ev.file.id;
             var msg = ev.msg;
-            var id = ev.id;
             //打印错误消息
             $('.J_ErrorMsg_' + id).html(msg);
         }
