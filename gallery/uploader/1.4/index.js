@@ -139,7 +139,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             var $btn = self.get('target');
             if (!$btn.length) return false;
             //渲染模拟按钮
-            var text = $btn.val() || '上传文件';
+            var text = $btn[0].defaultValue || '上传文件';
             var btnHtml = S.substitute(self.get('btnTpl'), {text:text});
             var $aBtn = $(btnHtml).insertAfter($btn);
             //将按钮上name配置到属性上（Button实例必须用到）
