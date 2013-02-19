@@ -97,11 +97,11 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
         _addUploaderAttrs:function(){
             var self = this;
             var uploader = self.get('uploader');
-            S.each(SUPPORT_RULES,function(r,key){
+            S.each(SUPPORT_RULES,function(r){
                 var hasRule = self.get(r) !== EMPTY;
                 var ruleVal = hasRule && self.get(r)  || null;
                 if(hasRule){
-                    uploader.addAttr(key,{
+                    uploader.addAttr(r,{
                         value:ruleVal,
                         getter:function(v){
                             return v;
