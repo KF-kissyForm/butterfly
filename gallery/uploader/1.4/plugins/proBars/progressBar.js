@@ -53,9 +53,10 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/progressBar',function(S, Node, B
             var self = this,$wrapper = self.get('wrapper'),
                 width = self.get('width');
             if(!$wrapper.length) return false;
+            if(width == 'auto') width = $wrapper.parent().width();
+            $wrapper.width(width);
             //给容器添加ks-progress-bar样式名
-            $wrapper.addClass(ProgressBar.cls.PROGRESS_BAR)
-                    .width(width);
+            $wrapper.addClass(ProgressBar.cls.PROGRESS_BAR);
             self._addAttr();
             !self.get('visible') && self.hide();
             self.set('bar',self._create());

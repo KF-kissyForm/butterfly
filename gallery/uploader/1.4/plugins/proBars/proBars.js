@@ -122,7 +122,7 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/proBars',function(S, Node, Base,
          * @type Number
          * @default 'auto'
          */
-        width : { value:100 },
+        width : { value:'auto' },
         /**
          * 进度走到100%时是否隐藏
          */
