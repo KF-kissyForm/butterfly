@@ -228,11 +228,11 @@ loveUploader-queue li .loading-icon {
     border-radius: 5px;
     display: block;
     overflow: hidden;
-    margin: 6px 0 0 10px;
+    margin-left:1px;
 }
 
 .loveUploader-queue .ks-progress-bar  .ks-progress-bar-value {
-    width: 0%;
+    width: 0;
     height: 8px;
     background: #db0869;
     display: block;
