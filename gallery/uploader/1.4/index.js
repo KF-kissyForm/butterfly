@@ -292,9 +292,9 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          * 支持的内置主题
          * @type Array
          * @since 1.4
-         * @default ['default','imageUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']
+         * @default ['default', 'imageUploader','daogouUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']
          */
-        supportThemes:{value:['default', 'imageUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']},
+        supportThemes:{value:['default', 'imageUploader','daogouUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']},
         /**
          * 模拟上传按钮样式，不推荐替换
          * @type String
