@@ -35,6 +35,11 @@ KISSY.add('gallery/uploader/1.4/themes/daogouUploader/index', function (S, Node,
              var file = ev.file;
              self._showMsg(file,'.J_UploadingMsg');
         },
+        _successHandler:function(ev){
+            var self = this;
+            var file = ev.file;
+            self._showMsg(file,'.J_SuccessMsg');
+        },
         /**
          * 文件处于上传错误状态时触发
          */
