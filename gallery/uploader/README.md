@@ -1,10 +1,10 @@
 # Uploader
 
-- 版本：1.4（基于kissy1.3）
+ 异步文件上传组件，支持ajax、iframe、flash三种上传方案，自带多套主题，并允许用户自定义主题和插件，拥有相当不错的扩展性。
+
+- 版本：1.4（基于kissy1.3，兼容kissy1.2）
 - 作者：明河、紫英、飞绿
 - <a href="http://butterfly.36ria.com/1.4/demo.html" target="_blank">Butterfly教程</a>
-
-<img src="http://www.36ria.com/wp-content/uploads/2012/11/butterfly.png" />
 
  ## 包配置
 
@@ -20,43 +20,6 @@
 
 （PS:kissy1.3不再需要配置gallery包路径。）
 
-## 目前可以使用的表单UI组件
-
-### Uploader
-
- 异步文件上传组件，支持ajax、iframe、flash三种上传方案,由明河（剑平）、紫英、飞绿完成，请勿使用v1.0和v1.1的代码。
-
- <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/uploader.png">
-
-### Limiter
-
- 字数统计组件，支持对kissy的富编辑器editor的统计，由明河（剑平）完成。
-
- <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/limiter.png">
-
-### SpinBox
-
- 数字增减器，由易敛完成。
-
- <img src="http://www.36ria.com/wp-content/uploads/2012/05/splinBox.png">
-
-### Auth
-
- 新的表单验证，由张挺完成。
-
- <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/kf-auth.png">
-
-### Checkbox
-
- 模拟多选框，用于表单美化，由伯方完成。
-
- <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/checkbox.png">
-
-### Radio
-
- 模拟单选框，用于表单美化，由伯方完成。
-
- <img alt="uploader" src="http://www.36ria.com/wp-content/uploads/2012/05/radio.png">
 
 ## 组件变更
 
@@ -76,30 +39,6 @@
     [+] uploader增加queue的add和remove事件
 
 ### V1.3.0 change
-
-#### [+] 新增Butterfly
-#### [+] 新增Select
-#### [+] 新增List
-#### Auth
-
-    [+] #34消息采用更简单属性配置方式
-    [+] #37可以通过msg-wrapper来配置消息层容器
-    [+] 自定义规则可以传送验证配置值
-    [+] 增加监听change事件验证select
-    [!] add方法返回Field实例
-    [!] 第一个参数可以为空
-    [!] #35修复消息层显示后无法隐藏的bug
-    [+] 新增getFieldAttrRules方法
-    [+] 新增getName方法
-    [+] 新增mergeConfig方法
-    [+] Field新增rules属性
-
-#### Limiter
-
-    [+] #30 增加isCut参数，超过最大允许字数，不允许输入
-    [+] #29 增加isEn参数，中英文情况的字数统计的处理
-
-#### Uploader
 
     [+] 新增ImageUploader专用图片上传组件
     [+] #31 restore方法重构
@@ -130,27 +69,14 @@
     [!] 修正iframe remove form时的报错问题
     [!] 修正data传递失败的问题
 
-#### Radio
-
-    [+] 监听原生click事件，触发模拟radio的选中
-
-#### Checkbox
-
-    [+] 新增change方法
-    [+] 新增isChecked方法
-    [-] 去掉fire原生多选框的click事件
-
 ### V1.2.7 change
-
-Uploader
 
     修正最大文件字节数统计错误的bug
     #92 增加restore事件
     #93 当达到最大允许上传数时，删除一张图片，再传一张，testMax验证失效，没有禁用按钮
 
-V1.2.6 change
+### V1.2.6 change
 
-Uploader
 
     error事件数据增加status和file
     优化imageUploader主题
@@ -164,16 +90,6 @@ Uploader
     #81 修正开启拖拽后，禁用按钮时，没有移除拖拽区域的bug
     #82 修正默认主题状态层有进度条时删除入口跑到第二行的bug
 
-Radio
-
-    美化样式
-    #78 当label不存在时，只初始化一个radio
-
-Checkbox
-
-    美化样式
-    当label不存在时，只初始化一个checkbox
-    早期版本（主要是uploader的更新）
 
 ### V1.2.3 change
 
