@@ -2,7 +2,26 @@
  *     二手模板样式
  * @author 紫英(橘子)<daxingplay@gmail.com>
  */
-.upload-btn,
+.grid {
+    letter-spacing: -0.31em;
+    *letter-spacing: normal;
+    word-spacing: -0.43em;
+}
+button::-moz-focus-inner{ border:0; padding:0; margin:0; }
+.grid .g-u {
+    display: inline-block;
+    zoom: 1;
+    *display: inline; /* IE < 8: fake inline-block */
+    letter-spacing: normal;
+    word-spacing: normal;
+    vertical-align: top;
+    _vertical-align: text-bottom;
+}
+
+.grid .g-u input {
+    *vertical-align: middle;
+}
+.ershouUploader-button,
 .advance-queue .progress-bar {
     background: transparent url("http://img02.taobaocdn.com/tps/i2/T1FsaDXalQXXXXXXXX-280-535.png") no-repeat -9999px -9999px;
 }
@@ -30,7 +49,7 @@
 
 .tb-pic120 img { max-width: 120px; max-height: 120px; _width: 120px; }
 
-.upload-btn {
+.ershouUploader-button {
     display: block;
     float: left;
     width: 74px;
@@ -41,8 +60,11 @@
     text-indent: -9999px;
     position: relative;
 }
-.upload-btn:hover {
+.ershouUploader-button:hover {
     background-position: -80px -40px;
+}
+.upload-tips{
+    margin-top: 5px;
 }
 .uploader-button-disabled:hover {
     background-position: 0 -40px;

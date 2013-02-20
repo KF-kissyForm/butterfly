@@ -2,7 +2,7 @@
  * @fileoverview 二手市场图片上传主题
  * @author 紫英(橘子)<daxingplay@gmail.com>
  **/
-KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node, Theme, Message, SetMainPic) {
+KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node, ImageUploader, Message, SetMainPic) {
     var EMPTY = '', 
     	$ = Node.all,
     	LOG_PRE = '[Theme-ershou] ';
@@ -22,7 +22,10 @@ KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node,
         ErshouUploader.superclass.constructor.call(self, config);
     }
     
-    S.extend(ErshouUploader, Theme, /** @lends ErshouUploader.prototype*/ {
+    S.extend(ErshouUploader, ImageUploader, /** @lends ErshouUploader.prototype*/ {
+        render:function(){
+            var uploader = self.get('uploader');
+        },
     	/**
          * 在上传组件运行完毕后执行的方法
          * 本例主要是用来绑定事件，初始化一些附加模块
@@ -30,30 +33,21 @@ KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node,
          */
 		afterUploaderRender: function(uploader){
 			var self = this,
-				Plugins = self.get('oPlugin'),
 				queue = uploader.get('queue'),
                 button = uploader.get('button'),
                 auth = uploader.get('auth'),
                 queueTarget = self.get('queueTarget');
-			
-			// 初始化成功后将默认的input隐藏掉。这个默认的input是用来防止uploader无法初始化成功的fallback方案
-			var elemButtonTarget = button.get('target'),
-				elemTempFileInput = $('.original-file-input', elemButtonTarget);
-			$(elemTempFileInput).remove();
-			S.log(LOG_PRE + 'old input removed.');
 			
 			// 取得最大上传数量
 			var maxFileAllowed = 5;
 			if(auth){
             	maxFileAllowed = auth.getRule('max');
             }else{
-            	S.log(LOG_PRE + 'Cannot get auth');
             }
             self.set('maxFileAllowed', maxFileAllowed);
             
             // 初始化插件+附加模块
-			var preview = new Plugins.preview(),
-				message = new Message({
+		    var message = new Message({
 	            	'msgContainer': self.get('msgContainer'),
 	            	'successMsgCls': self.get('successMsgCls'),
 	            	'hintMsgCls': self.get('hintMsgCls'),
@@ -61,12 +55,10 @@ KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node,
 	            }),
 	            setMainPic = new SetMainPic(self.get('mainPicInput'), self.get('queueTarget'));
             self.set('message', message);
-            self.set('preview', preview);
             self.set('setMainPic', setMainPic);
             
             // 如果是ajax上传模式，添加一个class
             if(uploader.get('type') == 'ajax'){
-            	S.log(LOG_PRE + 'advance queue');
             	$(self.get('queueTarget')).addClass('advance-queue');
             }
             
@@ -104,20 +96,14 @@ KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node,
             });
             
             queue.on('add',function(ev){
-            	var elemImg = $('.J_ItemPic', ev.target),
-            		successFiles = queue.getFiles('success');
-        		preview.preview(ev.file.input, elemImg);
-        		S.log(LOG_PRE + 'preview done for file: ' + ev.file.id);
+                var successFiles = queue.getFiles('success');
         		if(successFiles.length + 1){
         			message.send(S.substitute(leftMsg, {
 	        			'left': maxFileAllowed[0] - successFiles.length - 1
 	        		}), 'hint');
         		}
             });
-            
-            
-            
-            
+
             queue.on('remove', function(e){
             	var successFiles = queue.getFiles('success'),
             		msg;
@@ -144,7 +130,6 @@ KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node,
         			serverUrl = file.sUrl;
     			$(curQueueItem).attr('data-url', serverUrl);
             	setMainPic.setMainPic();
-            	// message.send();
             });
 		},
 		/**
@@ -213,13 +198,6 @@ KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node,
     		$(queueItem).addClass('upload-waiting');
         },
         /**
-         * 在完成文件dom插入后执行的方法
-         * @param {Object} ev 类似{index:0,file:{},target:$target}
-         */
-        _addHandler: function(ev){
-        	S.log(LOG_PRE + 'add done.');
-        },
-        /**
          * 文件处于开始上传状态时触发
          */
         _startHandler: function(ev){
@@ -227,7 +205,6 @@ KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node,
         		file = ev.file,
         		queueItem = file.target;
     		$(queueItem).replaceClass('upload-waiting', 'uploading');
-        	S.log(LOG_PRE + 'start upload');
         },
         /**
          * 文件处于上传成功状态时触发
@@ -252,7 +229,6 @@ KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node,
         	// 更新剩余文件数量
             self._updateCount();
             $(queueItem).remove();
-            S.log(LOG_PRE + 'file deleted.');
         }
     }, {
     	ATTRS: /** @lends ErshouUploader.prototype*/ {
@@ -361,8 +337,8 @@ KISSY.add('gallery/uploader/1.4/themes/ershouUploader/index', function (S, Node,
     return ErshouUploader;
 }, {
 	requires:[
-		'node', 
-		'../../theme',
+		'node',
+        'gallery/uploader/1.4/themes/imageUploader/index',
 		'./message',
 		'./setMainPic'
 	]
