@@ -1,0 +1,303 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>KF/TextBox Demo</title>
+    <link rel="shortcut icon" href="http://docs.kissyui.com/kissy-dpl/base/assets/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap-responsive.css"/>
+    <!--<link rel="stylesheet" type="text/css" href="../../assets/docs.css"/>-->
+    <link rel="stylesheet" type="text/css" href="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/assets/docs.css"/>
+    <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy.js" charset="utf-8"></script>
+    <!--<script src="../../assets/feedback.js" charset="utf-8"></script>-->
+    <script src="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/assets/feedback.js" charset="utf-8"></script>
+    <script src="http://bootswatch.com/assets/js/jquery.js" charset="utf-8"></script>
+    <script src="http://bootswatch.com/assets/js/bootstrap-dropdown.js" charset="utf-8"></script>
+    <script src="http://bootswatch.com/assets/js/bootstrap-scrollspy.js" charset="utf-8"></script>
+    <!--<script src="../../assets/app.js" charset="utf-8"></script>-->
+    <script src="http://www.36ria.com/demo/gal/gallery/form/1.2/demo/assets/app.js" charset="utf-8"></script>
+
+</head>
+<body data-spy="scroll" data-target=".subnav" data-offset="50">
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+            <a class="brand" href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo.html" id="logo">BUTTERFLY</a>
+
+            <div class="nav-collapse">
+
+                <ul class="nav">
+                    <li><a href="http://docs.kissyui.com/kissy-gallery/gallery/form/1.3/demo.html">首页</a></li>
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">组件 <b
+                            class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/uploader/index.html">Uploader</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/limiter/index.html">Limiter</a>
+                            </li>
+                            <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/spinbox/index.html">SpinBox</a>
+                            </li>
+                            <li>
+                                <a href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/auth/index.html">Auth</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/checkbox/index.html">checkbox</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/radio/index.html">radio</a>
+                            </li>
+                            <li class=""><a
+                                    href="http://www.36ria.com/demo/gal/gallery/form/1.3/demo/form/textbox/index.html">textbox</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="https://github.com/kissyteam/kissy-gallery/tree/master/gallery/form">源码</a></li>
+                    <li><a href="http://www.36ria.com/demo/gal/gallery/form/1.3/doc/index.html">API文档</a></li>
+                </ul>
+                <ul class="nav pull-right">
+                    <li><a rel="tooltip" target="_blank" href="http://docs.kissyui.com/kissy-gallery/index.html">kissy
+                        gallery</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <header id="header" class="jumbotron subhead">
+        <h1 class="title-h1">Textbox
+            <small>文本输入框组件 Demo</small>
+        </h1>
+    </header>
+
+    <div id="content" class="row">
+        <div class="span8">
+            <script>
+                KISSY.config({
+                    packages: [{
+                        name:"gallery",
+                        path:"../../../../../../",
+                        charset:"utf-8"
+                    }]
+                });
+            </script>
+            <h3>
+                pattern
+            </h3>
+
+            <h4>pattern</h4>
+            <p>通过config参数配置</p>
+            <h5>code</h5>
+            <pre class="brush: html;">
+                <div id="textbox">
+                    <input type="text" />
+                    <button>checkValidity</button>
+                </div>
+            </pre>
+            <pre class="brush: js;">
+                KISSY.use('gallery/form/1.3/textbox/index', function (S, TextBox) {
+                    var textbox = new TextBox.TextBox('#textbox', {
+                            pattern: '^\d*$'
+                        });
+                        textbox.render();
+
+                        textbox.on('invalid', function (ev) {
+                            alert('textbox invalid: ' + this.get('validationMessage'));
+                        });
+
+                        S.one('#textbox button').on('click', function () {
+                            alert(textbox.checkValidity());
+                        });
+                });
+            </pre>
+            <h5>live</h5>
+            <div class="demo">
+                <div id="textbox-1">
+                    <input type="text"/>
+                    <button>checkValidity</button>
+                </div>
+                <script>
+                    KISSY.use('gallery/form/1.3/textbox/index', function (S, TextBox) {
+                        var textbox = new TextBox.TextBox('#textbox-1', {
+                            pattern: '^\\d*$'
+                        });
+                        textbox.render();
+
+                        textbox.on('invalid', function (ev) {
+                            alert('textbox invalid: ' + this.get('validationMessage'));
+                        });
+
+                        S.one('#textbox-1 button').on('click', function () {
+                            alert(textbox.checkValidity());
+                        });
+                    });
+                </script>
+            </div>
+
+            <p>直接设置placeholder</p>
+            <h5>code</h5>
+            <pre class="brush: html;">
+                <div id="textbox">
+                    <input type="text" pattern="^\d*$"/>
+                    <button>checkValidity</button>
+                </div>
+            </pre>
+            <pre class="brush: js;">
+                    KISSY.use('gallery/form/1.3/textbox/index', function (S, TextBox) {
+                        var textbox = new TextBox.TextBox('#textbox');
+                        textbox.render();
+
+                        textbox.on('invalid', function (ev) {
+                            alert('textbox invalid: ' + this.get('validationMessage'));
+                        });
+
+                        S.one('#textbox button').on('click', function () {
+                            alert(textbox.checkValidity());
+                        });
+                    });
+            </pre>
+            <h5>live</h5>
+            <div class="demo">
+                <div id="textbox-2">
+                    <input type="text" pattern="^\d*$"/>
+                    <button>checkValidity</button>
+                </div>
+                <script>
+                    KISSY.use('gallery/form/1.3/textbox/index', function (S, TextBox) {
+                        var textbox = new TextBox.TextBox('#textbox-2');
+                        textbox.render();
+
+                        textbox.on('invalid', function (ev) {
+                            alert('textbox invalid: ' + this.get('validationMessage'));
+                        });
+
+                        S.one('#textbox-2 button').on('click', function () {
+                            alert(textbox.checkValidity());
+                        });
+                    });
+                </script>
+            </div>
+
+
+
+
+            <h4>patternMismatchMessage，默认为“输入有误”</h4>
+            <p>通过config参数配置</p>
+            <h5>code</h5>
+            <pre class="brush: html;">
+                <div id="textbox">
+                    <input type="text" pattern="^\d*$"/>
+                    <button>checkValidity</button>
+                </div>
+            </pre>
+            <pre class="brush: js;">
+                KISSY.use('gallery/form/1.3/textbox/index', function (S, TextBox) {
+                    var textbox = new TextBox.TextBox('#textbox', {
+                            patternMismatchMessage: '请输入内容'
+                        });
+                        textbox.render();
+
+                        textbox.on('invalid', function (ev) {
+                            alert('textbox invalid: ' + this.get('validationMessage'));
+                        });
+
+                        S.one('#textbox button').on('click', function () {
+                            alert(textbox.checkValidity());
+                        });
+                });
+            </pre>
+            <h5>live</h5>
+            <div class="demo">
+                <div id="textbox-3">
+                    <input type="text" pattern="^\d*$"/>
+                    <button>checkValidity</button>
+                </div>
+                <script>
+                    KISSY.use('gallery/form/1.3/textbox/index', function (S, TextBox) {
+                        var textbox = new TextBox.TextBox('#textbox-3', {
+                            patternMismatchMessage: '请输入内容'
+                        });
+                        textbox.render();
+
+                        textbox.on('invalid', function (ev) {
+                            alert('textbox invalid: ' + this.get('validationMessage'));
+                        });
+
+                        S.one('#textbox-3 button').on('click', function () {
+                            alert(textbox.checkValidity());
+                        });
+                    });
+                </script>
+            </div>
+
+            <p>通过伪属性配置</p>
+            <h5>code</h5>
+            <pre class="brush: html;">
+                <div id="textbox">
+                    <input type="text" pattern="^\d*$" data-patternmismatchmessage="只能输入数字"/>
+                    <button>checkValidity</button>
+                </div>
+            </pre>
+            <pre class="brush: js;">
+                    KISSY.use('gallery/form/1.3/textbox/index', function (S, TextBox) {
+                        var textbox = new TextBox.TextBox('#textbox');
+                        textbox.render();
+
+                        textbox.on('invalid', function (ev) {
+                            alert('textbox invalid: ' + this.get('validationMessage'));
+                        });
+
+                        S.one('#textbox button').on('click', function () {
+                            alert(textbox.checkValidity());
+                        });
+                    });
+            </pre>
+            <h5>live</h5>
+            <div class="demo">
+                <div id="textbox-4">
+                    <input type="text" pattern="^\d*$" data-patternmismatchmessage="只能输入数字"/>
+                    <button>checkValidity</button>
+                </div>
+                <script>
+                    KISSY.use('gallery/form/1.3/textbox/index', function (S, TextBox) {
+                        var textbox = new TextBox.TextBox('#textbox-4');
+                        textbox.render();
+
+                        textbox.on('invalid', function (ev) {
+                            alert('textbox invalid: ' + this.get('validationMessage'));
+                        });
+
+                        S.one('#textbox-4 button').on('click', function () {
+                            alert(textbox.checkValidity());
+                        });
+                    });
+                </script>
+            </div>
+
+            <h3>注意事项：</h3>
+            <ul>
+                <li>config参数优先级较高</li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div id="footer">
+        &copy; Copyright 2012-2012, KF小组.
+    </div>
+</div>
+
+<!-- 代码高亮 START  -->
+<link href='../../assets/syntaxhighlighter_3.0.83/sh.css' rel='stylesheet'
+      type='text/css'/>
+<script type="text/javascript"
+        src="../../assets/syntaxhighlighter_3.0.83/sh.js"></script>
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+<!-- 代码高亮 END  -->
+</body>
+</html>
