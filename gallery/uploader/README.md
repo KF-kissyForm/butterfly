@@ -6,7 +6,7 @@
 - 作者：明河、紫英、飞绿
 - <a href="http://butterfly.36ria.com/1.4/demo.html" target="_blank">Butterfly教程</a>
 
- ## 包配置
+## 包配置
 
 ```javascript
         KISSY.config({
@@ -25,18 +25,38 @@
 
 ### V1.4.0 change
 
+    [!] 基于kissy1.3，内部结构和接口继承于rich-base
+    [!] 只有Uploader类，即只有uploader/index模块，通过主题控制是否是图片上传还是文件上传
+    [!] 重构简化主题设计，进度条的处理移到ProBars插件，插件使用简化，去掉状态层概念，全部使用事件监听
     [!] multiple默认为false，禁用多选
     [!] 默认上传方式改成["ajax","iframe"]
-    [-] 去掉data-config配置支持
-    [-] 去掉不使用主题情况支持
-    [+] 新增RenderUploader，ImageUploader和FileUploader继承于RenderUploader
+    [!] 服务器返回数据结构简化，不再有data字段
+    [!] 可以不指定queue目标（该目标与主题绑定）
+    [!] restore方法移动到urlsInput
+    [!] IE下图片预览优化
+    [!] 进度条插件重构
     [!] 修正_errorHandler报错的bug（daogouUploader主题）
     [!] 去掉theme.js状态层的log提示
-    [!] 将auth模块移到plugins下
+    [!] 将auth模块移到plugins下，变成插件
     [!] singleImageUploader当已经有图片存在时替换图片
     [!] singleImageUploader去掉max限制
-    [!] 重构UrlsInput，去掉create方法，不会自动创建urlsInput
+    [!] 重构UrlsInput，变成uploader的插件，去掉create方法，不会自动创建urlsInput
+    [!] 修正queue的clear方法，没有把li节点去掉的bug
     [+] uploader增加queue的add和remove事件
+    [+] 新增use()方法用于引入插件
+    [+] 新增theme()方法，初始化主题
+    [+] 增加图片尺寸控制验证
+    [+] 新增themeRender事件
+    [+] 主题增加从html拉取模版的功能
+    [+] 主题增加extend配置从外部快速覆盖主题监听器的功能
+    [+] 主题去掉插件加载，增加use配置，引入uploader插件
+    [+] restore渲染默认数据的动作移动到主题
+    [-] 去掉data-config配置支持
+    [-] 去掉不使用主题情况支持
+    [-] 去掉theme-config配置支持
+    [-] 去掉serviceConfig配置项
+    [-] 去掉init和render事件
+
 
 ### V1.3.0 change
 
