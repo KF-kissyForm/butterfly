@@ -28,8 +28,8 @@ author :
 # Else if you are pushing to username.github.com, replace with your username.
 # Finally if you are pushing to a GitHub project page, include the project name at the end.
 #
-url: http://ppxu.github.com/gallery/
-production_url : http://ppxu.github.com/gallery/
+url: http://kf-kissyform.github.com/butterfly/
+production_url : http://kf-kissyform.github.com/butterfly/
 
 # All Jekyll-Bootstrap specific configurations are namespaced into this hash
 #
@@ -58,7 +58,7 @@ JB :
   #   - Only the following values are falsy: ["", null, false]
   #   - When setting BASE_PATH it must be a valid url.
   #     This means always setting the protocol (http|https) or prefixing with "/"
-  BASE_PATH : http://ppxu.github.com/gallery/
+  BASE_PATH : http://kf-kissyform.github.com/butterfly/
 
   # By default, the asset_path is automatically defined relative to BASE_PATH plus the enabled theme.
   # ex: [BASE_PATH]/assets/themes/[THEME-NAME]
