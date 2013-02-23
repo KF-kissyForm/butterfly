@@ -1,7 +1,9 @@
 ## 综述
 
 Uploader是非常强大的异步文件上传组件，支持ajax、iframe、flash三套方案，实现浏览器的全兼容，调用非常简单，内置多套主题支持和常用插件，比如验证、图片预览、进度条等。
+
 广泛应用于淘宝网，比如退款系统、爱逛街、二手、拍卖、我的淘宝、卖家中心、导购中心等。
+
 拥有非常不错的扩展性，可以自己定制主题和插件。
 
 * 版本：1.4
@@ -115,11 +117,11 @@ Uploader是非常强大的异步文件上传组件，支持ajax、iframe、flash
     </li>
 </ul>
 
-## 3种方式初始化组件
+## 初始化组件
 
-gallery的包配置是必不可少：
+kissy1.2下需要gallery的包配置：
 
-{% highlight javascript %}
+```javascript
 KISSY.config({
     packages:[
         {
@@ -129,7 +131,42 @@ KISSY.config({
         }
     ]
 });
-{% endhighlight %}
+```
+
+kissy1.3就不需要该配置。
+
+### 1.组件依赖的html结构
+
+```xml
+    <input type="file" class="g-u" id="J_JsUploaderBtn" value="上传图片" name="Filedata" >
+```
+
+组件的核心只依赖原生的文件上传域，<code>value</code>属性值为上传按钮的文案，<code>name</code>属性非常重要：服务器端获取文件数据的字段。
+
+### 2.加载Uploader模块
+
+```javascript
+    KISSY.use('gallery/uploader/1.4/index', function (S, Uploader) {
+
+    })
+```
+**提醒**：use()的回调，第一个参数是KISSY，第二个参数才是组件。
+
+### 3.初始化Uploader
+
+```javascript
+    KISSY.use('gallery/uploader/1.4/index', function (S, Uploader) {
+        var uploader = new Uploader('#J_JsUploaderBtn',{
+          // 文件域
+          name:"Filedata",
+          //处理上传的服务器端脚本路径
+          action:"upload.php"
+        });
+    })
+```
+
+
+
 
 ### 1.使用js配置初始化组件
 
