@@ -138,7 +138,7 @@ kissy1.3就不需要该配置。
 ### 1.组件依赖的html结构
 
 ```xml
-    <input type="file" class="g-u" id="J_JsUploaderBtn" value="上传图片" name="Filedata" >
+    <input type="file" class="g-u" id="J_JsUploaderBtn" value="上传文件" name="Filedata" >
 ```
 
 组件的核心只依赖原生的文件上传域，<code>value</code>属性值为上传按钮的文案，<code>name</code>属性非常重要：服务器端获取文件数据的字段。
@@ -157,175 +157,181 @@ kissy1.3就不需要该配置。
 ```javascript
     KISSY.use('gallery/uploader/1.4/index', function (S, Uploader) {
         var uploader = new Uploader('#J_JsUploaderBtn',{
-          // 文件域
-          name:"Filedata",
           //处理上传的服务器端脚本路径
           action:"upload.php"
         });
     })
 ```
 
+Uploader类接受二个参数：
 
+* 第一个参数指向目标元素（指向原生文件上传域元素即可）
+* 第二参数为组件配置，<code>action</code>必须配置，为服务器端处理文件上传的路径。
 
+**提醒**：如果是使用flash上传，action必须是绝对路径。
 
-### 1.使用js配置初始化组件
+打开页面就会发现文件上传域部分的结构发生了变化，html结构如下：
 
-{% highlight javascript %}
-KISSY.use('gallery/form/1.3/uploader/imageUploader', function (S, ImageUploader) {
-
-    new ImageUploader('#J_JsUploaderBtn','#J_JsUploaderQueue',{
-        // 文件域
-        name:"Filedata",
-        //处理上传的服务器端脚本路径
-        action:"upload.php",
-        //用于放服务器端返回的url的隐藏域
-        urlsInputName:"jsImageUrls"
-    }).render();
-})
-{% endhighlight%}
-
-#### 配置参数说明
-
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th style="width: 100px;">参数名</th>
-            <th style="width: 50px;">类型</th>
-            <th style="width: 100px;">默认值</th>
-            <th>描述</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>action</td>
-            <td>String</td>
-            <td>""</td>
-            <td>服务器端处理上传的路径</td>
-        </tr>
-        <tr>
-            <td>name</td>
-            <td>String</td>
-            <td>Filedata</td>
-            <td>文件上传域name名，服务器端通过name来获取和处理上传数据</td>
-        </tr>
-        <tr>
-            <td>urlsInputName</td>
-            <td>String</td>
-            <td>''</td>
-            <td>
-                用于存放服务器端返回的文件路径的input（type="hidden"），当页面内不存在这个input时，组件会自动创建一个
-            </td>
-        </tr>
-    </tbody>
-</table>
-
-<div class="alert alert-info">
-    <strong>PS:</strong>
-    这三个配置是最核心的配置，一般是必不可少，更多的接口说明请看
-    <a href="http://www.36ria.com/demo/gal/gallery/form/1.3/doc/symbols/Uploader.html" target="_blank">
-        API
-doc
+```xml
+    <a href="javascript:void(0)" class="g-u ks-uploader-button">
+        <span class="btn-text">上传文件</span>
+        <div class="file-input-wrapper" style="overflow: hidden;">
+            <input type="file" name="Filedata" hidefocus="true" class="file-input" style="">
+        </div>
     </a>
-    ，后面将逐步介绍更多API。
-</div>
+```
 
-### 2.使用标签属性配置初始化
+但缺少样式，也没办法处理上传行为，接下来我们加载一个默认主题。
 
-#### 1) 需要个input标签（type="image-uploader"）
+### 4. 使用theme()方法加载主题
+
+```javascript
+        uploader.theme('default',{
+            queueTarget:'#J_JsUploaderQueue'
+        });
+```
+
+<code>theme()</code>方法接受二个参数：
+
+* 第一个参数为主题名，比如default（默认主题），uploader内置多套主题，后面会讲解到
+* 第二个参数为主题配置，<code>queueTarget</code>是必须配置的，用于显示文件信息。
+
+为了显示上传的文件信息，你需要一个队列容器：
+
+```xml
+    <ul id="J_JsUploaderQueue">
+
+    </ul>
+```
+再刷新下页面看看，就会发现已经有样式，并可以处理上传了（action指向的服务器路径可用的情况下）。
+
+加载的主题会包含二个文件：
+
+```xml
+http://a.tbcdn.cn/s/kissy/gallery/uploader/1.4/themes/default/index.js
+http://a.tbcdn.cn/s/kissy/gallery/uploader/1.4/themes/default/style.css
+```
+
+html结构上也发生了变化，模拟按钮上增加了<code>defaultTheme-button</code>样式，而ul队列容器上增加了<code>defaultTheme-queue</code>。
+
+你可以通过这二个样式，来改变主题样式。
+
+**提醒**：由于style.css是异步加载进来的，如果你的样式权重不够高会被主题样式覆盖。
+
+如果你不需要主题样式，可以设置<code>cssUrl</code>，比如下面的代码：
+
+```javascript
+        uploader.theme('default',{
+            queueTarget:'#J_JsUploaderQueue',
+            cssUrl:''
+        });
+```
+
+当然你也可以自定义自己的主题，后面会讲解到。
+
+### 4. 服务器端返回的数据格式
+
+建议服务端返回的数据格式如下：
+
+```javascript
+   {"status":1,"type":"ajax","name":"[1343736002.749366]0.png","url":".\/files\/[1343736002.749366]0.png"}
+```
+
+**提醒**：去掉了Uploader1.3的<code>data</code>字段
+
+留意引号！！！特别是键名要加<code>""</code>，不然json会解析失败。
+
+<code>"status":1</code>，才是上传成功的标识，其他任何状态码都认定为失败。
+
+<code>"url":"xxx"</code>，一般是必须的，为文件上传到服务器后的路径。
+
+ <code>"type":"ajax"</code>和<code>"name":"[1343736002.749366]0.png"</code>并非必须的。
+
+ **服务器出错时返回的信息**
+
+```javascript
+   {"status":0,message":"图片过大！"}
+```
+
+**如果服务器返回的格式不是这样，你需要使用filter属性，格式化数据**
+
+```javascript
+    uploader.set('filter',function(data){
+        var result = S.JSON.parse(data);
+        if(result.message) result.msg = '上传失败！';
+        return result;
+    });
+```
+
+### 5. 给上传组件增加验证
+
+```javascript
+        uploader.use('auth',{
+            //最多上传个数
+            max:3,
+            //文件最大允许大小
+            maxSize:500
+        });
+```
+
+<code>use()</code>方法会加载uploader的组件插件，接受二个参数：
+
+* 第一个参数为插件名，比如加载验证插件就是<code>auth</code>
+* 第二个参数为插件配置
+
+auth插件支持的验证规则如下：
 
 <table class="table table-bordered table-striped">
     <thead>
-        <tr>
-            <th style="width: 200px;">属性</th>
-            <th>描述</th>
-        </tr>
+    <tr>
+        <th style="width: 100px;">规则名</th>
+        <th style="width: 200px;">默认值</th>
+        <th>描述</th>
+    </tr>
     </thead>
     <tbody>
+    <tr>
+        <td>allowExts</td>
+        <td>"jpg,jpeg,png,gif,bmp"</td>
+        <td>
+            图片格式验证控制，ImageUploader自带此验证。
+        </td>
+    </tr>
+    <tr>
+        <td>required</td>
+        <td>true</td>
+        <td>
+            必须至少上传一个文件
+            <div class="alert alert-info">组件默认不触发，可以使用uploader的testRequired()方法手动验证。</div>
+        </td>
+    </tr>
+    <tr>
+        <td>max</td>
+        <td>3</td>
+        <td>
+            最多上传N个图片，当达到N个图片后按钮会增加禁用样式<code>uploader-button-disabled</code>，用户可以通过这个样式名定制需要的置灰样式。
+            <div class="alert alert-info">可以用uploader.get('max')来获取该配置项值。</div>
+        </td>
+    </tr>
+    <tr>
+        <td>maxSize</td>
+        <td>1024</td>
+        <td>
+            单图片最大允许上传的文件大小，单位是<code>KB</code>
+            <div class="alert alert-info">如果是iframe上传方式，此验证无效。</div>
+        </td>
+    </tr>
+    <tr>
+        <td>allowRepeat</td>
+        <td>false</td>
+        <td>是否允许多次上传同一个文件
+        </td>
+    </tr>
         <tr>
-            <td>
-                <code>type="image-uploader"</code>
+            <td>widthHeight</td>
+            <td>"160x160"</td>
+            <td>v1.4新增的验证规则，用于限制图片尺寸。
             </td>
-            <td>此属性为了配合Butterfly使用，表明此input为图片上传专用组件</td>
-        </tr>
-        <tr>
-            <td>
-                <code>id="J_UploaderBtn"</code>
-            </td>
-            <td>脚本实例化上传组件时使用的钩子</td>
-        </tr>
-        <tr>
-            <td>
-                <code>name="Filedata"</code>
-            </td>
-            <td>非常重要，文件上传域name名，服务器端通过name来获取和处理上传数据</td>
-        </tr>
-        <tr>
-            <td>
-                <code>value="上传图片"</code>
-            </td>
-            <td>上传按钮上的文案</td>
         </tr>
     </tbody>
 </table>
-
-#### 2) 创建一个input（hidden）用于存放服务器端返回的url
-
-给上传按钮input加上 `urlsInputName="imageUrls"` 属性，这样当上传成功后图片url会被加入到这个隐藏域中（多个图片路径以逗号隔开）。
-
-#### 3) 创建一个空的图片队列
-
-给上传按钮input加上 `queueTarget="#J_UploaderQueue"` 属性，将上传按钮和上传队列关联起来，当选择完图片后，自动显示图片。
-
-#### 4) 配置服务器端参数
-
-上传组件必须有服务器端脚本配合，所以需要个服务器端路径。可以使用 `action` 属性。
-
-可能你还需要向服务器post一些参数，比如用户名，商品id等，可以使使用 `postData='{"author":"明河"}'` 。
-
-#### 5) demo中完整的html结构
-
-<pre class='brush: xml; '>
-    <div class="grid">
-        <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue" action="upload.php" urlsInputName="imageUrls">
-        <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
-        <input type="hidden" name="imageUrls"></div>
-    <ul id="J_UploaderQueue" class="grid"></ul>
-</pre>
-
-#### 6) 初始化ImageUploader
-
-配置下gallery包路径（为了利用淘宝cdn，可以快速引用butterfly库，所以将代码托管在kissy gallery下）。
-
-{% highlight javascript %}
-var S = KISSY,
-    path = "http://a.tbcdn.cn/s/kissy/";
-KISSY.config({
-    packages:[
-        {
-            name:"gallery",
-            path:path,
-            charset:"utf-8"
-        }
-    ]
-});
-{% endhighlight %}
-
-初始化ImageUploader：
-
-{% highlight javascript %}
-KISSY.use('gallery/form/1.3/uploader/imageUploader', function (S, ImageUploader) {
-    new ImageUploader('#J_UploaderBtn').render();
-})
-{% endhighlight %}
-
-<div class="alert alert-info">
-    当实例化ImageUploader时，组件会自动加载主题js和css文件，比如没用
-    <code>theme</code>
-    属性时，加载默认主题
-    <code>theme="imageUploader"</code>
-    ，
-    <code>gallery/form/1.3/uploader/themes/imageUploader/index-min.js</code>
-    和
-    <code>gallery/form/1.3/uploader/themes/imageUploader/style.css</code>
-    。
-</div>
