@@ -296,7 +296,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          */
         supportThemes:{value:['default', 'imageUploader','daogouUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']},
         /**
-         * 模拟上传按钮样式，不推荐替换
+         * 模拟上传按钮模版，不推荐替换
          * @type String
          * @since 1.4
          */
