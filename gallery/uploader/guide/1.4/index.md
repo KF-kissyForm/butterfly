@@ -499,12 +499,14 @@ auth插件支持的验证规则如下：
         <td>autoUpload</td>
         <td>Boolean</td>
         <td>true</td>
+        <td>读/写</td>
         <td>是否自动上传，当为<code>false</code>时，可以通过uploader的<code>upload()</code>和<code>uploadFiles()</code>手动上传队列中的文件。</td>
     </tr>
     <tr>
         <td>multiple</td>
         <td>Boolean</td>
-        <td>true</td>
+        <td>false</td>
+        <td>读/写</td>
         <td>是否开启多选支持
             <div class="alert alert-info">如果采用iframe上传，请设置为<code>false</code></div>
         </td>
@@ -513,6 +515,7 @@ auth插件支持的验证规则如下：
         <td>disabled</td>
         <td>Boolean</td>
         <td>false</td>
+        <td>读/写</td>
         <td>是否可用,false为按钮可用</td>
     </tr>
     <tr>
@@ -686,9 +689,12 @@ uploader.stop();
 
 Queue用于控制队列的文件，非常常用，实例存储在Uploader中。
 
+
 ```javascript
 var queue = uploader.get('queue');
 ```
+
+
 
 ####Queue的files属性
 
@@ -713,6 +719,9 @@ var testFile = {'name':'test.jpg',
 var file = queue.add(testFile);
 S.log('添加的文件数据为：'+file);
 ```
+
+当组件向队列添加文件时，会自动生成一个唯一id，比如'file-10'，'file-'前缀是一样的，可以通过id来获取指定的文件。
+
 
 ####remove():删除队列中的文件
 
@@ -747,5 +756,204 @@ alert('所有等待中的文件index为：' + indexs);
 
 getFiles()和getIndexs()的作用是不同的，getFiles()类似过滤数组，获取的是指定状态的文件数据，而getIndexs()只是获取指定状态下的文件对应的在文件数组内的索引值。
 
+##Theme说明
+
+####如何理解主题的概念
+
+Uploader的主题包含二个部分：脚本（index.js）和样式（style.css）。
+
+主题的脚本可以理解为uploader事件监听器集合，主题脚本的模版如下：
+
+```javascript
+KISSY.add(function (S, Node, ImageUploader) {
+    var EMPTY = '', $ = Node.all;
+
+    /**
+     * @name RefundUploader
+     * @class 退款凭证上传主题，继承于imageUploader主题
+     * @constructor
+     * @extends Theme
+     * @requires Theme
+     * @requires  ProgressBar
+     * @author 明河
+     */
+    function RefundUploader(config) {
+        var self = this;
+        //调用父类构造函数
+        RefundUploader.superclass.constructor.call(self, config);
+    }
+
+    S.extend(RefundUploader, ImageUploader, /** @lends RefundUploader.prototype*/{
+        /**
+         * 在上传组件运行完毕后执行的方法（对上传组件所有的控制都应该在这个函数内）
+         * @param {Uploader} uploader
+         */
+        render:function () {
+            var self = this;
+            var uploader = self.get('uploader');
+        },
+        /**
+         * 在完成文件dom插入后执行的方法
+         * @param {Object} ev 类似{index:0,file:{},target:$target}
+         */
+        _addHandler:function(ev){
+
+        },
+         /**
+         * 文件处于上传错误状态时触发
+         */
+        _errorHandler:function (ev) {
+
+        }
+    }, {ATTRS:/** @lends RefundUploader.prototype*/{
+        name:{value:'refundUploader'}
+    }});
+    return RefundUploader;
+}, {requires:['node', 'gallery/uploader/1.4/themes/imageUploader/index']});
+```
+
+主题中的<code>_errorHandler</code>会自动触发，当然像"_addHandler"或"_successHandler"也是一样的道理。
+
+####Theme的属性
+
+<table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th style="width: 100px;">属性名</th>
+            <th style="width: 50px;">类型</th>
+            <th style="width: 130px;">默认值</th>
+            <th style="width: 200px;">是否只读</th>
+            <th>描述</th>
+        </tr>
+        </thead>
+        <tbody>
+             <tr>
+                 <td>name</td>
+                 <td>String</td>
+                 <td>''</td>
+                 <td>只读</td>
+                 <td>
+                    主题名，是主题对应的模拟按钮和队列容器的样式名的前缀
+                 </td>
+             </tr>
+             <tr>
+                 <td>use</td>
+                 <td>String</td>
+                 <td>''</td>
+                 <td>只读</td>
+                 <td>
+                      需要加载的uploader插件，如果想要获取插件，使用<code>uploader.getPlugin('auth')</code>。
+                      可以加载多个uploader插件，写法是"proBars,preview"。
+                 </td>
+             </tr>
+             <tr>
+                  <td>cssUrl</td>
+                  <td>String</td>
+                  <td>''</td>
+                  <td>只读</td>
+                  <td>
+                  css模块路径，如果你不希望加载主题样式，设置为<code>''</code>即可。
+                  </td>
+              </tr>
+              <tr>
+                  <td>fileTpl</td>
+                  <td>String</td>
+                  <td>''</td>
+                  <td>只读</td>
+                  <td>
+                  主题模版，用于定制主题的DOM样式
+                  </td>
+              </tr>
+              <tr>
+                  <td>extend</td>
+                  <td>Object</td>
+                  <td>''</td>
+                  <td>只读</td>
+                  <td>
+                  覆盖主题的事件监听器，后面会深入讲解。
+                  </td>
+              </tr>
+              <tr>
+                  <td>authMsg</td>
+                  <td>Object</td>
+                  <td>{}</td>
+                  <td>只读</td>
+                  <td>
+                  验证插件的消息文案
+                  </td>
+              </tr>
+              <tr>
+                  <td>allowExts</td>
+                  <td>String</td>
+                  <td>''</td>
+                  <td>只读</td>
+                  <td>
+                    文件格式限制
+                  </td>
+              </tr>
+              <tr>
+                  <td>queueTarget</td>
+                  <td>NodeList</td>
+                  <td>''</td>
+                  <td>只读</td>
+                  <td>
+                    队列容器目标元素
+                  </td>
+              </tr>
+              <tr>
+                  <td>uploader</td>
+                  <td>Uploader</td>
+                  <td>''</td>
+                  <td>只读</td>
+                  <td>
+                    Uploader的实例
+                  </td>
+              </tr>
+        </tbody>
+</table>
+
+####Theme的extend属性说明
+
+<code>extend</code>属性的用途：有时主题的默认行为不是业务需要的，你就需要将主题的监听器干掉，extend就是用于覆盖主题的监听器。
 
 
+```javascript
+var newTheme = {
+    _addHandler:function(){
+        alert('test');
+    }
+}
+uploader.theme('#J_Ul',{
+    extend:newTheme
+})
+```
+
+####在html页面直接写主题模版
+
+这是1.4新增功能，用于用户可以更直观的控制主题模版。
+
+```javascript
+<ul id="J_JsUploaderQueue">
+      <script type="text/uploader-theme">
+                  <li id="queue-file-{id}" class="g-u" data-name="{name}">
+                      <div class="pic-wrapper">
+                         <div class="pic">
+                             <span><img class="J_Pic_{id} preview-img" src="" /></span>
+                         </div>
+                         <div class=" J_Mask_{id} pic-mask"></div>
+                         <div class="status-wrapper J_FileStatus">
+                             <div class="status waiting-status"><p>等待上传</p></div>
+                             <div class="status start-status progress-status success-status">
+                                 <div class="J_ProgressBar_{id}">上传中...</div>
+                             </div>
+                             <div class="status error-status">
+                                 <p class="J_ErrorMsg_{id}">上传失败，请重试！</p></div>
+                         </div>
+                     </div>'+
+                     <div>
+                         <a class="J_Del_{id} del-pic" href="#">删除</a>
+                     </div>
+                 </li>'
+      </script>
+</ul>
+```

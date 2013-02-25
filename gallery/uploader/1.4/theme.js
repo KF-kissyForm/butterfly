@@ -314,7 +314,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          */
         name:{value:EMPTY},
         /**
-        * 使用插件
+        * 需要加载的uploader插件
         * @type String
         * @default ''
         */
@@ -326,7 +326,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          */
         cssUrl:{value:EMPTY},
         /**
-         * 队列使用的模板
+         * 主题模版
          * @type String
          * @default ""
          */
