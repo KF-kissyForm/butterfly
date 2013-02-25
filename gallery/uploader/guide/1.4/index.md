@@ -443,6 +443,21 @@ auth插件支持的验证规则如下：
 
 ##组件属性说明
 
+####获取/设置属性
+
+使用get()/set()来获取设置属性，举例：
+
+```javascript
+    uploader.on('themeRender', function (ev) {
+        var queue = uploader.get('queue');
+        //队列中所有的文件数据
+        S.log(queue.get('files'));
+       //禁用按钮
+        uploader.set('disabled',true);
+    });
+```
+
+
 ####常用指数：*****
 
 <table class="table table-bordered table-striped">
@@ -450,7 +465,8 @@ auth插件支持的验证规则如下：
     <tr>
         <th style="width: 100px;">参数名</th>
         <th style="width: 50px;">类型</th>
-        <th style="width: 100px;">默认值</th>
+        <th style="width: 130px;">默认值</th>
+        <th style="width: 200px;">是否只读</th>
         <th>描述</th>
     </tr>
     </thead>
@@ -518,8 +534,8 @@ auth插件支持的验证规则如下：
         <tr>
             <th style="width: 100px;">属性名</th>
             <th style="width: 50px;">类型</th>
-            <th style="width: 100px;">默认值</th>
-            <th style="width: 50px;">是否只读</th>
+            <th style="width: 130px;">默认值</th>
+            <th style="width: 200px;">是否只读</th>
             <th>描述</th>
         </tr>
         </thead>
@@ -598,8 +614,8 @@ auth插件支持的验证规则如下：
         <tr>
             <th style="width: 100px;">属性名</th>
             <th style="width: 50px;">类型</th>
-            <th style="width: 100px;">默认值</th>
-            <th style="width: 50px;">是否只读</th>
+            <th style="width: 130px;">默认值</th>
+            <th style="width: 200px;">是否只读</th>
             <th>描述</th>
         </tr>
         </thead>
@@ -633,3 +649,103 @@ auth插件支持的验证规则如下：
               </tr>
         </tbody>
 </table>
+
+##Uploader方法说明
+
+####upload (index)：上传指定队列索引的文件
+
+```javascript
+//上传队列中的第一个文件
+uploader.upload(0)
+```
+
+####uploadFiles (status)：批量上传队列中的指定状态下的文件
+
+```javascript
+//上传队列中所有等待的文件
+uploader.uploadFiles("waiting")
+```
+
+####cancel  (index)：取消文件上传
+
+当index参数不存在时取消当前正在上传的文件的上传。cancel并不会停止其他文件的上传（对应方法是stop）。
+
+```javascript
+//取消当前正在上传的文件的上传
+uploader.cancel();
+```
+
+####stop()：停止上传动作
+
+```javascript
+//停止上传
+uploader.stop();
+```
+
+##Queue的控制说明
+
+Queue用于控制队列的文件，非常常用，实例存储在Uploader中。
+
+```javascript
+var queue = uploader.get('queue');
+```
+
+####Queue的files属性
+
+queue的属性只有<code>files</code>，可以获取到所有上传的文件数据，为一个数组。
+
+```javascript
+var queue = uploader.get('queue');
+var files = queue.get('files');
+S.log(files.length);
+```
+
+####add():向队列添加文件
+
+```javascript
+//测试文件数据
+var testFile = {'name':'test.jpg',
+    'size':2000,
+    'input':{},
+    'file':{'name':'test.jpg', 'type':'image/jpeg', 'size':2000}
+};
+//向队列添加文件
+var file = queue.add(testFile);
+S.log('添加的文件数据为：'+file);
+```
+
+####remove():删除队列中的文件
+
+```javascript
+var removeFile = queue.remove(0);
+S.log('删除的文件数据为：'+removeFile);
+```
+
+**提醒**：remove()的参数可以是队列数组的索引，比如上面代码的0，是取队列第一个文件数据；也可以是文件的id（唯一），比如remove('file-26')。
+
+####clear():删除队列内的所有文件
+
+```javascript
+    queue.clear();
+```
+####getFiles(status):获取指定状态下的文件
+
+```javascript
+var files = queue.getFiles('waiting'),
+        ids = [];
+S.each(files, function (file) {
+    ids.push(file.id);
+});
+alert('所有等待中的文件id为：' + ids);
+```
+####getIndexs(type):获取等指定状态的文件对应的文件数组索引值组成的数组
+
+```javascript
+var indexs = queue.getIndexs('waiting');
+alert('所有等待中的文件index为：' + indexs);
+```
+
+getFiles()和getIndexs()的作用是不同的，getFiles()类似过滤数组，获取的是指定状态的文件数据，而getIndexs()只是获取指定状态下的文件对应的在文件数组内的索引值。
+
+
+
