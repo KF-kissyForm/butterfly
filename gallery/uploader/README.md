@@ -51,6 +51,7 @@
     [+] 主题增加extend配置从外部快速覆盖主题监听器的功能
     [+] 主题去掉插件加载，增加use配置，引入uploader插件
     [+] restore渲染默认数据的动作移动到主题
+    [+] 新增ImageZoom插件
     [-] 去掉data-config配置支持
     [-] 去掉不使用主题情况支持
     [-] 去掉theme-config配置支持
