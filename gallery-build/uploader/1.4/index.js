@@ -1453,7 +1453,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          */
         supportThemes:{value:['default', 'imageUploader','daogouUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']},
         /**
-         * 模拟上传按钮样式，不推荐替换
+         * 模拟上传按钮模版，不推荐替换
          * @type String
          * @since 1.4
          */
@@ -2411,8 +2411,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
  */
 KISSY.add('gallery/uploader/1.4/plugins/coverPic/coverPic', function(S, Node,Base){
 
-    var $ = Node.all,
-        LOG_PRE = '[LineQueue: setMainPic] ';
+    var $ = Node.all;
 
     /**
      * �Ӷ���ͼƬ��ѡ��һ����Ϊ����ͼƬ������ͼ
@@ -2425,9 +2424,12 @@ KISSY.add('gallery/uploader/1.4/plugins/coverPic/coverPic', function(S, Node,Bas
     }
     S.extend(CoverPic, Base, /** @lends CoverPic.prototype*/{
         /**
-         * �������
+         * �����ʼ��
+         * @private
          */
-        render:function(){
+        pluginInitializer : function(uploader) {
+            if(!uploader) return false;
+            var self = this;
 
         }
     },{
@@ -2657,6 +2659,77 @@ KISSY.add('gallery/uploader/1.4/plugins/filedrop/filedrop', function (S, Node, B
  * changes:
  * 明河：1.4
  *           - 重构成rich base的插件
+ *//**
+ * @fileoverview 进度条集合
+ * @author 剑平（明河）<minghe36@126.com>
+ **/
+KISSY.add('gallery/uploader/1.4/plugins/imageZoom/imageZoom',function(S, Node, Base,IMGDD) {
+    var EMPTY = '';
+    var $ = Node.all;
+    /**
+     * @name TagConfig
+     * @class 进度条集合
+     * @since 1.4
+     * @constructor
+     * @extends Base
+     */
+    function ImageZoom(config) {
+        var self = this;
+        //调用父类构造函数
+        ImageZoom.superclass.constructor.call(self, config);
+    }
+    S.extend(ImageZoom, Base, /** @lends ImageZoom.prototype*/{
+        /**
+         * 插件初始化
+          * @private
+         */
+        pluginInitializer : function(uploader) {
+            if(!uploader) return false;
+            var self = this;
+            uploader.on('success',self._successHandler,self);
+        },
+        /**
+         * 上传成功了添加图片放大器
+         * @param ev
+         * @private
+         */
+        _successHandler:function(ev){
+            var self = this;
+            var file = ev.file;
+            var id = file.id;
+            //服务器端返回的数据
+            var result = file.result;
+            var sUrl =  result.url;
+            var $img = $('.J_Pic_'+id);
+            $img.attr('data-original-url',sUrl);
+            $img.addClass('J_ImgDD');
+            self._renderIMGDD(file.target);
+        },
+        /**
+         * 运行图片放大器
+         * @private
+         */
+        _renderIMGDD:function($target){
+            if(!$target || !$target.length) return false;
+            var imageDD = new IMGDD();
+            imageDD.add($target,'.J_ImgDD');
+        }
+    }, {ATTRS : /** @lends ImageZoom*/{
+        /**
+         * 插件名称
+         * @type String
+         * @default urlsInput
+         */
+        pluginId:{
+            value:'imageZoom'
+        }
+    }});
+    return ImageZoom;
+}, {requires : ['node','base','gallery/image-dd/1.0/index']});
+/**
+ * changes:
+ * 明河：1.4
+ *           - 新增插件
  *//**
  * @fileoverview 本地图片预览组件
  * @author 紫英（橘子）<daxingplay@gmail.com>
@@ -4248,7 +4321,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          */
         name:{value:EMPTY},
         /**
-        * 使用插件
+        * 需要加载的uploader插件
         * @type String
         * @default ''
         */
@@ -4260,7 +4333,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          */
         cssUrl:{value:EMPTY},
         /**
-         * 队列使用的模板
+         * 主题模版
          * @type String
          * @default ""
          */

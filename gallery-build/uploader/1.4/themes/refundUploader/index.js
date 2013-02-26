@@ -114,6 +114,7 @@ KISSY.add(function (S, Node, ImageUploader) {
          * @default "gallery/uploader/1.4/themes/refundUploader/style.css"
          */
         cssUrl:{value:'gallery/uploader/1.4/themes/refundUploader/style.css'},
+        use:{value:'proBars,filedrop,preview,imageZoom'},
         /**
          * 队列使用的模板
          * @type String

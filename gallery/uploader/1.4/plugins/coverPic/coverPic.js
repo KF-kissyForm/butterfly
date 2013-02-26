@@ -5,8 +5,7 @@
  */
 KISSY.add('gallery/uploader/1.4/plugins/coverPic/coverPic', function(S, Node,Base){
 
-    var $ = Node.all,
-        LOG_PRE = '[LineQueue: setMainPic] ';
+    var $ = Node.all;
 
     /**
      * 从多张图片中选择一张作为封面图片或者主图
@@ -19,9 +18,12 @@ KISSY.add('gallery/uploader/1.4/plugins/coverPic/coverPic', function(S, Node,Bas
     }
     S.extend(CoverPic, Base, /** @lends CoverPic.prototype*/{
         /**
-         * 运行组件
+         * 插件初始化
+         * @private
          */
-        render:function(){
+        pluginInitializer : function(uploader) {
+            if(!uploader) return false;
+            var self = this;
 
         }
     },{
