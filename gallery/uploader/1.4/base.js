@@ -289,7 +289,7 @@ KISSY.add('gallery/uploader/1.4/base', function (S, Base, Node, IframeType, Ajax
             var button = self.get('button');
             //如果是flash异步上传方案，增加swfUploaderBase的实例作为参数
             if (self.get('type') == UploaderBase.type.FLASH) {
-                S.mix(serverConfig, {swfUploaderBase:button.get('swfUploaderBase')});
+                S.mix(serverConfig, {swfUploader:button.get('swfUploader')});
             }
             serverConfig.fileDataName = self.get('name');
             var uploadType = new UploadType(serverConfig);
