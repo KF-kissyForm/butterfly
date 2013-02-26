@@ -289,7 +289,7 @@ KISSY.add('gallery/uploader/1.4/base', function (S, Base, Node, IframeType, Ajax
             var button = self.get('button');
             //如果是flash异步上传方案，增加swfUploaderBase的实例作为参数
             if (self.get('type') == UploaderBase.type.FLASH) {
-                S.mix(serverConfig, {swfUploaderBase:button.get('swfUploaderBase')});
+                S.mix(serverConfig, {swfUploader:button.get('swfUploader')});
             }
             serverConfig.fileDataName = self.get('name');
             var uploadType = new UploadType(serverConfig);
@@ -4677,9 +4677,8 @@ KISSY.add('gallery/uploader/1.4/type/base',function(S, Node, Base) {
  * @fileoverview flash上传方案，基于龙藏写的ajbridge内的uploader
  * @author 剑平（明河）<minghe36@126.com>
  **/
-KISSY.add('gallery/uploader/1.4/type/flash', function (S, Node, UploadType, swfUploader) {
+KISSY.add('gallery/uploader/1.4/type/flash', function (S, Node, UploadType) {
     var EMPTY = '', LOG_PREFIX = '[uploader-FlashType]:';
-    if(S.FlashType) return S.FlashType;
     /**
      * @name FlashType
      * @class flash上传方案，基于龙藏写的ajbridge内的uploader
@@ -4841,8 +4840,6 @@ KISSY.add('gallery/uploader/1.4/type/flash', function (S, Node, UploadType, swfU
          */
         uploadingId : {value : EMPTY}
     }});
-    //TODO:之所以污染KISSY，是因为ImageUploader和Uploader同时引用时存在bug
-    S.FlashType = FlashType;
     return FlashType;
 }, {requires:['node', './base']});/**
  * @fileoverview iframe方案上传

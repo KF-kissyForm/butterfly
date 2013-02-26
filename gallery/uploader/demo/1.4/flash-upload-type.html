@@ -37,8 +37,8 @@
             ]
         });
     }
-    S.use('gallery/uploader/1.4/index', function (S, ImageUploader) {
-        var flashUploader = new ImageUploader('#J_UploaderBtn', {
+    S.use('gallery/uploader/1.4/index', function (S, Uploader) {
+        var flashUploader = new Uploader('#J_UploaderBtn', {
             // 上传方式切成flash
             type:"flash",
             //手动控制flash的尺寸

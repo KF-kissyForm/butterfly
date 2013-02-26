@@ -385,7 +385,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             setter:function (v) {
                 if (S.isObject(v)) {
                     var self = this, uploadType = self.get('uploadType');
-                    uploadType.set('data', v);
+                    if(uploadType) uploadType.set('data', v);
                 }
                 return v;
             }
