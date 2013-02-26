@@ -60,7 +60,6 @@ KISSY.add('gallery/uploader/1.4/plugins/preview/preview', function (S, D, E,Base
         if (_mode != 'filter') {
             imgElem.src = data || _transparentImg;
         } else {
-            imgElem.src = _transparentImg;
             if (data) {
                 data = data.replace(/[)'"%]/g, function (s) {
                     return escape(escape(s));
