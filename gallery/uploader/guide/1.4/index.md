@@ -957,3 +957,17 @@ uploader.theme('#J_Ul',{
       </script>
 </ul>
 ```
+
+模版代码必须包含在<code>script</code>标签内
+
+```javascript
+<script type="text/uploader-theme">
+</script>
+```
+
+
+####如何自己写一套主题？
+
+//TODO:日后补充
+
+##插件说明
