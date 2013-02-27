@@ -2,46 +2,57 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<title>queue事件测试</title>
-<script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js" charset="utf-8"></script>
+<title>queue全部方法demo</title>
+<script src="http://a.tbcdn.cn/s/kissy/1.3.0/kissy-min.js" charset="utf-8"></script>
 </head>
 <body>
+<h2>queue全部方法demo</h2>
 <div class="grid">
-    <input class="g-u" id="J_QueueUploaderBtn" name="Filedata" type="image-uploader" value="上传图片"
-           action="upload.php" urlsInputName="imageUrls3" maxSize="500" max="4">
-    <input type="hidden" name="imageUrls3">
+    <input type="file" class="g-u" id="J_UploaderBtn" value="上传文件" name="Filedata" >
+    <input type="hidden" id="J_Urls" name="urls" value="" />
 </div>
-<ul id="J_QueueUploaderQueue" class="grid">
+<ul id="J_UploaderQueue">
 
 </ul>
-<input class="btn" id="J_Add" type="button" value="添加一个文件">
-<input class="btn" id="J_DelFirst" type="button" value="删除第一个文件">
-<input class="btn" id="J_ChangeStatus" type="button" value="改变第一个文件状态为success">
-<input class="btn" id="J_Clear" type="button" value="删除所有文件">
-<input class="btn" id="J_GetAll" type="button" value="获取所有文件id">
-<input class="btn" id="J_GetStatusFileIds" type="button" value="获取所有等待状态的文件id">
-<input class="btn" id="J_GetStatusFilesIndex" type="button" value="获取所有等待状态文件index">
+<p>
+    <input class="btn" id="J_Add" type="button" value="添加一个文件">
+    <input class="btn" id="J_DelFirst" type="button" value="删除第一个文件">
+    <input class="btn" id="J_Clear" type="button" value="删除所有文件">
+    <input class="btn" id="J_GetAll" type="button" value="获取所有文件id">
+    <input class="btn" id="J_GetStatusFileIds" type="button" value="获取所有等待状态的文件id">
+    <input class="btn" id="J_GetStatusFilesIndex" type="button" value="获取所有等待状态文件index">
+</p>
 
 <script type="text/javascript">
     var S = KISSY;
-    //包路径，实际使用请直接配置为"http://a.tbcdn.cn/s/kissy/"
-    var path = S.Config.debug && "../../../" || "http://a.tbcdn.cn/s/kissy/";
-    S.config({
-        packages:[
-            {
-                name:"gallery",
-                path:path,
-                charset:"utf-8"
-            }
-        ]
-    });
+    if (S.Config.debug) {
+        var srcPath = "../../../../";
+        S.config({
+            packages:[
+                {
+                    name:"gallery",
+                    path:srcPath,
+                    charset:"utf-8"
+                }
+            ]
+        });
+    }
     var $ = S.Node.all;
+    S.use('gallery/uploader/1.4/index', function (S, Uploader) {
+        var uploader = new Uploader('#J_UploaderBtn',{
+            action:"upload.php",
+            autoUpload:false
+        });
+        uploader.use('auth',{
+            //最多上传个数
+            max:3,
+            //文件最大允许大小
+            maxSize:500
+        });
 
-
-    KISSY.use('gallery/uploader/1.4/imageUploader', function (S, ImageUploader) {
-        var uploaderQueueTest = new ImageUploader('#J_QueueUploaderBtn','#J_QueueUploaderQueue');
-        uploaderQueueTest.on('render',function(ev){
-            var queue = ev.queue;
+        uploader.use('urlsInput',{target:'#J_Urls'});
+        uploader.on('themeRender',function(ev){
+            var queue = uploader.get('queue');
 
             $('#J_Add').on('click', function (ev) {
                 //测试文件数据
@@ -69,9 +80,6 @@
                 });
                 alert('所有文件id：' + ids);
             });
-            $('#J_ChangeStatus').on('click', function (ev) {
-                queue.fileStatus(0, 'success');
-            });
             $('#J_GetStatusFileIds').on('click', function (ev) {
                 var files = queue.getFiles('waiting'),
                         ids = [];
@@ -86,7 +94,10 @@
             })
 
         });
-        uploaderQueueTest.render();
+
+        uploader.theme('default',{
+            queueTarget:'#J_UploaderQueue'
+        });
     })
 
 </script>
