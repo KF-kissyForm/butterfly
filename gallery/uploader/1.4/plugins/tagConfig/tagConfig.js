@@ -1,5 +1,5 @@
 /**
- * @fileoverview 进度条集合
+ * @fileoverview 从input上拉取配置覆盖组件配置
  * @author 剑平（明河）<minghe36@126.com>
  **/
 KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, Base) {
@@ -9,7 +9,7 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
     var AUTH_OPTIONS = ['max','maxSize','allowRepeat','allowExts','required','widthHeight'];
     /**
      * @name TagConfig
-     * @class 进度条集合
+     * @class 从input上拉取配置覆盖组件配置
      * @since 1.4
      * @constructor
      * @extends Base
