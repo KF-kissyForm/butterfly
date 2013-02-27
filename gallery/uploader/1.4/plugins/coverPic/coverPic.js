@@ -28,7 +28,14 @@ KISSY.add('gallery/uploader/1.4/plugins/coverPic/coverPic', function(S, Node,Bas
         }
     },{
         ATTRS:/** @lends CoverPic.prototype*/{
-
+            /**
+             * ²å¼þÃû³Æ
+             * @type String
+             * @default urlsInput
+             */
+            pluginId:{
+                value:'coverPic'
+            }
         }
     });
 

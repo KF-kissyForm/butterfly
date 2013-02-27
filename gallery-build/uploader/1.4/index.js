@@ -1542,7 +1542,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             setter:function (v) {
                 if (S.isObject(v)) {
                     var self = this, uploadType = self.get('uploadType');
-                    uploadType.set('data', v);
+                    if(uploadType) uploadType.set('data', v);
                 }
                 return v;
             }
@@ -1897,18 +1897,6 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             var queue = uploader.get('queue');
             self._setSwfButtonExt();
             self._addUploaderAttrs();
-
-            //给uploader增加常用的max和required验证方法
-            uploader.testMax = function(){
-                return self.testMax();
-            };
-            uploader.testRequired = function(){
-                return self.testRequired();
-            };
-            uploader.test = function(){
-                return self.testMax() && self.testRequired();
-            };
-
             queue.on('add',function(ev){
                 var file = ev.file;
                 var isPass = self.testAllowExt(file);
@@ -2434,7 +2422,14 @@ KISSY.add('gallery/uploader/1.4/plugins/coverPic/coverPic', function(S, Node,Bas
         }
     },{
         ATTRS:/** @lends CoverPic.prototype*/{
-
+            /**
+             * ������
+             * @type String
+             * @default urlsInput
+             */
+            pluginId:{
+                value:'coverPic'
+            }
         }
     });
 
@@ -2792,7 +2787,6 @@ KISSY.add('gallery/uploader/1.4/plugins/preview/preview', function (S, D, E,Base
         if (_mode != 'filter') {
             imgElem.src = data || _transparentImg;
         } else {
-            imgElem.src = _transparentImg;
             if (data) {
                 data = data.replace(/[)'"%]/g, function (s) {
                     return escape(escape(s));
@@ -3241,7 +3235,7 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/progressBar',function(S, Node, B
     }});
     return ProgressBar;
 }, {requires : ['node','base']});/**
- * @fileoverview 进度条集合
+ * @fileoverview 从input上拉取配置覆盖组件配置
  * @author 剑平（明河）<minghe36@126.com>
  **/
 KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, Base) {
@@ -3251,7 +3245,7 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
     var AUTH_OPTIONS = ['max','maxSize','allowRepeat','allowExts','required','widthHeight'];
     /**
      * @name TagConfig
-     * @class 进度条集合
+     * @class 从input上拉取配置覆盖组件配置
      * @since 1.4
      * @constructor
      * @extends Base
@@ -3273,9 +3267,19 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
             if(!input) return false;
 
             self.set('input',input);
+
+            uploader.on('themeRender',function(){
+                self.cover();
+            })
+        },
+        /**
+         * 覆盖组件配置
+         */
+        cover:function(){
+            var self = this;
             self._setUploaderConfig();
             self._setAuthConfig();
-
+            return self;
         },
         /**
          * 设置上传配置
@@ -3330,12 +3334,12 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
                             break;
                     }
                     auth.set(option,value);
-                    //配置验证消息
-                    //demo:max-msg="每次最多上传{max}个文件！"
-                    msg = $input.attr(option + '-' + msg);
-                    if(msg){
-                        auth.msg(option,msg);
-                    }
+                }
+                //配置验证消息
+                //demo:max-msg="每次最多上传{max}个文件！"
+                msg = $input.attr(option + '-msg');
+                if(msg){
+                    auth.msg(option,msg);
                 }
             })
         }
@@ -3363,6 +3367,7 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
  * changes:
  * 明河：1.4
  *           - 新增模块，用于解析按钮标签上的配置
+ *           - 修正auth的msg被主题覆盖的问题，该组件必须在加载组件时才触发
  *//**
  * @fileoverview 存储文件路径信息的隐藏域
  * @author: 剑平（明河）<minghe36@126.com>
@@ -4135,8 +4140,12 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          */
         _addThemeCssName:function () {
             var self = this, name = self.get('name'),
-                $queueTarget = $(self.get('queueTarget')),
+                $queueTarget = self.get('queueTarget'),
                 $btn = $(self.get('buttonTarget'));
+            if(!$queueTarget.length){
+                S.log('不存在容器目标！');
+                return false;
+            }
             if (name == EMPTY) return false;
             if($queueTarget.length)  $queueTarget.addClass('ks-uploader-queue ' + name + classSuffix.QUEUE);
             $btn.addClass(name + classSuffix.BUTTON);
@@ -4194,6 +4203,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             //处理消息层的显影
             var status = file.status;
             var $target = file.target;
+            if(!$target.length) return false;
             var $status = $target.all('.'+status+'-status');
             if($status.length){
                 $status.show();
@@ -4213,7 +4223,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
         _hideStatusDiv:function(file){
             if(!S.isObject(file)) return false;
             var $target = file.target;
-            $target.all('.status').hide();
+            $target.length && $target.all('.status').hide();
         },
         /**
          * 加载css文件
@@ -4354,10 +4364,15 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
         },
         /**
          * 队列目标元素（一般是ul），队列的实例化过程在Theme中
-         * @type String
+         * @type NodeList
          * @default ""
          */
-        queueTarget:{value:EMPTY},
+        queueTarget:{
+            value:EMPTY,
+            getter:function(v){
+                return $(v);
+            }
+        },
         /**
          * Queue（上传队列）实例
          * @type Queue
@@ -4382,6 +4397,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
  *           - 增加从html拉取模版的功能
  *           - 增加从外部快速覆盖主题监听器的功能
  *           - 增加主题配置验证消息的功能
+ *           - queueTarget优化
  *//**
  * @fileoverview ajax方案上传
  * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
