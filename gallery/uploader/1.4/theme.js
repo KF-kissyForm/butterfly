@@ -128,8 +128,12 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          */
         _addThemeCssName:function () {
             var self = this, name = self.get('name'),
-                $queueTarget = $(self.get('queueTarget')),
+                $queueTarget = self.get('queueTarget'),
                 $btn = $(self.get('buttonTarget'));
+            if(!$queueTarget.length){
+                S.log('不存在容器目标！');
+                return false;
+            }
             if (name == EMPTY) return false;
             if($queueTarget.length)  $queueTarget.addClass('ks-uploader-queue ' + name + classSuffix.QUEUE);
             $btn.addClass(name + classSuffix.BUTTON);
@@ -187,6 +191,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             //处理消息层的显影
             var status = file.status;
             var $target = file.target;
+            if(!$target.length) return false;
             var $status = $target.all('.'+status+'-status');
             if($status.length){
                 $status.show();
@@ -206,7 +211,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
         _hideStatusDiv:function(file){
             if(!S.isObject(file)) return false;
             var $target = file.target;
-            $target.all('.status').hide();
+            $target.length && $target.all('.status').hide();
         },
         /**
          * 加载css文件
@@ -347,10 +352,15 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
         },
         /**
          * 队列目标元素（一般是ul），队列的实例化过程在Theme中
-         * @type String
+         * @type NodeList
          * @default ""
          */
-        queueTarget:{value:EMPTY},
+        queueTarget:{
+            value:EMPTY,
+            getter:function(v){
+                return $(v);
+            }
+        },
         /**
          * Queue（上传队列）实例
          * @type Queue
@@ -375,4 +385,5 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
  *           - 增加从html拉取模版的功能
  *           - 增加从外部快速覆盖主题监听器的功能
  *           - 增加主题配置验证消息的功能
+ *           - queueTarget优化
  */
