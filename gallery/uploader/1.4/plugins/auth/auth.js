@@ -53,18 +53,6 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             var queue = uploader.get('queue');
             self._setSwfButtonExt();
             self._addUploaderAttrs();
-
-            //给uploader增加常用的max和required验证方法
-            uploader.testMax = function(){
-                return self.testMax();
-            };
-            uploader.testRequired = function(){
-                return self.testRequired();
-            };
-            uploader.test = function(){
-                return self.testMax() && self.testRequired();
-            };
-
             queue.on('add',function(ev){
                 var file = ev.file;
                 var isPass = self.testAllowExt(file);

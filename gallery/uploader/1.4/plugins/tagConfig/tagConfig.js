@@ -31,9 +31,19 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
             if(!input) return false;
 
             self.set('input',input);
+
+            uploader.on('themeRender',function(){
+                self.cover();
+            })
+        },
+        /**
+         * 覆盖组件配置
+         */
+        cover:function(){
+            var self = this;
             self._setUploaderConfig();
             self._setAuthConfig();
-
+            return self;
         },
         /**
          * 设置上传配置
@@ -88,12 +98,12 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
                             break;
                     }
                     auth.set(option,value);
-                    //配置验证消息
-                    //demo:max-msg="每次最多上传{max}个文件！"
-                    msg = $input.attr(option + '-' + msg);
-                    if(msg){
-                        auth.msg(option,msg);
-                    }
+                }
+                //配置验证消息
+                //demo:max-msg="每次最多上传{max}个文件！"
+                msg = $input.attr(option + '-msg');
+                if(msg){
+                    auth.msg(option,msg);
                 }
             })
         }
@@ -121,4 +131,5 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
  * changes:
  * 明河：1.4
  *           - 新增模块，用于解析按钮标签上的配置
+ *           - 修正auth的msg被主题覆盖的问题，该组件必须在加载组件时才触发
  */
