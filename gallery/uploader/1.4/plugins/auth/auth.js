@@ -139,7 +139,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             return type == uploaderType;
         },
         /**
-         * 检验是否必须上传一个文件
+         * 检验是否已经上传了至少一个文件
          * @return {Boolean}
          */
         testRequired:function(){

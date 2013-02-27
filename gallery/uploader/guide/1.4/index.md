@@ -76,35 +76,28 @@ Uploader是非常强大的异步文件上传组件，支持ajax、iframe、flash
 
 <ul class="thumbnails">
     <li class="span3">
-        <a href="theme-imageUploader.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/theme-imageUploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">
                 <h4>主题：imageUploader</h4>
             </div>
         </a>
     </li>
     <li class="span3">
-        <a href="theme-refundUploader.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/theme-refundUploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">
                 <h4>主题：refundUploader</h4>
             </div>
         </a>
     </li>
     <li class="span3">
-        <a href="theme-loveUploader.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/theme-loveUploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">
                 <h4>主题：loveUploader</h4>
             </div>
         </a>
     </li>
     <li class="span3">
-        <a href="theme-ershouUploader.html" class="demo-item" target="_blank">
-            <div class="thumbnail">
-                <h4>主题：ershouUploader</h4>
-            </div>
-        </a>
-    </li>
-    <li class="span3">
-        <a href="theme-singleImageUploader.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/theme-singleImageUploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">
                 <h4>singleImageUploader</h4>
             </div>
@@ -274,62 +267,7 @@ html结构上也发生了变化，模拟按钮上增加了<code>defaultTheme-but
 * 第一个参数为插件名，比如加载验证插件就是<code>auth</code>
 * 第二个参数为插件配置
 
-auth插件支持的验证规则如下：
-
-<table class="table table-bordered table-striped">
-    <thead>
-    <tr>
-        <th style="width: 100px;">规则名</th>
-        <th style="width: 200px;">默认值</th>
-        <th>描述</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr>
-        <td>allowExts</td>
-        <td>"jpg,jpeg,png,gif,bmp"</td>
-        <td>
-            图片格式验证控制
-        </td>
-    </tr>
-    <tr>
-        <td>required</td>
-        <td>true</td>
-        <td>
-            必须至少上传一个文件
-            <div class="alert alert-info">组件默认不触发，可以使用uploader的testRequired()方法手动验证。</div>
-        </td>
-    </tr>
-    <tr>
-        <td>max</td>
-        <td>3</td>
-        <td>
-            最多上传N个图片，当达到N个图片后按钮会增加禁用样式<code>uploader-button-disabled</code>，用户可以通过这个样式名定制需要的置灰样式。
-            <div class="alert alert-info">可以用uploader.get('max')来获取该配置项值。</div>
-        </td>
-    </tr>
-    <tr>
-        <td>maxSize</td>
-        <td>1024</td>
-        <td>
-            单图片最大允许上传的文件大小，单位是<code>KB</code>
-            <div class="alert alert-info">如果是iframe上传方式，此验证无效。</div>
-        </td>
-    </tr>
-    <tr>
-        <td>allowRepeat</td>
-        <td>false</td>
-        <td>是否允许多次上传同一个文件
-        </td>
-    </tr>
-        <tr>
-            <td>widthHeight</td>
-            <td>"160x160"</td>
-            <td>v1.4新增的验证规则，用于限制图片尺寸。
-            </td>
-        </tr>
-    </tbody>
-</table>
+auth插件支持的验证规则，请看文章的插件部分
 
 ### 6.存储服务器上传成功后返回的url
 
@@ -966,3 +904,127 @@ uploader.theme('#J_Ul',{
 //TODO:日后补充
 
 ##插件说明
+
+###插件的使用
+
+以加载上传验证插件为例：
+
+```javascript
+    uploader.use('auth',{
+        max:3,
+        maxSize:100
+    });
+```
+
+使用<code>use()</code>方法会加载uploader内置组件，会去[gallery/uploader/1.4/plugins](https://github.com/KF-kissyForm/butterfly/tree/master/gallery/uploader/1.4/plugins)目录下查找。
+
+**如何获取插件呢？**
+
+```javascript
+    var auth = uploader.getPlugin('auth');
+    //只允许上传一个文件
+    auth.set('max',1);
+```
+
+**如何自己写一个uploader的插件呢？**
+
+//TODO:日后补充
+
+###auth：表单验证
+
+####配置项（属性）
+
+<table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th style="width: 100px;">属性名</th>
+            <th style="width: 50px;">类型</th>
+            <th style="width: 130px;">默认值</th>
+            <th style="width: 200px;">是否只读</th>
+            <th>描述</th>
+        </tr>
+        </thead>
+        <tbody>
+             <tr>
+                 <td>allowExts</td>
+                 <td>String</td>
+                 <td>''</td>
+                 <td>读/写</td>
+                 <td> 图片格式验证控制 </td>
+             </tr>
+             <tr>
+                 <td>required</td>
+                 <td>Boolean</td>
+                 <td>''</td>
+                 <td>读/写</td>
+                 <td> 必须至少上传一个文件 <div class="alert alert-info">组件默认不触发，可以使用uploader的testRequired()方法手动验证。</div></td>
+             </tr>
+             <tr>
+                 <td>max</td>
+                 <td>Number</td>
+                 <td>''</td>
+                 <td>读/写</td>
+                 <td>最多上传N个图片，当达到N个图片后按钮会增加禁用样式<code>uploader-button-disabled</code>，用户可以通过这个样式名定制需要的置灰样式。 </td>
+             </tr>
+             <tr>
+                 <td>maxSize</td>
+                 <td>Number</td>
+                 <td>''</td>
+                 <td>读/写</td>
+                 <td>单图片最大允许上传的文件大小，单位是<code>KB</code> <div class="alert alert-info">如果是iframe上传方式，此验证无效。</div></td>
+             </tr>
+             <tr>
+                 <td>allowRepeat</td>
+                 <td>Boolean</td>
+                 <td>''</td>
+                 <td>读/写</td>
+                 <td>是否允许多次上传同一个文件</td>
+             </tr>
+             <tr>
+                 <td>widthHeight</td>
+                 <td>String</td>
+                 <td>''</td>
+                 <td>读/写</td>
+                 <td>v1.4新增的验证规则，用于限制图片尺寸，比如"160x160"，留意IE下可能不起作用 </td>
+             </tr>
+             <tr>
+                 <td>msg</td>
+                 <td>Object</td>
+                 <td>{}</td>
+                 <td>读/写</td>
+                 <td>验证的消息集合，请使用msg()方法来设置消息</td>
+             </tr>
+        </tbody>
+</table>
+
+####auth的方法
+
+**msg(rule,msg)**：获取/设置验证消息
+
+```javascript
+    var auth = uploader.getPlugin('auth');
+    //设置max规则消息
+    auth.msg('max','每次最多上传{max}个文件！');
+    //获取max消息
+    S.log(auth.msg('max'));
+```
+
+**testRequired()**：检验是否已经上传了至少一个文件
+
+```javascript
+    var auth = uploader.getPlugin('auth');
+    var isPass = auth.testRequired();
+    S.log(isPass);
+```
+
+其他的规则一样拥有test方法（"test+规则名()"）。
+
+####auth的事件
+
+当校验不通过是auth会触发uploader的error事件：
+
+```javascript
+uploader.on('error',function(ev){
+    S.log(ev.rule);
+})
+```
