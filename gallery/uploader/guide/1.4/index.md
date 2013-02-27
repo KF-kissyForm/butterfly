@@ -26,52 +26,47 @@ Uploader是非常强大的异步文件上传组件，支持ajax、iframe、flash
 
 <ul class="thumbnails">
     <li class="span3">
-        <a href="./js-config-use.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/js-config-use.html" class="demo-item" target="_blank">
             <div class="thumbnail">简单demo：js配置上传组件</div>
         </a>
     </li>
     <li class="span3">
-        <a href="./pro-config-use.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/pro-config-use.html" class="demo-item" target="_blank">
             <div class="thumbnail">简单demo：属性配置上传组件</div>
         </a>
     </li>
     <li class="span3">
-        <a href="./auth.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/auth.html" class="demo-item" target="_blank">
             <div class="thumbnail">上传验证控制的demo</div>
         </a>
     </li>
     <li class="span3">
-        <a href="./events.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/events.html" class="demo-item" target="_blank">
             <div class="thumbnail">组件全部事件演示</div>
         </a>
     </li>
     <li class="span3">
-        <a href="default-data-show.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/default-data-show.html" class="demo-item" target="_blank">
             <div class="thumbnail">渲染默认队列数据的demo</div>
         </a>
     </li>
     <li class="span3">
-        <a href="queue.html" class="demo-item" target="_blank">
-            <div class="thumbnail">图片队列控制的demo</div>
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/queue.html" class="demo-item" target="_blank">
+            <div class="thumbnail">队列全部方法演示</div>
         </a>
     </li>
     <li class="span3">
-        <a href="flash-upload-type.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/flash-upload-type.html" class="demo-item" target="_blank">
             <div class="thumbnail">只使用flash上传的demo</div>
         </a>
     </li>
     <li class="span3">
-        <a href="iframe-upload-type.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/iframe-upload-type.html" class="demo-item" target="_blank">
             <div class="thumbnail">只使用iframe上传的demo</div>
         </a>
     </li>
     <li class="span3">
-        <a href="" class="demo-item" target="_blank">
-            <div class="thumbnail">常用属性控制</div>
-        </a>
-    </li>
-    <li class="span3">
-        <a href="" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/method-uploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">常用方法控制</div>
         </a>
     </li>
