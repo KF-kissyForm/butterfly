@@ -1028,3 +1028,94 @@ uploader.on('error',function(ev){
     S.log(ev.rule);
 })
 ```
+
+###urlsInput：存储服务器返回的url并可以渲染默认数据
+
+使用<code>urlsInput</code>插件，uploader会自动将服务器返回的url插入到一个input上。
+
+需要有个目标容器：
+
+```javascript
+    <input type="hidden" id="J_Urls" name="refundImageUrls">
+```
+
+
+```javascript
+    uploader.use('urlsInput',{target:'.J_Urls'});
+```
+
+**什么是渲染默认数据？**
+
+即目标容器已经存在url时，组件会自动抓取url渲染到队列中，比如：
+
+```javascript
+    <input type="hidden" id="J_Urls" name="refundImageUrls" value="http://www.36ria.com/wp-content/uploads/2013/02/ant-300x140.png">
+```
+
+```javascript
+    uploader.use('urlsInput',{target:'.J_Urls',autoRestore:true});
+```
+
+<code>autoRestore</code>默认为true，如果你不希望渲染默认数据，设置为false。
+
+
+####配置项（属性）
+
+<table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th style="width: 100px;">属性名</th>
+            <th style="width: 50px;">类型</th>
+            <th style="width: 130px;">默认值</th>
+            <th style="width: 200px;">是否只读</th>
+            <th>描述</th>
+        </tr>
+        </thead>
+        <tbody>
+             <tr>
+                 <td>target</td>
+                 <td>String</td>
+                 <td>''</td>
+                 <td>读</td>
+                 <td>用于存储文件路径的目标容器</td>
+             </tr>
+             <tr>
+                 <td>urls</td>
+                 <td>Array</td>
+                 <td>[]</td>
+                 <td>读</td>
+                 <td>容器内的所有路径</td>
+             </tr>
+             <tr>
+                 <td>autoRestore</td>
+                 <td>Boolean</td>
+                 <td>true</td>
+                 <td>读</td>
+                 <td>是否自动渲染默认数据</td>
+             </tr>
+             <tr>
+                 <td>split</td>
+                 <td>String</td>
+                 <td>","</td>
+                 <td>读/写</td>
+                 <td>多个路径间的分隔符</td>
+             </tr>
+        </tbody>
+</table>
+
+####urlsInput的方法
+
+
+**add(url)**：向input添加路径
+
+```javascript
+    var urlsInput = uploader.getPlugin('urlsInput');
+    urlsInput.add('http://www.36ria.com/test.jpg');
+```
+
+**remove(url)**：删除input内的指定路径
+
+**isExist(url)**：是否已经存在指定路径
+
+**restore()**：添加默认数据到队列
+
