@@ -31,7 +31,7 @@ Uploader是非常强大的异步文件上传组件，支持ajax、iframe、flash
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/pro-config-use.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/demo/1.4/tag-config-use.html" class="demo-item" target="_blank">
             <div class="thumbnail">简单demo：属性配置上传组件</div>
         </a>
     </li>
@@ -905,7 +905,7 @@ uploader.theme('#J_Ul',{
 
 ##插件说明
 
-###插件的使用
+插件的使用
 
 以加载上传验证插件为例：
 
@@ -917,6 +917,14 @@ uploader.theme('#J_Ul',{
 ```
 
 使用<code>use()</code>方法会加载uploader内置组件，会去[gallery/uploader/1.4/plugins](https://github.com/KF-kissyForm/butterfly/tree/master/gallery/uploader/1.4/plugins)目录下查找。
+
+主题也是可以加载uploader插件的：
+
+```javascript
+    uploader.theme('default',{
+        use:'auth'
+    });
+```
 
 **如何获取插件呢？**
 
@@ -1118,4 +1126,84 @@ uploader.on('error',function(ev){
 **isExist(url)**：是否已经存在指定路径
 
 **restore()**：添加默认数据到队列
+
+###tagConfig：从input上拉取配置覆盖组件配置
+
+如果你希望可以在html配置组件属性，需要use("tagConfig")。
+
+demo可以[猛击这里](http://butterfly.36ria.com/uploader/demo/1.4/tag-config-use.html)。
+
+```xml
+    <input class="g-u" id="J_UploaderBtn" name="Filedata" type="file" value="上传图片"
+           action="upload.php" postData='{"author":"minghe"}' max="3" maxSize="500">
+```
+
+**提醒**：html中的配置会覆盖js的配置，这跟1.4前的逻辑相反。
+
+**提醒**：postData等价于js配置中的data。
+
+tagConfig的配置覆盖会在主题初始化成功后才执行，如果你的uploader不使用主题，请手动调用覆盖方法：
+
+```javascript
+    var tagConfig = uploader.getPlugin('tagConfig');
+    tagConfig.cover();
+```
+
+###proBars：进度条集合
+
+**提醒**：proBars是队列中所有的进度条集合，插件还有个ProgressBar子类，对应每个文件的进度条。
+
+进度条插件依赖主题模版中的进度条容器：
+
+```xml
+<div class="J_ProgressBar_{id}">上传中...</div>
+```
+
+####ProBars的配置项
+
+<table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th style="width: 100px;">属性名</th>
+            <th style="width: 50px;">类型</th>
+            <th style="width: 130px;">默认值</th>
+            <th style="width: 200px;">是否只读</th>
+            <th>描述</th>
+        </tr>
+        </thead>
+        <tbody>
+             <tr>
+                 <td>width</td>
+                 <td>Number</td>
+                 <td>'auto'</td>
+                 <td>读/写</td>
+                 <td>进度条的宽度</td>
+             </tr>
+              <tr>
+                  <td>bars</td>
+                  <td>Object</td>
+                  <td>{}</td>
+                  <td>读</td>
+                  <td>进度条实例集合</td>
+              </tr>
+             <tr>
+                 <td>isHide</td>
+                 <td>Boolean</td>
+                 <td>true</td>
+                 <td>读/写</td>
+                 <td>进度走到100%时是否隐藏</td>
+             </tr>
+             <tr>
+                 <td>speed</td>
+                 <td>String</td>
+                 <td>0.2</td>
+                 <td>读/写</td>
+                 <td>进度条跑动速度控制</td>
+             </tr>
+        </tbody>
+</table>
+
+####ProBars的方法
+
+**add(fileId)** ：向集合添加一个进度条
 

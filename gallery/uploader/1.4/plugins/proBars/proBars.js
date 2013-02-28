@@ -94,7 +94,8 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/proBars',function(S, Node, Base,
             var self = this;
             var $target = $('.'+PRE+fileId);
             var isHide = self.get('isHide');
-            var progressBar = new ProgressBar($target,{width:self.get('width')});
+            var speed = self.get('speed');
+            var progressBar = new ProgressBar($target,{width:self.get('width'),speed:speed});
             if(isHide){
                 progressBar.on('change',function(ev){
                     //百分百进度隐藏进度条
@@ -125,14 +126,15 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/proBars',function(S, Node, Base,
         width : { value:'auto' },
         /**
          * 进度走到100%时是否隐藏
+         * @type Boolean
+         * @default true
          */
         isHide : { value:true },
         /**
-         * 显隐动画的速度
+         * 进度条跑动速度控制
+         * @type Number
+         * @default 0.2
          */
-        duration : {
-          value : 0.3
-        },
         speed : {value : 0.2}
     }});
     return ProBars;
