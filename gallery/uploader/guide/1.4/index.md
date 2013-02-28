@@ -1207,3 +1207,15 @@ tagConfig的配置覆盖会在主题初始化成功后才执行，如果你的up
 
 **add(fileId)** ：向集合添加一个进度条
 
+###preview：图片预览插件
+
+**提醒**：该插件在IE10下无效，无效的情况下，主题会使用服务器返回的路径来渲染出图片。
+
+**preview(fileInput, imgElem)**：preview只有这个方法，用于渲染本地图片。
+
+```javascript
+    var preview = uploader.getPlugin('preview');
+    var fileInput = uploader.get('fileInput');
+    preview.preview(fileInput,$img);
+```
+
