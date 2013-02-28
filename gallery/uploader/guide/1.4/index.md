@@ -1219,3 +1219,35 @@ tagConfig的配置覆盖会在主题初始化成功后才执行，如果你的up
     preview.preview(fileInput,$img);
 ```
 
+###filedrop：文件拖拽上传插件
+
+####Filedrop的配置项
+
+<table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th style="width: 100px;">属性名</th>
+            <th style="width: 50px;">类型</th>
+            <th style="width: 130px;">默认值</th>
+            <th style="width: 200px;">是否只读</th>
+            <th>描述</th>
+        </tr>
+        </thead>
+        <tbody>
+             <tr>
+                 <td>target</td>
+                 <td>NodeList</td>
+                 <td>''</td>
+                 <td>读</td>
+                 <td>指向模拟按钮</td>
+             </tr>
+        </tbody>
+</table>
+
+####Filedrop的方法
+
+**show()/hide()**：显示和隐藏拖拽区域
+
+###imageZoom：图片放大插件
+
+利用image-dd组件来实现图片放大。

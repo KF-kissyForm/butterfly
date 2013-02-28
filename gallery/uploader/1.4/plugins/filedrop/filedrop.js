@@ -93,7 +93,6 @@ KISSY.add('gallery/uploader/1.4/plugins/filedrop/filedrop', function (S, Node, B
                 html = S.substitute(self.get('tpl')[mode], {name:self.get('name')}),
                 dropContainer = $(html),
                 buttonWrap = dropContainer.all('.J_ButtonWrap');
-            // console.log(buttonWrap);
             dropContainer.appendTo(target);
             dropContainer.on('dragover', function (ev) {
                 ev.stopPropagation();
@@ -125,7 +124,8 @@ KISSY.add('gallery/uploader/1.4/plugins/filedrop/filedrop', function (S, Node, B
          * @param ev
          */
         _clickHandler:function(ev){
-            var self = this,$target = $(ev.target),uploader = self.get('uploader'),
+            var self = this,
+                uploader = self.get('uploader'),
                 button = uploader.get('button'),
                 $input = button.get('fileInput');
             //触发input的选择文件
@@ -160,8 +160,16 @@ KISSY.add('gallery/uploader/1.4/plugins/filedrop/filedrop', function (S, Node, B
             pluginId:{
                 value:'filedrop'
             },
+            /**
+             * 指向模拟按钮
+             * @type NodeList
+             * @default ''
+             */
             target:{
-                value:EMPTY
+                value:EMPTY,
+                getter:function(v){
+                    return $(v);
+                }
             },
             uploader:{value:EMPTY},
             dropContainer:{
@@ -191,21 +199,7 @@ KISSY.add('gallery/uploader/1.4/plugins/filedrop/filedrop', function (S, Node, B
                         '</div>'
                 }
             },
-            name:{
-                value:'',
-                setter:function (v) {
-                }
-            },
-            disabled:{
-                value:false,
-                setter:function (v) {
-                    this._setDisabled(v);
-                    return v;
-                }
-            },
-            cls:{
-                disabled:'drop-area-disabled'
-            }
+            name:{ value:'' }
         }
     });
 
