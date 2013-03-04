@@ -59,4 +59,9 @@ KISSY.add('gallery/uploader/1.4/plugins/ajbridge/uploader', function(S,flash,A) 
     Uploader.version = '1.0.1';
     A.Uploader = Uploader;
     return A.Uploader;
-},{ requires:["flash","./ajbridge"] });
+},{ requires:["gallery/flash/1.0/","./ajbridge"] });
+/**
+ * changes:
+ * 明河：1.4
+ *           - flash模块改成gallery/flash/1.0/，flash模块1.3不再存在
+ */

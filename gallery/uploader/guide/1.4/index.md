@@ -10,6 +10,7 @@ Uploader是非常强大的异步文件上传组件，支持ajax、iframe、flash
 * 基于：kissy1.3（兼容kissy1.2，不兼容kissy1.1.6）
 * 作者：明河（剑平）、紫英、飞绿，感谢苏河、溪夏、正豪等主题和插件作者
 
+flash上传感谢龙藏的<code>ajbridge</code>组件。
 
 #### ImageUploader的特性
 

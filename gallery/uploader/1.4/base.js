@@ -76,78 +76,6 @@ KISSY.add('gallery/uploader/1.4/base', function (S, Base, Node, IframeType, Ajax
             ERROR:'error'
         }
     });
-    /**
-     * @name UploaderBase#select
-     * @desc  选择完文件后触发
-     * @event
-     * @param {Array} ev.files 文件完文件后返回的文件数据
-     */
-
-    /**
-     * @name UploaderBase#start
-     * @desc  开始上传后触发
-     * @event
-     * @param {Number} ev.index 要上传的文件在队列中的索引值
-     * @param {Object} ev.file 文件数据
-     */
-
-    /**
-     * @name UploaderBase#progress
-     * @desc  正在上传中时触发，这个事件在iframe上传方式中不存在
-     * @event
-     * @param {Object} ev.file 文件数据
-     * @param {Number} ev.loaded  已经加载完成的字节数
-     * @param {Number} ev.total  文件总字节数
-     */
-
-    /**
-     * @name UploaderBase#complete
-     * @desc  上传完成（在上传成功或上传失败后都会触发）
-     * @event
-     * @param {Number} ev.index 上传中的文件在队列中的索引值
-     * @param {Object} ev.file 文件数据
-     * @param {Object} ev.result 服务器端返回的数据
-     */
-
-    /**
-     * @name UploaderBase#success
-     * @desc  上传成功后触发
-     * @event
-     * @param {Number} ev.index 上传中的文件在队列中的索引值
-     * @param {Object} ev.file 文件数据
-     * @param {Object} ev.result 服务器端返回的数据
-     */
-
-    /**
-     * @name UploaderBase#error
-     * @desc  上传失败后触发
-     * @event
-     * @param {Number} ev.index 上传中的文件在队列中的索引值
-     * @param {Object} ev.file 文件数据
-     * @param {Object} ev.result 服务器端返回的数据
-     * @param {Object} ev.status 服务器端返回的状态码，status如果是-1，说明是前端验证返回的失败
-     */
-
-    /**
-     * @name UploaderBase#cancel
-     * @desc  取消上传后触发
-     * @event
-     * @param {Number} ev.index 上传中的文件在队列中的索引值
-     */
-
-    /**
-     * @name UploaderBase#uploadFiles
-     * @desc  批量上传结束后触发
-     * @event
-     */
-
-    /**
-     * @name UploaderBase#restore
-     * @desc 添加默认数据到队列后触发
-     * @event
-     */
-
-        //继承于Base，属性getter和setter委托于Base处理
     S.extend(UploaderBase, Base, /** @lends UploaderBase.prototype*/{
         /**
          * 上传指定队列索引的文件
@@ -298,6 +226,7 @@ KISSY.add('gallery/uploader/1.4/base', function (S, Base, Node, IframeType, Ajax
             uploadType.on(uploaderTypeEvent.SUCCESS, self._uploadCompleteHanlder, self);
             uploadType.on(uploaderTypeEvent.ERROR, function (ev) {
                 self.fire(event.ERROR, {status:ev.status, result:ev.result});
+                self._continueUpload();
             }, self);
             //监听上传器上传进度事件
             if (uploaderTypeEvent.PROGRESS) uploadType.on(uploaderTypeEvent.PROGRESS, self._uploadProgressHandler, self);
@@ -562,4 +491,5 @@ KISSY.add('gallery/uploader/1.4/base', function (S, Base, Node, IframeType, Ajax
  * 明河：1.4
  *           - Uploader上传组件的核心部分
  *           - 去掉 S.convertByteSize
+ *           - 修正上传失败后无法继续上传其他文件的bug
  */
