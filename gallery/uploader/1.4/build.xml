@@ -10,7 +10,7 @@
     <!--合并源码文件，排除模板js-->
     <target name="concat">
         <concat destfile="index-pkg.js" encoding="${charset}" outputencoding="${charset}" overwrite="true">
-            <fileset dir="${src.dir}" includes="**/*.js" excludes="themes/**/*.js"/>
+            <fileset dir="${src.dir}" includes="**/*.js" excludes="themes/**/*.js,guide/**/*.js,demo/**/*.js"/>
             <filterchain>
                 <deletecharacters chars="&#xFEFF;"/>
             </filterchain>
