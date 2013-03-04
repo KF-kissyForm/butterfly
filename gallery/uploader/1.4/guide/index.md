@@ -27,47 +27,47 @@ flash上传感谢龙藏的<code>ajbridge</code>组件。
 
 <ul class="thumbnails">
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/js-config-use.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/js-config-use.html" class="demo-item" target="_blank">
             <div class="thumbnail">简单demo：js配置上传组件</div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/tag-config-use.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/tag-config-use.html" class="demo-item" target="_blank">
             <div class="thumbnail">简单demo：属性配置上传组件</div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/auth.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/auth.html" class="demo-item" target="_blank">
             <div class="thumbnail">上传验证控制的demo</div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/events.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/events.html" class="demo-item" target="_blank">
             <div class="thumbnail">组件全部事件演示</div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/default-data-show.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/default-data-show.html" class="demo-item" target="_blank">
             <div class="thumbnail">渲染默认队列数据的demo</div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/queue.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/queue.html" class="demo-item" target="_blank">
             <div class="thumbnail">队列全部方法演示</div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/flash-upload-type.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/flash-upload-type.html" class="demo-item" target="_blank">
             <div class="thumbnail">只使用flash上传的demo</div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/iframe-upload-type.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/iframe-upload-type.html" class="demo-item" target="_blank">
             <div class="thumbnail">只使用iframe上传的demo</div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/method-uploader.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/method-uploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">常用方法控制</div>
         </a>
     </li>
@@ -77,28 +77,28 @@ flash上传感谢龙藏的<code>ajbridge</code>组件。
 
 <ul class="thumbnails">
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/theme-imageUploader.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/theme-imageUploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">
                 <h4>主题：imageUploader</h4>
             </div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/theme-refundUploader.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/theme-refundUploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">
                 <h4>主题：refundUploader</h4>
             </div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/theme-loveUploader.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/theme-loveUploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">
                 <h4>主题：loveUploader</h4>
             </div>
         </a>
     </li>
     <li class="span3">
-        <a href="http://butterfly.36ria.com/uploader/demo/1.4/theme-singleImageUploader.html" class="demo-item" target="_blank">
+        <a href="http://butterfly.36ria.com/uploader/1.4/demo/theme-singleImageUploader.html" class="demo-item" target="_blank">
             <div class="thumbnail">
                 <h4>singleImageUploader</h4>
             </div>
@@ -1132,7 +1132,7 @@ uploader.on('error',function(ev){
 
 如果你希望可以在html配置组件属性，需要use("tagConfig")。
 
-demo可以[猛击这里](http://butterfly.36ria.com/uploader/demo/1.4/tag-config-use.html)。
+demo可以[猛击这里](http://butterfly.36ria.com/uploader/1.4/demo/tag-config-use.html)。
 
 ```xml
     <input class="g-u" id="J_UploaderBtn" name="Filedata" type="file" value="上传图片"
