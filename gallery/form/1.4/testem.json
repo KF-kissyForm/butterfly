@@ -1,8 +1,0 @@
-{
-    "framework": "jasmine",
-    "src_files":[
-          "spec/fixture/*.html",
-          "spec/*.js"
-    ],
-    "test_page": "tests.html"
-}
