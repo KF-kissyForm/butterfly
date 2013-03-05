@@ -171,14 +171,9 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          */
         _renderHandler:function(handlerName,ev){
             var self = this;
-            var extend = self.get('extend');
             var handler = self[handlerName];
             self._setStatusVisibility(ev.file);
-            if(S.isObject(extend) && S.isFunction(extend[handlerName])){
-                extend[handlerName].call(self,ev);
-            }else{
-                handler && handler.call(self,ev);
-            }
+            handler && handler.call(self,ev);
         },
         /**
          * 设置各个状态下的消息可见性
@@ -325,23 +320,11 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
         */
         use:{value:EMPTY},
         /**
-         * css模块路径
-         * @type String
-         * @default ""
-         */
-        cssUrl:{value:EMPTY},
-        /**
          * 主题模版
          * @type String
          * @default ""
          */
         fileTpl:{value:EMPTY },
-        /**
-        * 覆盖主题方法集合
-        * @type Object
-        * @default ''
-        */
-        extend:{value:EMPTY},
         /**
          * 验证消息
          * @since 1.4
@@ -386,4 +369,5 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
  *           - 增加从外部快速覆盖主题监听器的功能
  *           - 增加主题配置验证消息的功能
  *           - queueTarget优化
+ *           - 去掉extend参数
  */
