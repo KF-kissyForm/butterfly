@@ -309,4 +309,4 @@ KISSY.add(function (S, Node, Theme) {
         maxText:{value:'您已上传满{max}张图片'}
     }});
     return RefundUploader;
-}, {requires:['node', '../../theme']});
+}, {requires:['node', 'gallery/form/1.3/uploader/theme']});

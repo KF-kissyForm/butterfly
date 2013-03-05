@@ -1859,7 +1859,7 @@ KISSY.use('gallery/form/1.3/uploader/index', function (S, ImageUploader) {
         //合并配置
         config = S.mix(S.form.parseConfig(buttonTarget), config);
         //超类初始化
-        ImageUploader.superclass.constructor.call(self, config);
+        ImageUploader.superclass.constructor.call(self,buttonTarget,queueTarget, config);
         self.set('buttonTarget', buttonTarget);
         self.set('queueTarget', queueTarget);
         self.set('uploaderConfig', config);
