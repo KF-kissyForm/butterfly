@@ -1282,6 +1282,27 @@ tagConfig的配置覆盖会在主题初始化成功后才执行，如果你的up
 
 crossdomain.xml是flash的安全策略文件，需要放在在域名根目录下，比如应用域名为refund.taobao.com，那么就应该有http://www.refund.taobao.com/crossdomain.xml，在调试时可以将这个文件代理到本地。
 
+crossdomain.xml的内容可以如下：
+
+```xml
+<?xml version="1.0"?>
+<cross-domain-policy>
+    <allow-access-from domain="*"/>
+    <!--下面这行代码必须有-->
+    <allow-access-from domain="*.tbcdn.cn"/>
+</cross-domain-policy>
+```
+
+tbcdn.cn为swf文件所在的位置，安全策略文件需要加上。
+
+####flash上传时，隐藏上传按钮后再显示，上传组件不可用
+
+flash对象不能设置<code>display:none;</code>，父容器隐藏也是不行的！这点特别留意。
+
+你可以设置<code>position:absolute;top:-2000px</code>，这样的位移方式来处理。
+
+
+
 
 
 
