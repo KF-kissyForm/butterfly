@@ -194,66 +194,18 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          * @param {Object} config
          * @return  {Uploader}
          */
-        theme:function (name, config) {
+        theme:function (oTheme) {
             var self = this;
             var theme = self.get('theme');
+            if(!oTheme)return false;
             if (theme) {
                 S.log('不支持重新渲染主题！');
                 return self;
             }
-            //为模块路径
-            if (S.isString(name)) {
-                theme = self._initTheme(name, config || {});
-            }
-            //传入的是Theme的实例，直接返回
-            else if (S.isObject(name)) {
-                theme = name;
-                theme.render();
-                self.fire('themeRender', {theme:theme, name:theme.get('name')});
-            }
+            oTheme.render && oTheme.render();
+            self.fire('themeRender', {theme:theme, uploader:self});
             self.set('theme', theme);
             return self;
-        },
-        /**
-         * 初始化主题
-         * @param {Function} callback 主题加载完成后的执行的回调函数
-         */
-        _initTheme:function (name, config) {
-            var self = this;
-            //如果只是传递主题名，组件自行拼接
-            var theme = self._getThemeName(name);
-            if (!config.queueTarget) {
-                S.log('主题配置缺少queueTarget！');
-                return false;
-            }
-            //引入主题
-            S.use(theme, function (S, Theme) {
-                //合并配置
-                S.mix(config, {uploader:self,queue:self.get('queue'),buttonTarget:self.get('target')});
-                theme = new Theme(config);
-                theme.on('init', function () {
-                    theme.render();
-                    self.fire('themeRender', {theme:theme, name:name});
-                });
-            })
-        },
-        /**
-         * 获取正确的主题名
-         * @param {String} theme 主题名
-         * @return {String}
-         */
-        _getThemeName:function (theme) {
-            var self = this;
-            var themeName = theme;
-            //遍历内置模版，判断是否是内置模版
-            var supportThemes = self.get('supportThemes');
-            S.each(supportThemes, function (t) {
-                if (t == theme) {
-                    themeName = THEME_PREFIX + theme;
-                }
-            });
-            themeName = themeName + '/index';
-            return themeName;
         }
     }, {ATTRS:/** @lends Uploader.prototype*/{
         /**
@@ -289,13 +241,6 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          * @default ""
          */
         theme:{ value:EMPTY },
-        /**
-         * 支持的内置主题
-         * @type Array
-         * @since 1.4
-         * @default ['default', 'imageUploader','daogouUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']
-         */
-        supportThemes:{value:['default', 'imageUploader','daogouUploader', 'ershouUploader', 'loveUploader', 'refundUploader', 'singleImageUploader']},
         /**
          * 模拟上传按钮模版，不推荐替换
          * @type String
@@ -444,4 +389,5 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
  *           - 重构模块
  *           - 去掉urlsInputName参数
  *           - 新增add和remove事件
+ *           - 去掉主题的自动异步加载
  */
