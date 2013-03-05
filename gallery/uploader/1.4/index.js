@@ -209,6 +209,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             else if (S.isObject(name)) {
                 theme = name;
                 theme.render();
+                self.fire('themeRender', {theme:theme, name:theme.get('name')});
             }
             self.set('theme', theme);
             return self;
