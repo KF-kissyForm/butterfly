@@ -22,31 +22,20 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
         var self = this;
         //调用父类构造函数
         Theme.superclass.constructor.call(self, config);
-        self._init();
     }
 
     S.extend(Theme, Base, /** @lends Theme.prototype*/{
         /**
-         * 初始化
-         * @private
+         * 运行主题（供主题扩展使用）
          */
-        _init:function(){
+        render:function(){
             var self = this;
             self._addThemeCssName();
             self._tplFormHtml();
             self._usePlugins();
             self._bind();
             self._setAuth();
-            self._LoaderCss(function(){
-                self._restore();
-                self.fire('init');
-            });
-        },
-        /**
-         * 运行主题（供主题扩展使用）
-         */
-        render:function(){
-
+            self._restore();
         },
         /**
          * 选择文件后执行的方法
@@ -127,9 +116,11 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          * 将主题名写入到队列和按钮目标容器，作为主题css样式起始
          */
         _addThemeCssName:function () {
-            var self = this, name = self.get('name'),
-                $queueTarget = self.get('queueTarget'),
-                $btn = $(self.get('buttonTarget'));
+            var self = this;
+            var name = self.get('name');
+            var $queueTarget = self.get('queueTarget');
+            var uploader = self.get('uploader');
+            var $btn = uploader.get('target');
             if(!$queueTarget.length){
                 S.log('不存在容器目标！');
                 return false;
@@ -207,22 +198,6 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             if(!S.isObject(file)) return false;
             var $target = file.target;
             $target.length && $target.all('.status').hide();
-        },
-        /**
-         * 加载css文件
-         */
-        _LoaderCss:function (callback) {
-            var self = this,
-                cssUrl = self.get('cssUrl');
-            //加载css文件
-            if (cssUrl == EMPTY){
-                callback && callback.call(self);
-                return false;
-            }
-            S.use(cssUrl, function () {
-                S.log(cssUrl + '加载成功！');
-                callback && callback.call(self);
-            });
         },
         /**
          * 当队列添加完文件数据后向队列容器插入文件信息DOM结构

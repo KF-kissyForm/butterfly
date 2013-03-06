@@ -3,9 +3,8 @@
  * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
  **/
 KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBase) {
-    var EMPTY = '', $ = Node.all, LOG_PREFIX = '[uploader]:';
-    //内置主题路径前缀
-    var THEME_PREFIX = 'gallery/uploader/1.4/themes/';
+    var EMPTY = '';
+    var $ = Node.all;
     var PLUGIN_PREFIX = 'gallery/uploader/1.4/plugins/';
     /**
      * @name Uploader
@@ -202,6 +201,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
                 S.log('不支持重新渲染主题！');
                 return self;
             }
+            oTheme.set('uploader',self);
             oTheme.render && oTheme.render();
             self.fire('themeRender', {theme:theme, uploader:self});
             self.set('theme', theme);
