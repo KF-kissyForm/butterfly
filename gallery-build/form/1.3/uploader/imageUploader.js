@@ -2665,7 +2665,7 @@ KISSY.add('gallery/form/1.3/uploader/plugins/ajbridge/uploader', function(S,flas
     Uploader.version = '1.0.1';
     A.Uploader = Uploader;
     return A.Uploader;
-},{ requires:["flash","./ajbridge"] });
+},{ requires:["gallery/flash/1.0/","./ajbridge"] });
 /**
  * @fileoverview �Ӷ���ͼƬ��ѡ��һ����Ϊ����ͼƬ������ͼ��
  * @author ��Ӣ�����ӣ�<daxingplay@gmail.com>�����<jianping.xwh@taobao.com>
