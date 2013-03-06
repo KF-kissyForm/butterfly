@@ -345,4 +345,5 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
  *           - 增加主题配置验证消息的功能
  *           - queueTarget优化
  *           - 去掉extend参数
+ *           - 去掉cssUrl参数
  */

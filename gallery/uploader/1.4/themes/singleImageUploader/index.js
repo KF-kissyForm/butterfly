@@ -37,12 +37,6 @@ KISSY.add('gallery/uploader/1.4/themes/singleImageUploader/index',function (S, N
          */
         name:{value:'singleImageUploader'},
         /**
-         * css模块路径
-         * @type String
-         * @default "gallery/uploader/1.4/themes/imageUploader/style.css"
-         */
-        cssUrl:{value:'gallery/uploader/1.4/themes/singleImageUploader/style.css'},
-        /**
          * 队列使用的模板
          * @type String
          * @default ""

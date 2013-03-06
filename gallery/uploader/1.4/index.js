@@ -163,7 +163,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             //防止目标元素不存在，uploader实例化不成功，调用use抛异常
             var target = self.get('target');
             if(!target.length){
-                S.log('use():目标元素不存在！')
+                S.log('use():目标元素不存在！');
                 return false;
             }
             var plugins = plugin.split(',');

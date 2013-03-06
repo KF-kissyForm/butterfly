@@ -71,12 +71,6 @@ KISSY.add('gallery/uploader/1.4/themes/daogouUploader/index', function (S, Node,
          */
         name:{value:'daogouUploader'},
         /**
-         * css模块路径
-         * @type String
-         * @default gallery/uploader/1.4/themes/daogouUploader/style.css
-         */
-        cssUrl:{value:'gallery/uploader/1.4/themes/daogouUploader/style.css'},
-        /**
          * 队列使用的模板
          * @type String
          * @default ""

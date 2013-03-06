@@ -109,11 +109,10 @@ KISSY.add(function (S, Node, ImageUploader) {
          */
         name:{value:'refundUploader'},
         /**
-         * css模块路径
+         * 引入的插件
          * @type String
-         * @default "gallery/uploader/1.4/themes/refundUploader/style.css"
+         * @default 'proBars,filedrop,preview,imageZoom'
          */
-        cssUrl:{value:'gallery/uploader/1.4/themes/refundUploader/style.css'},
         use:{value:'proBars,filedrop,preview,imageZoom'},
         /**
          * 队列使用的模板
