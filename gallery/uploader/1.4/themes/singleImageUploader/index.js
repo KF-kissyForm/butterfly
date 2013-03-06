@@ -19,6 +19,7 @@ KISSY.add('gallery/uploader/1.4/themes/singleImageUploader/index',function (S, N
     S.extend(singleImageUploader, ImageUploader, /** @lends singleImageUploader.prototype*/{
         render:function(){
             var self = this;
+            singleImageUploader.superclass.render.call(self);
             var uploader = self.get('uploader');
             //单图片上传，必须禁用多选
             uploader.set('multiple',false);
