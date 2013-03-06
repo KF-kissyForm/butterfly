@@ -202,6 +202,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
                 return self;
             }
             oTheme.set('uploader',self);
+            oTheme.set('queue',self.get('queue'));
             oTheme.render && oTheme.render();
             self.fire('themeRender', {theme:theme, uploader:self});
             self.set('theme', theme);
