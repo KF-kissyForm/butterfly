@@ -4,9 +4,6 @@
     <title>imageUploader主题 </title>
     <meta charset="utf-8"/>
     <script src="http://a.tbcdn.cn/s/kissy/1.2.0/kissy-min.js" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="../../assets/bootstrap-responsive.css"/>
-    <link rel="stylesheet" type="text/css" href="../../assets/docs.css"/>
 </head>
 
 <body style="padding:20px;">
@@ -36,7 +33,7 @@
 
 <div class="grid">
 
-    <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" queueTarget="#J_UploaderQueue"
+    <input class="g-u" id="J_UploaderBtn" name="Filedata" type="image-uploader" value="上传图片" data-theme-config='123' queueTarget="#J_UploaderQueue"
            action="upload.php" urlsInputName="imageUrls" max="3" maxSize="500"  restoreHook="#J_ImageRestore">
 
     <!--用来存放服务器端返回的图片路径，多个图片以逗号隔开-->
