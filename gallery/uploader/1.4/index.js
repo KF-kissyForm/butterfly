@@ -152,42 +152,6 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             return $aBtn;
         },
         /**
-         * 使用插件
-         * @param {String} plugin 插件名称
-         * @param {Object} config 插件配置
-         */
-        use:function (plugin, config) {
-            var self = this;
-            var oPlugin;
-            if(!plugin) return self;
-            //防止目标元素不存在，uploader实例化不成功，调用use抛异常
-            var target = self.get('target');
-            if(!target.length){
-                S.log('use():目标元素不存在！');
-                return false;
-            }
-            var plugins = plugin.split(',');
-            S.each(plugins,function(p,i){
-                //如果使用的是内置插件，拼接插件路径
-                //拼接的路径类似gallery/uploader/1.4/plugins/auth/auth
-                if (!/\//.test(p)) {
-                    plugins[i] = PLUGIN_PREFIX+p + '/' +p;
-                }
-            });
-            S.use(plugins.join(','),function(){
-                var args = S.makeArray(arguments).slice(1);
-                S.each(args,function(Plugin){
-                    var c = S.merge(config,{uploader:self});
-                    oPlugin = new Plugin(c);
-                    if (oPlugin['pluginInitializer']) {
-                        oPlugin['pluginInitializer'](self);
-                    }
-                    self.get('plugins').push(oPlugin);
-                });
-            });
-            return self;
-        },
-        /**
          * 使用指定主题
          * @param {String|Theme} name 主题路径或主题类
          * @param {Object} config
@@ -207,6 +171,13 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             self.fire('themeRender', {theme:theme, uploader:self});
             self.set('theme', theme);
             return self;
+        },
+        /**
+         * 渲染默认数据
+         * @param target
+         */
+        restore:function(target){
+
         }
     }, {ATTRS:/** @lends Uploader.prototype*/{
         /**
