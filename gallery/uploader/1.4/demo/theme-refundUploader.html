@@ -40,7 +40,7 @@
         });
     }
 
-    KISSY.use('gallery/uploader/1.4/index', function (S, Uploader) {
+    KISSY.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/refundUploader/,gallery/uploader/1.4/themes/refundUploader/style.css', function (S, Uploader,RefundUploader) {
         var uploader = new Uploader('#J_RefundUploaderBtn',{
             // 文件域
             name:"Filedata",
@@ -57,9 +57,10 @@
 
         uploader.use('urlsInput',{target:'#J_Urls'});
 
-        uploader.theme('refundUploader',{
+        var uploaderTheme = new RefundUploader({
             queueTarget:'#J_RefundUploaderQueue'
         });
+        uploader.theme(uploaderTheme);
     })
 </script>
 </body>

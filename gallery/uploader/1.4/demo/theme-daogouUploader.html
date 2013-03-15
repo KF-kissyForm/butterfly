@@ -62,7 +62,7 @@
         });
     }
     var $ = S.Node.all;
-    S.use('gallery/uploader/1.4/index', function (S, Uploader) {
+    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/daogouUploader/,gallery/uploader/1.4/themes/daogouUploader/style.css', function (S, Uploader,DaogouUploader) {
         var uploader = new Uploader('#J_UploaderBtn',{
             // 文件域
             name:"Filedata",
@@ -87,9 +87,12 @@
             $('.J_UploadingBtn').hide();
             $('.J_Sure').show();
         });
-        uploader.theme('daogouUploader',{
+
+        var uploaderTheme = new DaogouUploader({
             queueTarget:'#J_UploaderQueue'
         });
+
+        uploader.theme(uploaderTheme);
 
         $('.J_Upload').on('click',function(ev){
             var disabled = uploader.get('disabled');

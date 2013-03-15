@@ -37,28 +37,29 @@
         });
     }
 
-    KISSY.use('gallery/uploader/1.4/index', function (S, Uploader) {
+    KISSY.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/imageUploader/,gallery/uploader/1.4/themes/imageUploader/style.css', function (S, Uploader,ImageUploader) {
 
         var uploader = new Uploader('#J_UploaderBtn');
 
-        uploader.use('auth',{
-            max:3,
-            maxSize:500
-        });
-        uploader.use('urlsInput',{target:'#J_Urls'});
-        //使用标签上的配置，会覆盖js的配置
-        uploader.use('tagConfig');
+        uploader.use('auth', {
+                    max:3,
+                    maxSize:500
+                })
+                .use('urlsInput',{target:'#J_Urls'});
 
-        uploader.on('themeRender',function(){
-            S.log('action:'+uploader.get('action'));
-            S.log(uploader.get('data'));
-            var auth = uploader.getPlugin('auth');
-            S.log(auth.get('max'));
-            S.log(auth.get('maxSize'));
-        });
-        uploader.theme('imageUploader',{
+        var uploaderTheme = new ImageUploader({
             queueTarget:'#J_UploaderQueue'
         });
+
+        uploader.theme(uploaderTheme);
+        //从html中的input上拉取配置覆盖uploader的配置
+        uploader.use('tagConfig');
+
+        S.log('action:'+uploader.get('action'));
+        S.log(uploader.get('data'));
+        var auth = uploader.getPlugin('auth');
+        S.log(auth.get('max'));
+        S.log(auth.get('maxSize'));
 
     })
 

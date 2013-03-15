@@ -39,7 +39,7 @@
         });
     }
 
-    S.use('gallery/uploader/1.4/index', function (S, Uploader) {
+    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/singleImageUploader/,gallery/uploader/1.4/themes/singleImageUploader/style.css', function (S, Uploader,SingleImageUploader) {
 
         var uploader = new Uploader('#J_UploaderBtn',{
             // 文件域
@@ -54,9 +54,11 @@
 
         uploader.use('urlsInput',{target:'#J_Urls'});
 
-        uploader.theme('singleImageUploader',{
+        var uploaderTheme = new SingleImageUploader({
             queueTarget:'#J_UploaderQueue'
         });
+
+        uploader.theme(uploaderTheme);
 
     })
 </script>

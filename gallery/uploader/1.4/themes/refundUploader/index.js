@@ -27,6 +27,7 @@ KISSY.add(function (S, Node, ImageUploader) {
          */
         render:function () {
             var self = this;
+            RefundUploader.superclass.render.call(self);
             var uploader = self.get('uploader');
             //当移除文件后改变按钮上的文案
             uploader.on('remove',function(){

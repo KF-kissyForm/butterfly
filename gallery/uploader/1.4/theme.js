@@ -32,7 +32,6 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             var self = this;
             self._addThemeCssName();
             self._tplFormHtml();
-            self._usePlugins();
             self._bind();
             self._setAuth();
             self._restore();
@@ -224,18 +223,6 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             $target.fadeOut(0.4,function(){
                 $target.remove();
             })
-        },
-        /**
-         * 使用插件
-         * @private
-         */
-        _usePlugins:function(){
-            var self = this;
-            var plugins = self.get('use');
-            if(plugins == EMPTY) return false;
-            var uploader = self.get('uploader');
-            uploader.use(plugins);
-            return self;
         },
         /**
          * 从html中拉取模版

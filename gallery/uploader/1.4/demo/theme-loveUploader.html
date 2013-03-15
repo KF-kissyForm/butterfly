@@ -41,7 +41,7 @@
         });
     }
 
-    KISSY.use('gallery/uploader/1.4/index', function (S, Uploader) {
+    KISSY.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/loveUploader/,gallery/uploader/1.4/themes/loveUploader/style.css', function (S, Uploader,loveUploader) {
         var uploader = new Uploader('#J_UploaderBtn',{
             // 文件域
             name:"Filedata",
@@ -56,9 +56,10 @@
 
         uploader.use('urlsInput',{target:'#J_Urls'});
 
-        uploader.theme('loveUploader',{
+        var uploaderTheme = new loveUploader({
             queueTarget:'#J_UploaderQueue'
         });
+        uploader.theme(uploaderTheme);
     })
 </script>
 </body>

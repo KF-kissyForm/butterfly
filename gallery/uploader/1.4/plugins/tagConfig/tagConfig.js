@@ -31,10 +31,7 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
             if(!input) return false;
 
             self.set('input',input);
-
-            uploader.on('themeRender',function(){
-                self.cover();
-            })
+            self.cover();
         },
         /**
          * 覆盖组件配置

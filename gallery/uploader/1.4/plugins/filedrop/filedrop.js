@@ -47,6 +47,8 @@ KISSY.add('gallery/uploader/1.4/plugins/filedrop/filedrop', function (S, Node, B
             var self = this;
             var mode = self.get('mode');
             var $dropArea;
+            if(!uploader) return false;
+            self.set('uploader',uploader);
             if(uploader.get('type') == 'flash'){
                 S.log('flash上传方式不支持拖拽！');
                 self.set('isSupport',false);

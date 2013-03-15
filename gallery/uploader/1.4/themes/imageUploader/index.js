@@ -211,14 +211,6 @@ KISSY.add(function (S, Node, Theme) {
             '</li>'
         },
         /**
-         * 引入的插件
-         * @type String
-         * @default 'proBars,filedrop,preview'
-         */
-        use:{
-            value:'proBars,filedrop,preview'
-        },
-        /**
          * 允许上传的文件类型
          * @since 1.4
          * @type String
