@@ -10,7 +10,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
     var classSuffix = {BUTTON:'-button', QUEUE:'-queue'};
     //html中拉取主题模版的容器的type：<script type="text/uploader-theme"></script>
     var HTML_THEME = 'text/uploader-theme';
-
+    var UPLOADER_FILES = 'text/uploader-files';
     /**
      * @name Theme
      * @class 上传组件主题基类
@@ -34,7 +34,6 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             self._tplFormHtml();
             self._bind();
             self._setAuth();
-            self._restore();
         },
         /**
          * 选择文件后执行的方法

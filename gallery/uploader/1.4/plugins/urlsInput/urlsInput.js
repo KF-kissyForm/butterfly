@@ -36,8 +36,6 @@ KISSY.add('gallery/uploader/1.4/plugins/urlsInput/urlsInput',function(S, Node, B
 
             var queue = uploader.get('queue');
             queue.on('remove',self._fileRemoveHandler,self);
-            //渲染默认数据
-            if(self.get('autoRestore')) self.restore();
         },
         /**
          * 上传成功后向路径隐藏域添加路径
@@ -154,46 +152,6 @@ KISSY.add('gallery/uploader/1.4/plugins/urlsInput/urlsInput',function(S, Node, B
                 }
             });
             return b;
-        },
-        /**
-         * 添加默认数据到队列
-         */
-        restore:function(){
-            var self = this;
-            var uploader = self.get('uploader');
-            var queue = uploader.get('queue');
-            var data = self._getRestoreData();
-            if (!data.length) return false;
-
-            S.each(data, function (file) {
-                //向队列添加文件
-                var fileData = queue.add(file);
-                var id = fileData.id;
-                var index = queue.getFileIndex(id);
-                //改变文件状态为成功
-                queue.fileStatus(index, 'success', {index:index, id:id, file:fileData});
-            });
-        },
-        /**
-         * 获取隐藏域内的默认路径
-         * @return {Array}
-         */
-        _getRestoreData:function () {
-            var self = this;
-            var urls = self.parse();
-            var files = [];
-            S.each(urls,function(url){
-                //伪造数据结构
-                files.push({
-                    name:url, type:'restore', url:url, sUrl:url,
-                    result:{
-                        status:1,
-                        name:url,
-                        url : url
-                    }
-                });
-            });
-            return files;
         }
     }, {ATTRS : /** @lends UrlsInput.prototype*/{
         /**
@@ -229,14 +187,6 @@ KISSY.add('gallery/uploader/1.4/plugins/urlsInput/urlsInput',function(S, Node, B
             }
         },
         /**
-        * 是否自动渲染默认数据
-        * @type Boolean
-        * @default true
-        */
-        autoRestore:{
-            value:true
-        },
-        /**
          * 文件路径隐藏input
          * @type KISSY.Node
          * @default ""
@@ -257,6 +207,5 @@ KISSY.add('gallery/uploader/1.4/plugins/urlsInput/urlsInput',function(S, Node, B
  *           - 移动到plugins目录下，作为插件出现
  *           - 去掉target参数的配置支持
  *           - rich base的插件形式出现，增加pluginInitializer方法
- *           - 新增restore方法
  *           - 监听uploader的success事件和queue的remove事件
  */

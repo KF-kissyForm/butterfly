@@ -35,16 +35,6 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/proBars',function(S, Node, Base,
             if(!uploader) return false;
             var self = this;
             var uploadType = uploader.get('type');
-            //iframe上传方式是不支持进度条的
-            if(uploadType == 'iframe'){
-                //隐藏进度条
-                uploader.on('success',function(ev){
-                    var $target = $('.'+PRE+ev.file.id);
-                    $target.hide();
-                });
-                return false;
-            }
-
             uploader.on('start',function(ev){
                 self.add(ev.file.id);
             });
@@ -82,8 +72,15 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/proBars',function(S, Node, Base,
             var file = ev.file;
             var id = file.id;
             var bar = self.get('bars')[id];
+            var isHide = self.get('isHide');
             //处理进度
-            bar.set('value',100);
+            if(bar) bar.set('value',100);
+            if(isHide){
+                S.later(function(){
+                    var $target = $('.'+PRE+ev.file.id);
+                    $target.hide();
+                },500);
+            }
         },
         /**
          * 向集合添加一个进度条
@@ -93,21 +90,9 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/proBars',function(S, Node, Base,
             if(!S.isString(fileId)) return false;
             var self = this;
             var $target = $('.'+PRE+fileId);
-            var isHide = self.get('isHide');
             var speed = self.get('speed');
             var progressBar = new ProgressBar($target,{width:self.get('width'),speed:speed});
-            if(isHide){
-                progressBar.on('change',function(ev){
-                    //百分百进度隐藏进度条
-                    if(ev.value == 100){
-                        S.later(function(){
-                            $target.hide();
-                        },500);
-                    }
-                });
-            }
             progressBar.render();
-
             var bars = self.get('bars');
             return bars[fileId] = progressBar;
         }

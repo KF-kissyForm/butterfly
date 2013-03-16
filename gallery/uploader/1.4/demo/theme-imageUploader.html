@@ -20,13 +20,6 @@
     <input type="file" class="g-u" id="J_UploaderBtn" value="上传图片" name="Filedata" >
     <input type="hidden" id="J_Urls" name="urls" value="" />
     <div class="g-u">还可以上传<span id="J_UploadCount">3</span>张图片</div>
-    <script type="text/files" id="J_RestoreFiles">
-        [{
-            "name":"icon_evil.gif",
-            "Url": "http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
-            "shopId":"12345"
-        }]
-    </script>
 </div>
 <ul id="J_UploaderQueue" class="grid">
 
@@ -79,7 +72,6 @@
                     //图片预览
                     .plug(new Preview())
             ;
-
         });
     })
 

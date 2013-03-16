@@ -2,10 +2,10 @@
  * @fileoverview 异步文件上传组件
  * @author 剑平（明河）<minghe36@126.com>,紫英<daxingplay@gmail.com>
  **/
-KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBase) {
+KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBase,JSON) {
     var EMPTY = '';
     var $ = Node.all;
-    var PLUGIN_PREFIX = 'gallery/uploader/1.4/plugins/';
+    var UPLOADER_FILES = 'text/uploader-files';
     /**
      * @name Uploader
      * @class 异步文件上传组件，支持ajax、flash、iframe三种方案
@@ -153,9 +153,8 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
         },
         /**
          * 使用指定主题
-         * @param {String|Theme} name 主题路径或主题类
-         * @param {Object} config
-         * @return  {Uploader}
+         * @param {Theme} oTheme 主题类
+         * @return  {Uploader|Boolean}
          */
         theme:function (oTheme) {
             var self = this;
@@ -169,7 +168,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
             oTheme.set('queue',self.get('queue'));
             oTheme.render && oTheme.render();
             self.fire('themeRender', {theme:theme, uploader:self});
-            self.set('theme', theme);
+            self.set('theme', oTheme);
             return self;
         },
         /**
@@ -177,7 +176,58 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
          * @param target
          */
         restore:function(target){
-
+            var self = this;
+            var fileResults;
+            if(!target){
+                var theme = self.get('theme');
+                if(!theme) return false;
+                var $queueTarget = theme.get('queueTarget');
+                if(!$queueTarget || !$queueTarget.length) return false;
+                /**
+                 * demo:
+                 *<script type="text/uploader-files">
+                    [{
+                    "name":"icon_evil.gif",
+                    "url": "http://tp4.sinaimg.cn/1653905027/50/5601547226/1",
+                    "desc":"默认数据的图片描述"
+                    }]
+                  </script>
+                 */
+                var $script = $queueTarget.all('script');
+                $script.each(function(el){
+                    if(el.attr('type') == UPLOADER_FILES){
+                        fileResults = el.text();
+                    }
+                });
+            }else{
+                var $target = $(target);
+                if(!$target.length) {
+                    S.log('restore()：不存在target！');
+                    return false;
+                }
+                fileResults = $target.text();
+            }
+            fileResults = JSON.parse(fileResults);
+            if(!fileResults.length) return false;
+            var queue = self.get('queue');
+            var file;
+            S.each(fileResults, function (fileResult) {
+                fileResult.status = 1;
+                file = {
+                    type:'restore',
+                    name:fileResult.name || '',
+                    url:fileResult.url || '',
+                    result:fileResult
+                };
+                //向队列添加文件
+                var queueFile = queue.add(file);
+                var id = queueFile.id;
+                var index = queue.getFileIndex(id);
+                //改变文件状态为成功
+                queue.fileStatus(index, 'success', {index:index, id:id, file:queueFile});
+                //触发uploader的监听器，给
+                self.fire('success',{file:queueFile,result:queueFile.result});
+            });
         }
     }, {ATTRS:/** @lends Uploader.prototype*/{
         /**
@@ -354,7 +404,7 @@ KISSY.add('gallery/uploader/1.4/index', function (S, Node, UploaderBase, RichBas
         swfSize:{value:{}}
     }}, 'Uploader');
     return Uploader;
-}, {requires:['node', './base', 'rich-base']});
+}, {requires:['node', './base', 'rich-base','json']});
 /**
  * changes:
  * 明河：1.4
