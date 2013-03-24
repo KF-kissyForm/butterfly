@@ -10,10 +10,10 @@
 <h2>使用js传参方式上传文件</h2>
 
 <div class="grid">
-    <input type="file" class="g-u" id="J_JsUploaderBtn" value="上传文件" name="Filedata" >
+    <input type="file" class="g-u" id="J_UploaderBtn" value="上传文件" name="Filedata" >
     <input type="hidden" id="J_Urls" name="urls" value="" />
 </div>
-<ul id="J_JsUploaderQueue">
+<ul id="J_UploaderQueue">
 
 </ul>
 <script>
@@ -31,29 +31,37 @@
         });
     }
 
-    KISSY.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/default/,gallery/uploader/1.4/themes/default/style.css', function (S, Uploader,DefaultTheme) {
+    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/default/index,gallery/uploader/1.4/themes/default/style.css', function (S, Uploader,DefaultTheme) {
+        //上传组件插件
+        var plugins = 'gallery/uploader/1.4/plugins/auth/auth,' +
+                'gallery/uploader/1.4/plugins/urlsInput/urlsInput,' +
+                'gallery/uploader/1.4/plugins/proBars/proBars,' +
+                'gallery/uploader/1.4/plugins/filedrop/filedrop,' +
+                'gallery/uploader/1.4/plugins/preview/preview';
 
-        var uploader = new Uploader('#J_JsUploaderBtn',{
-            //处理上传的服务器端脚本路径
-            action:"upload.php"
+        S.use(plugins,function(S,Auth,UrlsInput,ProBars,Filedrop,Preview){
+            var uploader = new Uploader('#J_UploaderBtn',{
+                //处理上传的服务器端脚本路径
+                action:"upload.php"
+            });
+            //使用主题
+            uploader.theme(new DefaultTheme({
+                queueTarget:'#J_UploaderQueue'
+            }))
+                    //验证插件
+            uploader.plug(new Auth({
+                        //最多上传个数
+                        max:3,
+                        //图片最大允许大小
+                        maxSize:100
+                    }))
+                     //url保存插件
+                    .plug(new UrlsInput({target:'#J_Urls'}))
+                    //进度条集合
+                    .plug(new ProBars())
+            ;
         });
-
-        uploader.use('auth',{
-            //最多上传个数
-            max:3,
-            //文件最大允许大小
-            maxSize:500
-        });
-
-        uploader.use('urlsInput',{target:'#J_Urls'});
-
-        var uploaderTheme = new DefaultTheme({
-            queueTarget:'#J_JsUploaderQueue'
-        });
-        //运行主题
-        uploader.theme(uploaderTheme);
     })
-
 </script>
 </body>
 </html>
