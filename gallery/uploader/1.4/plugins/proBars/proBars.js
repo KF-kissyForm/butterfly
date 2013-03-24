@@ -98,6 +98,14 @@ KISSY.add('gallery/uploader/1.4/plugins/proBars/proBars',function(S, Node, Base,
         }
     }, {ATTRS : /** @lends ProBars*/{
         /**
+         * 插件名称
+         * @type String
+         * @default proBars
+         */
+        pluginId:{
+            value:'proBars'
+        },
+        /**
         * 进度条实例集合
         * @type Object
         * @default {}
