@@ -39,27 +39,40 @@
         });
     }
 
-    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/singleImageUploader/,gallery/uploader/1.4/themes/singleImageUploader/style.css', function (S, Uploader,SingleImageUploader) {
+    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/singleImageUploader/index,gallery/uploader/1.4/themes/singleImageUploader/style.css', function (S, Uploader,SingleImageUploader) {
+        //上传组件插件
+        var plugins = 'gallery/uploader/1.4/plugins/auth/auth,' +
+                'gallery/uploader/1.4/plugins/urlsInput/urlsInput,' +
+                'gallery/uploader/1.4/plugins/proBars/proBars,' +
+                'gallery/uploader/1.4/plugins/filedrop/filedrop,' +
+                'gallery/uploader/1.4/plugins/preview/preview';
 
-        var uploader = new Uploader('#J_UploaderBtn',{
-            // 文件域
-            name:"Filedata",
-            //处理上传的服务器端脚本路径
-            action:"upload.php"
+        S.use(plugins,function(S,Auth,UrlsInput,ProBars,Filedrop,Preview){
+            var uploader = new Uploader('#J_UploaderBtn',{
+                //处理上传的服务器端脚本路径
+                action:"upload.php"
+            });
+            //使用主题
+            uploader.theme(new SingleImageUploader({
+                queueTarget:'#J_UploaderQueue'
+            }))
+            //验证插件
+            uploader.plug(new Auth({
+                        //最多上传个数
+                        max:3,
+                        //图片最大允许大小
+                        maxSize:100
+                    }))
+                //url保存插件
+                    .plug(new UrlsInput({target:'#J_Urls'}))
+                //进度条集合
+                    .plug(new ProBars())
+                //拖拽上传
+                    .plug(new Filedrop())
+                //图片预览
+                    .plug(new Preview())
+            ;
         });
-
-        uploader.use('auth',{
-            maxSize:100
-        });
-
-        uploader.use('urlsInput',{target:'#J_Urls'});
-
-        var uploaderTheme = new SingleImageUploader({
-            queueTarget:'#J_UploaderQueue'
-        });
-
-        uploader.theme(uploaderTheme);
-
     })
 </script>
 </body>
