@@ -40,7 +40,7 @@
     }
 
     S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/imageUploader/index,gallery/uploader/1.4/themes/imageUploader/style.css', function (S, Uploader,ImageUploader) {
-        //上传插件
+        //上传组件插件
         var plugins = 'gallery/uploader/1.4/plugins/auth/auth,' +
                 'gallery/uploader/1.4/plugins/urlsInput/urlsInput,' +
                 'gallery/uploader/1.4/plugins/proBars/proBars,' +
@@ -57,7 +57,7 @@
                 queueTarget:'#J_UploaderQueue'
             }))
                     //验证插件
-                    .plug(new Auth({
+                    uploader.plug(new Auth({
                         //最多上传个数
                         max:3,
                         //图片最大允许大小

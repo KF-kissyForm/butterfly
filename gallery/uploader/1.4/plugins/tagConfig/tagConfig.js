@@ -29,7 +29,7 @@ KISSY.add('gallery/uploader/1.4/plugins/tagConfig/tagConfig',function(S, Node, B
             var self = this;
             var input = uploader.get('_oldInput');
             if(!input) return false;
-
+            self.set('uploader',uploader);
             self.set('input',input);
             self.cover();
         },
