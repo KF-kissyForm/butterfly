@@ -127,7 +127,7 @@ kissy1.3就不需要该配置。
 ### 1.组件依赖的html结构
 
 ```xml
-    <input type="file" class="g-u" id="J_JsUploaderBtn" value="上传文件" name="Filedata" >
+    <input type="file" class="g-u" id="J_UploaderBtn" value="上传文件" name="Filedata" >
 ```
 
 组件的核心只依赖原生的文件上传域，<code>value</code>属性值为上传按钮的文案，<code>name</code>属性非常重要：服务器端获取文件数据的字段。
@@ -139,13 +139,13 @@ kissy1.3就不需要该配置。
 
     })
 ```
-**提醒**：use()的回调，第一个参数是KISSY，第二个参数才是组件。
+**提醒**：use()的回调，第一个参数是KISSY，第二个参数才是组件实例。
 
 ### 3.初始化Uploader
 
 ```javascript
     KISSY.use('gallery/uploader/1.4/index', function (S, Uploader) {
-        var uploader = new Uploader('#J_JsUploaderBtn',{
+        var uploader = new Uploader('#J_UploaderBtn',{
           //处理上传的服务器端脚本路径
           action:"upload.php"
         });
@@ -155,7 +155,7 @@ kissy1.3就不需要该配置。
 Uploader类接受二个参数：
 
 * 第一个参数指向目标元素（指向原生文件上传域元素即可）
-* 第二参数为组件配置，<code>action</code>必须配置，为服务器端处理文件上传的路径。
+* 第二个参数为组件配置，<code>action</code>必须配置，为服务器端处理文件上传的路径。
 
 **提醒**：如果是使用flash上传，action必须是绝对路径。
 
@@ -172,51 +172,51 @@ Uploader类接受二个参数：
 
 但缺少样式，也没办法处理上传行为，接下来我们加载一个默认主题。
 
-### 4. 使用theme()方法加载主题
+### 4. 主题的使用
 
 ```javascript
-        uploader.theme('default',{
-            queueTarget:'#J_JsUploaderQueue'
-        });
+S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/default/index,gallery/uploader/1.4/themes/default/style.css', function (S, Uploader,DefaultTheme) {
+        var uploader = new Uploader('#J_UploaderBtn',{
+                        //处理上传的服务器端脚本路径
+                        action:"upload.php"
+                    });
+        //使用主题
+        var defaultTheme = new DefaultTheme({ queueTarget:'#J_UploaderQueue' });
+        uploader.theme(defaultTheme);
+    })
 ```
 
-<code>theme()</code>方法接受二个参数：
+第一步先要<code>use()</code>主题js和css，模块路径为<code>gallery/uploader/1.4/themes/default/index</code>和<code>gallery/uploader/1.4/themes/default/index</code>。
 
-* 第一个参数为主题名，比如default（默认主题），uploader内置多套主题，后面会讲解到
-* 第二个参数为主题配置，<code>queueTarget</code>是必须配置的，用于显示文件信息。
+第二步实例化主题：
 
-为了显示上传的文件信息，你需要一个队列容器：
+```javascript
+var defaultTheme = new DefaultTheme({ queueTarget:'#J_UploaderQueue' });
+```
+
+<code>queueTarget</code>是必须配置的，指向队列容器：
 
 ```xml
     <ul id="J_JsUploaderQueue">
 
     </ul>
 ```
-再刷新下页面看看，就会发现已经有样式，并可以处理上传了（action指向的服务器路径可用的情况下）。
 
-加载的主题会包含二个文件：
+第三步使用<code>uploader.theme()</code>方法，将主题实例加入到uploader中。
 
-```xml
-http://a.tbcdn.cn/s/kissy/gallery/uploader/1.4/themes/default/index.js
-http://a.tbcdn.cn/s/kissy/gallery/uploader/1.4/themes/default/style.css
+```javascript
+uploader.theme(defaultTheme);
 ```
+
+再刷新下页面看看，就会发现已经有样式，并可以处理上传了（action指向的服务器路径可用的情况下）。
 
 html结构上也发生了变化，模拟按钮上增加了<code>defaultTheme-button</code>样式，而ul队列容器上增加了<code>defaultTheme-queue</code>。
 
 你可以通过这二个样式，来改变主题样式。
 
-**提醒**：由于style.css是异步加载进来的，如果你的样式权重不够高会被主题样式覆盖。
-
-如果你不需要主题样式，可以设置<code>cssUrl</code>，比如下面的代码：
-
-```javascript
-        uploader.theme('default',{
-            queueTarget:'#J_JsUploaderQueue',
-            cssUrl:''
-        });
-```
-
 当然你也可以自定义自己的主题，后面会讲解到。
+
+我们还需要加载一些uploader插件，才能让功能更完整，比如验证、预览等，继续往下看。
 
 ### 4. 服务器端返回的数据格式
 
@@ -254,28 +254,46 @@ html结构上也发生了变化，模拟按钮上增加了<code>defaultTheme-but
 
 ### 5. 给上传组件增加验证
 
+验证功能是作为uploader的插件出现的，需要用户手动加载并初始化。
+
+第一步加载插件js：
+
 ```javascript
-        uploader.use('auth',{
-            //最多上传个数
-            max:3,
-            //文件最大允许大小
-            maxSize:500
-        });
+    S.use('gallery/uploader/1.4/plugins/auth/auth',function(S,Auth){
+
+    })
 ```
 
-<code>use()</code>方法会加载uploader的组件插件，接受二个参数：
+第二步初始化插件：
 
-* 第一个参数为插件名，比如加载验证插件就是<code>auth</code>
-* 第二个参数为插件配置
+```javascript
+    var auth = new Auth({
+       //最多上传个数
+       max:3,
+       //图片最大允许大小
+       maxSize:100
+   });
+```
 
-auth插件支持的验证规则，请看文章的插件部分
+auth插件的配置，请看文章的插件部分。
+
+第三步使用<code>plug()</code>将插件插入uploader：
+
+```javascript
+    uploader.plug(auth);
+```
 
 ### 6.存储服务器上传成功后返回的url
 
 上传成功后服务器会返回文件的url，供开发者后续操作，比如将url存储到数据库中，这个过程不需要用户自己写额外代码，加载Uploader的urlsInput插件即可。
 
+插件的使用跟auth是一样的：
+
 ```javascript
-        uploader.use('urlsInput',{target:'#J_Urls'});
+    S.use('gallery/uploader/1.4/plugins/urlsInput/urlsInput',function(S,UrlsInput){
+        var urlsInput = new UrlsInput({target:'#J_Urls'});
+        uploader.plug(urlsInput);
+    })
 ```
 
 <code>target</code>指向用于存储的元素目标，一般是个隐藏域，比如：
@@ -283,6 +301,44 @@ auth插件支持的验证规则，请看文章的插件部分
 ```xml
     <input type="hidden" id="J_Urls" name="urls">
 ```
+
+### 7.合并插件调用
+
+uploader的plug方法和theme方法是支持链式调用的。
+
+```javascript
+    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/default/index,gallery/uploader/1.4/themes/default/style.css', function (S, Uploader,DefaultTheme) {
+            //上传组件插件
+            var plugins = 'gallery/uploader/1.4/plugins/auth/auth,' +
+                    'gallery/uploader/1.4/plugins/urlsInput/urlsInput,' +
+                    'gallery/uploader/1.4/plugins/proBars/proBars';
+
+            S.use(plugins,function(S,Auth,UrlsInput,ProBars){
+                var uploader = new Uploader('#J_UploaderBtn',{
+                    //处理上传的服务器端脚本路径
+                    action:"upload.php"
+                });
+                //使用主题
+                uploader.theme(new DefaultTheme({
+                    queueTarget:'#J_UploaderQueue'
+                }))
+                        //验证插件
+                uploader.plug(new Auth({
+                            //最多上传个数
+                            max:3,
+                            //图片最大允许大小
+                            maxSize:100
+                        }))
+                         //url保存插件
+                        .plug(new UrlsInput({target:'#J_Urls'}))
+                        //进度条集合
+                        .plug(new ProBars())
+                ;
+            });
+        })
+```
+
+uploader拥有非常丰富的插件，用户可以根据自己的需要加载和初始化指定的插件，详细内容请看下面的插件部分。
 
 ## 组件事件说明
 
@@ -294,10 +350,6 @@ auth插件支持的验证规则，请看文章的插件部分
     </tr>
     </thead>
     <tbody>
-    <tr>
-            <td>themeRender </td>
-            <td>主题运行成功后触发，只有在使用theme()加载主题时才存在</td>
-        </tr>
     <tr>
         <td>select </td>
         <td>选择完文件后触发</td>
@@ -333,8 +385,6 @@ auth插件支持的验证规则，请看文章的插件部分
     </tbody>
 </table>
 
-<code>themeRender</code>最为重要，对组件的操作比如初始化后禁用按钮、改变验证规则等，最好等主题加载结束后操作，所以先监听themeRender。
-
 **提醒**：如果你需要操作队列容器中的dom结构，需要监听<code>add</code>事件，比如：
 
 ```javascript
@@ -345,7 +395,7 @@ auth插件支持的验证规则，请看文章的插件部分
     });
 ```
 
-除了themeRender外的事件参数都包含<code>ev.file</code>对象存储着文件数据。
+所有的事件参数都包含<code>ev.file</code>对象存储着文件数据。
 
 <code>ev.file.target</code>指向队列容器中的每一个文件对应的DOM节点。
 
@@ -619,6 +669,39 @@ uploader.cancel();
 uploader.stop();
 ```
 
+####theme():运行主题实例
+
+```javascript
+uploader.theme(new DefaultTheme({
+    queueTarget:'#J_UploaderQueue'
+}))
+```
+
+####plug():将插件插入到uploader中
+
+```javascript
+//验证插件
+uploader.plug(new Auth({
+        //最多上传个数
+        max:3,
+        //图片最大允许大小
+        maxSize:100
+    }))
+     //url保存插件
+    .plug(new UrlsInput({target:'#J_Urls'}))
+```
+
+####getPlugin(pluginName):获取插件
+
+```javascript
+//验证插件
+uploader.getPlugin('auth');
+```
+
+插件名称可以对照插件的模块路径上的名称<code>gallery/uploader/1.4/plugins/auth/auth</code>。
+
+
+
 ##Queue的控制说明
 
 Queue用于控制队列的文件，非常常用，实例存储在Uploader中。
@@ -694,15 +777,13 @@ getFiles()和getIndexs()的作用是不同的，getFiles()类似过滤数组，�
 
 ####Theme的使用
 
-使用<code>theme()</code>方法自动加载内置主题（index.js和style.css），代码如下：
+使用<code>theme()</code>方法初始化主题逻辑，代码如下：
 
 ```javascript
-        uploader.theme('default',{
-            queueTarget:'#J_JsUploaderQueue'
-        });
+    uploader.theme(new DefaultTheme({
+        queueTarget:'#J_UploaderQueue'
+    }))
 ```
-
-内置主题只要写上主题名称即可，目前共支持的
 
 ####如何理解主题的概念
 
@@ -758,7 +839,7 @@ KISSY.add(function (S, Node, ImageUploader) {
 }, {requires:['node', 'gallery/uploader/1.4/themes/imageUploader/index']});
 ```
 
-主题中的<code>_errorHandler</code>会自动触发，当然像"_addHandler"或"_successHandler"也是一样的道理。
+主题中的<code>_errorHandler</code>，在上传失败时会自动触发，当然像"_addHandler"或"_successHandler"也是一样的道理。
 
 ####Theme的属性
 
@@ -782,25 +863,6 @@ KISSY.add(function (S, Node, ImageUploader) {
                     主题名，是主题对应的模拟按钮和队列容器的样式名的前缀
                  </td>
              </tr>
-             <tr>
-                 <td>use</td>
-                 <td>String</td>
-                 <td>''</td>
-                 <td>只读</td>
-                 <td>
-                      需要加载的uploader插件，如果想要获取插件，使用<code>uploader.getPlugin('auth')</code>。
-                      可以加载多个uploader插件，写法是"proBars,preview"。
-                 </td>
-             </tr>
-             <tr>
-                  <td>cssUrl</td>
-                  <td>String</td>
-                  <td>''</td>
-                  <td>只读</td>
-                  <td>
-                  css模块路径，如果你不希望加载主题样式，设置为<code>''</code>即可。
-                  </td>
-              </tr>
               <tr>
                   <td>fileTpl</td>
                   <td>String</td>
@@ -808,15 +870,6 @@ KISSY.add(function (S, Node, ImageUploader) {
                   <td>只读</td>
                   <td>
                   主题模版，用于定制主题的DOM样式
-                  </td>
-              </tr>
-              <tr>
-                  <td>extend</td>
-                  <td>Object</td>
-                  <td>''</td>
-                  <td>只读</td>
-                  <td>
-                  覆盖主题的事件监听器，后面会深入讲解。
                   </td>
               </tr>
               <tr>
@@ -857,22 +910,6 @@ KISSY.add(function (S, Node, ImageUploader) {
               </tr>
         </tbody>
 </table>
-
-####Theme的extend属性说明
-
-<code>extend</code>属性的用途：有时主题的默认行为不是业务需要的，你就需要将主题的监听器干掉，extend就是用于覆盖主题的监听器。
-
-
-```javascript
-var newTheme = {
-    _addHandler:function(){
-        alert('test');
-    }
-}
-uploader.theme('#J_Ul',{
-    extend:newTheme
-})
-```
 
 ####在html页面直接写主题模版
 
@@ -917,27 +954,6 @@ uploader.theme('#J_Ul',{
 //TODO:日后补充
 
 ##插件说明
-
-插件的使用
-
-以加载上传验证插件为例：
-
-```javascript
-    uploader.use('auth',{
-        max:3,
-        maxSize:100
-    });
-```
-
-使用<code>use()</code>方法会加载uploader内置组件，会去[gallery/uploader/1.4/plugins](https://github.com/KF-kissyForm/butterfly/tree/master/gallery/uploader/1.4/plugins)目录下查找。
-
-主题也是可以加载uploader插件的：
-
-```javascript
-    uploader.theme('default',{
-        use:'auth'
-    });
-```
 
 **如何获取插件呢？**
 
