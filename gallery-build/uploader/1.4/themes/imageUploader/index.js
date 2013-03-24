@@ -75,6 +75,15 @@ KISSY.add(function (S, Node, Theme) {
             //获取服务器返回的图片路径写入到src上
             if(result) self._changeImageSrc(ev);
             $('.J_Mask_'+id).hide();
+
+            //如果不存在进度条插件，隐藏进度条容器
+            var uploader = self.get('uploader');
+            var proBars = uploader.getPlugin('proBars');
+            if(!proBars){
+                var target = file.target;
+                if(!target) return false;
+                target.all('.J_ProgressBar_'+id).hide();
+            }
         },
          /**
          * 文件处于上传错误状态时触发
@@ -189,12 +198,6 @@ KISSY.add(function (S, Node, Theme) {
          */
         name:{value:'imageUploader'},
         /**
-         * css模块路径
-         * @type String
-         * @default "gallery/uploader/1.4/themes/imageUploader/style.css"
-         */
-        cssUrl:{value:'gallery/uploader/1.4/themes/imageUploader/style.css'},
-        /**
          * 队列使用的模板
          * @type String
          * @default ""
@@ -215,14 +218,6 @@ KISSY.add(function (S, Node, Theme) {
                 '</div>' +
                 '<a class="J_Del_{id} del-pic" href="#">删除</a>' +
             '</li>'
-        },
-        /**
-         * 引入的插件
-         * @type String
-         * @default 'proBars,filedrop,preview'
-         */
-        use:{
-            value:'proBars,filedrop,preview'
         },
         /**
          * 允许上传的文件类型

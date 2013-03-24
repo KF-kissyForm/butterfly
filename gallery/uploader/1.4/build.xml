@@ -10,7 +10,7 @@
     <!--合并源码文件，排除模板js-->
     <target name="concat">
         <concat destfile="index-pkg.js" encoding="${charset}" outputencoding="${charset}" overwrite="true">
-            <fileset dir="${src.dir}" includes="**/*.js" excludes="themes/**/*.js,guide/**/*.js,demo/**/*.js"/>
+            <fileset dir="${src.dir}" includes="**/*.js" excludes="themes/**/*.js,guide/**/*.js,demo/**/*.js,plugins/**/*.js"/>
             <filterchain>
                 <deletecharacters chars="&#xFEFF;"/>
             </filterchain>
@@ -37,8 +37,10 @@
         </mkdir>
     </target>
     <!--移动uploader.swf-->
-    <target name="move-swf">
-        <copy file="plugins/ajbridge/uploader.swf" todir="${uploader.build.dir}/plugins/ajbridge"/>
+    <target name="move-plugin">
+        <copy todir="${uploader.build.dir}/plugins" overwrite="true">
+            <fileset dir="${src.dir}/plugins"/>
+        </copy>
     </target>
     <!--移动模板的源码文件到build目录下-->
     <target name="move-theme">
@@ -125,6 +127,6 @@
         <renameext srcDir="${uploader.build.dir}" includes="**/*.ascii.js"  fromExtension=".ascii.js" toExtension=".js" replace="true"/>
     </target>
 
-    <target name="build" depends="clean-build,mkdir,concat,move,build-theme,minify-theme-css,minify,native2ascii,move-swf">
+    <target name="build" depends="clean-build,mkdir,concat,move,move-plugin,build-theme,minify-theme-css,minify,native2ascii">
     </target>
 </project>

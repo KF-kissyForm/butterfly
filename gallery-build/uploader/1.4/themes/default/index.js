@@ -22,12 +22,6 @@ KISSY.add('gallery/uploader/1.4/themes/default/index', function (S, Node, Theme)
 
     S.extend(DefaultTheme, Theme, /** @lends DefaultTheme.prototype*/{
         /**
-         * 在上传组件运行完毕后执行的方法（对上传组件所有的控制都应该在这个函数内）
-         */
-        render:function () {
-
-        },
-        /**
          * 向队列中添加一个文件后触发
          */
         _addHandler : function(ev){
@@ -97,12 +91,6 @@ KISSY.add('gallery/uploader/1.4/themes/default/index', function (S, Node, Theme)
          * @default "defaultTheme"
          */
         name:{value:'defaultTheme'},
-        /**
-         * css模块路径
-         * @type String
-         * @default "gallery/uploader/1.4/themes/default/style.css"
-         */
-        cssUrl:{value:'gallery/uploader/1.4/themes/default/style.css'},
         /**
          * 队列使用的模板
          * @type String
