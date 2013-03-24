@@ -35,11 +35,9 @@
         //上传组件插件
         var plugins = 'gallery/uploader/1.4/plugins/auth/auth,' +
                 'gallery/uploader/1.4/plugins/urlsInput/urlsInput,' +
-                'gallery/uploader/1.4/plugins/proBars/proBars,' +
-                'gallery/uploader/1.4/plugins/filedrop/filedrop,' +
-                'gallery/uploader/1.4/plugins/preview/preview';
+                'gallery/uploader/1.4/plugins/proBars/proBars';
 
-        S.use(plugins,function(S,Auth,UrlsInput,ProBars,Filedrop,Preview){
+        S.use(plugins,function(S,Auth,UrlsInput,ProBars){
             var uploader = new Uploader('#J_UploaderBtn',{
                 //处理上传的服务器端脚本路径
                 action:"upload.php"
