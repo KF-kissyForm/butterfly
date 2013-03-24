@@ -18,10 +18,10 @@
 </ul>
 
 <div class="grid">
-    <input type="file" class="g-u" id="J_RefundUploaderBtn" value="上传图片" name="Filedata" >
+    <input type="file" class="g-u" id="J_UploaderBtn" value="上传图片" name="Filedata" >
     <input type="hidden" id="J_Urls" name="refundImageUrls">
 </div>
-<ul id="J_RefundUploaderQueue" class="grid">
+<ul id="J_UploaderQueue" class="grid">
 
 </ul>
 
@@ -40,27 +40,42 @@
         });
     }
 
-    KISSY.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/refundUploader/,gallery/uploader/1.4/themes/refundUploader/style.css', function (S, Uploader,RefundUploader) {
-        var uploader = new Uploader('#J_RefundUploaderBtn',{
-            // 文件域
-            name:"Filedata",
-            //处理上传的服务器端脚本路径
-            action:"upload.php"
-        });
+    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/refundUploader/index,gallery/uploader/1.4/themes/refundUploader/style.css', function (S, Uploader,RefundUploader) {
+        //上传组件插件
+        var plugins = 'gallery/uploader/1.4/plugins/auth/auth,' +
+                'gallery/uploader/1.4/plugins/urlsInput/urlsInput,' +
+                'gallery/uploader/1.4/plugins/proBars/proBars,' +
+                'gallery/uploader/1.4/plugins/filedrop/filedrop,' +
+                'gallery/uploader/1.4/plugins/preview/preview,' +
+                'gallery/uploader/1.4/plugins/imageZoom/imageZoom';
 
-        uploader.use('auth',{
-            //最多上传个数
-            max:3,
-            //图片最大允许大小
-            maxSize:100
+        S.use(plugins,function(S,Auth,UrlsInput,ProBars,Filedrop,Preview,ImageZoom){
+            var uploader = new Uploader('#J_UploaderBtn',{
+                //处理上传的服务器端脚本路径
+                action:"upload.php"
+            });
+            //使用主题
+            uploader.theme(new RefundUploader({
+                queueTarget:'#J_UploaderQueue'
+            }))
+            //验证插件
+            uploader.plug(new Auth({
+                        //最多上传个数
+                        max:3,
+                        //图片最大允许大小
+                        maxSize:100
+                    }))
+                //url保存插件
+                    .plug(new UrlsInput({target:'#J_Urls'}))
+                //进度条集合
+                    .plug(new ProBars())
+                //拖拽上传
+                    .plug(new Filedrop())
+                //图片预览
+                    .plug(new Preview())
+                    .plug(new ImageZoom())
+            ;
         });
-
-        uploader.use('urlsInput',{target:'#J_Urls'});
-
-        var uploaderTheme = new RefundUploader({
-            queueTarget:'#J_RefundUploaderQueue'
-        });
-        uploader.theme(uploaderTheme);
     })
 </script>
 </body>
