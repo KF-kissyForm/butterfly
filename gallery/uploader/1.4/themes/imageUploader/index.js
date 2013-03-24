@@ -75,6 +75,14 @@ KISSY.add(function (S, Node, Theme) {
             //获取服务器返回的图片路径写入到src上
             if(result) self._changeImageSrc(ev);
             $('.J_Mask_'+id).hide();
+            //如果不存在进度条插件，隐藏进度条容器
+            var uploader = self.get('uploader');
+            var proBars = uploader.getPlugin('proBars');
+            if(!proBars){
+                var target = file.target;
+                if(!target) return false;
+                target.all('.J_ProgressBar_'+id).hide();
+            }
         },
          /**
          * 文件处于上传错误状态时触发
