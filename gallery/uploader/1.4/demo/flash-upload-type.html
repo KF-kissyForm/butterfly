@@ -37,26 +37,40 @@
             ]
         });
     }
-    S.use('gallery/uploader/1.4/index', function (S, Uploader) {
-        var flashUploader = new Uploader('#J_UploaderBtn', {
-            // 上传方式切成flash
-            type:"flash",
-            //手动控制flash的尺寸
-            swfSize:{"width":200, "height":25},
-            action:"upload.php"
-        });
-        flashUploader.use('auth',{
-            //最多上传个数
-            max:3,
-            //文件最大允许大小
-            maxSize:500
-        });
-        flashUploader.use('urlsInput',{target:'#J_Urls'});
-        flashUploader.on('themeRender', function (ev) {
+
+    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/default/index,gallery/uploader/1.4/themes/default/style.css', function (S, Uploader,DefaultTheme) {
+        //上传组件插件
+        var plugins = 'gallery/uploader/1.4/plugins/auth/auth,' +
+                'gallery/uploader/1.4/plugins/urlsInput/urlsInput,' +
+                'gallery/uploader/1.4/plugins/proBars/proBars';
+
+        S.use(plugins,function(S,Auth,UrlsInput,ProBars,Filedrop,Preview){
+            var flashUploader = new Uploader('#J_UploaderBtn', {
+                // 上传方式切成flash
+                type:"flash",
+                //手动控制flash的尺寸
+                swfSize:{"width":200, "height":25},
+                action:"upload.php"
+            });
+            //使用主题
+            flashUploader.theme(new DefaultTheme({
+                queueTarget:'#J_UploaderQueue'
+            }))
+            //验证插件
+            flashUploader.plug(new Auth({
+                        //最多上传个数
+                        max:3,
+                        //图片最大允许大小
+                        maxSize:100
+                    }))
+                    //url保存插件
+                    .plug(new UrlsInput({target:'#J_Urls'}))
+                    //进度条集合
+                    .plug(new ProBars({width:100}))
+            ;
+
             var $ = S.Node.all;
             var Event = S.Event;
-            //上传组件实例
-            var uploader = ev.uploader;
 
             S.later(function(){
                 //触发多选框的change事件，改变组件配置
@@ -85,10 +99,7 @@
                 }
             });
         });
-        flashUploader.theme('default',{
-            queueTarget:'#J_UploaderQueue'
-        });
-    });
+    })
 </script>
 </body>
 </html>
