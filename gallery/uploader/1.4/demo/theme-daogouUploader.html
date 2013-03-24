@@ -29,7 +29,7 @@
                 <div class="upload">
                     <input type="text" class="select-input J_FileName" value=""><div class="select-btn">选择文件</div>
                     <!--下面才是真正的上传按钮-->
-                    <a id="J_UploaderBtn" class="uploader-button" href="#"> 选择文件 </a>
+                    <input type="file" class="g-u" id="J_UploaderBtn" value="选择文件" name="Filedata" >
                     <input type="hidden" id="J_Urls" name="urls" value="">
                 </div>
             </div>
@@ -62,47 +62,58 @@
         });
     }
     var $ = S.Node.all;
-    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/daogouUploader/,gallery/uploader/1.4/themes/daogouUploader/style.css', function (S, Uploader,DaogouUploader) {
-        var uploader = new Uploader('#J_UploaderBtn',{
-            // 文件域
-            name:"Filedata",
-            //处理上传的服务器端脚本路径
-            action:"upload.php",
-            //禁用多选
-            multiple : false,
-            //不使用自动上传
-            autoUpload:false
-        });
 
-        uploader.use('auth',{
-            maxSize:1000
-        });
+    S.use('gallery/uploader/1.4/index,gallery/uploader/1.4/themes/daogouUploader/index,gallery/uploader/1.4/themes/daogouUploader/style.css', function (S, Uploader,DaogouUploader) {
+        //上传组件插件
+        var plugins = 'gallery/uploader/1.4/plugins/auth/auth,' +
+                'gallery/uploader/1.4/plugins/urlsInput/urlsInput,' +
+                'gallery/uploader/1.4/plugins/proBars/proBars,' +
+                'gallery/uploader/1.4/plugins/filedrop/filedrop,' +
+                'gallery/uploader/1.4/plugins/preview/preview';
 
-        uploader.use('urlsInput',{target:'#J_Urls'});
-        uploader.on('start',function(){
-            $('.J_UploadArea').hide();
-            $('#J_UploaderQueue').show();
-        });
-        uploader.on('success',function(){
-            $('.J_UploadingBtn').hide();
-            $('.J_Sure').show();
-        });
+        S.use(plugins,function(S,Auth,UrlsInput,ProBars,Filedrop,Preview){
+            var uploader = new Uploader('#J_UploaderBtn',{
+                //处理上传的服务器端脚本路径
+                action:"upload.php",
+                //禁用多选
+                multiple : false,
+                //不使用自动上传
+                autoUpload:false
+            });
+            //使用主题
+            uploader.theme(new DaogouUploader({
+                queueTarget:'#J_UploaderQueue'
+            }))
+            //验证插件
+            uploader.plug(new Auth({
+                        //最多上传个数
+                        max:3,
+                        //图片最大允许大小
+                        maxSize:100
+                    }))
+                //url保存插件
+                    .plug(new UrlsInput({target:'#J_Urls'}))
+                //进度条集合
+                    .plug(new ProBars())
+            ;
 
-        var uploaderTheme = new DaogouUploader({
-            queueTarget:'#J_UploaderQueue'
+            uploader.on('start',function(){
+                $('.J_UploadArea').hide();
+                $('#J_UploaderQueue').show();
+            });
+            uploader.on('success',function(){
+                $('.J_UploadingBtn').hide();
+                $('.J_Sure').show();
+            });
+            $('.J_Upload').on('click',function(ev){
+                var disabled = uploader.get('disabled');
+                if(disabled) return false;
+                uploader.uploadFiles();
+            });
+            $('.J_Cancel').on('click',function(ev){
+                uploader.stop();
+            })
         });
-
-        uploader.theme(uploaderTheme);
-
-        $('.J_Upload').on('click',function(ev){
-            var disabled = uploader.get('disabled');
-            if(disabled) return false;
-            uploader.uploadFiles();
-        });
-        $('.J_Cancel').on('click',function(ev){
-            uploader.stop();
-        })
-
     })
 </script>
 </body>
