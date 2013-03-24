@@ -59,7 +59,7 @@ KISSY.add('gallery/uploader/1.4/plugins/ajbridge/uploader', function(S,flash,A) 
     Uploader.version = '1.0.1';
     A.Uploader = Uploader;
     return A.Uploader;
-},{ requires:["gallery/flash/1.0/","./ajbridge"] });
+},{ requires:["gallery/flash/1.0/index","./ajbridge"] });
 /**
  * changes:
  * 明河：1.4
