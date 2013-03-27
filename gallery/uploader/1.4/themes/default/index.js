@@ -142,4 +142,4 @@ KISSY.add('gallery/uploader/1.4/themes/default/index', function (S, Node, Theme)
         }
     }});
     return DefaultTheme;
-}, {requires:['node', '../../theme']});
+}, {requires:['node', 'gallery/uploader/1.4/theme']});
