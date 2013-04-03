@@ -10,7 +10,7 @@
     <!--合并源码文件，排除模板js-->
     <target name="concat">
         <concat destfile="index-pkg.js" encoding="${charset}" outputencoding="${charset}" overwrite="true">
-            <fileset dir="${src.dir}" includes="**/*.js" excludes="themes/**/*.js,guide/**/*.js,demo/**/*.js,plugins/**/*.js"/>
+            <fileset dir="${src.dir}" includes="**/*.js" excludes="theme.js,themes/**/*.js,guide/**/*.js,demo/**/*.js,plugins/**/*.js"/>
             <filterchain>
                 <deletecharacters chars="&#xFEFF;"/>
             </filterchain>
@@ -19,6 +19,7 @@
     <!--移动合并后源文件到build目录下-->
     <target name="move">
         <move file="index-pkg.js" tofile="${uploader.build.dir}/index.js"/>
+        <move file="theme.js" tofile="${uploader.build.dir}/theme.js"/>
     </target>
     <target name="dircheck">
         <condition property="uploader.build.dir.exists">

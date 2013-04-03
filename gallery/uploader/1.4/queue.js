@@ -6,6 +6,20 @@ KISSY.add('gallery/uploader/1.4/queue', function (S, Node, Base) {
     var EMPTY = '', $ = Node.all, LOG_PREFIX = '[uploader-queue]:';
 
     /**
+     * 转换文件大小字节数
+     * @param {Number} bytes 文件大小字节数
+     * @return {String} 文件大小
+     */
+    function convertByteSize(bytes) {
+        var i = -1;
+        do {
+            bytes = bytes / 1024;
+            i++;
+        } while (bytes > 99);
+        return Math.max(bytes, 0.1).toFixed(1) + ['kB', 'MB', 'GB', 'TB', 'PB', 'EB'][i];
+    }
+
+    /**
      * @name Queue
      * @class 文件上传队列，用于存储文件数据
      * @constructor
@@ -338,7 +352,7 @@ KISSY.add('gallery/uploader/1.4/queue', function (S, Node, Base) {
             //设置文件唯一id
             if (!file.id) file.id = S.guid(Queue.FILE_ID_PREFIX);
             //转换文件大小单位为（kb和mb）
-            if (file.size && S.convertByteSize) file.textSize = S.convertByteSize(file.size);
+            if (file.size) file.textSize = convertByteSize(file.size);
             //状态
             file.status = 'waiting';
             files.push(file);
