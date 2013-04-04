@@ -33,7 +33,6 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             self._addThemeCssName();
             self._tplFormHtml();
             self._bind();
-            self._setAuth();
         },
         /**
          * 选择文件后执行的方法
@@ -147,6 +146,17 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
                 self._removeFileDom(ev.file);
             });
 
+            //是否已经设置过了auth插件
+            var isAlreadySetAuth = false;
+            //设置验证消息和格式限制
+            uploader.on(uploaderEvents[0],function(ev){
+                if(!isAlreadySetAuth){
+                    self._setAuth();
+                    isAlreadySetAuth = true;
+                }
+
+            })
+
             S.each(uploaderEvents,function(e){
                 uploader.on(e,function(ev){
                     var handlerName = '_'+ev.type+'Handler';
@@ -252,19 +262,20 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
          */
         _setAuth:function(){
             var self = this;
-            var msg = self.get('authMsg');
-            if(S.isEmptyObject(msg)) return  false;
-
             var uploader = self.get('uploader');
             //获取验证插件
             var auth = uploader.getPlugin('auth');
             if(!auth) return false;
-            auth.set('msg',msg);
 
             var allowExts = self.get('allowExts');
-            if(allowExts !== EMPTY){
+            //只有在不存在用户配置的格式验证的情况下，才覆盖格式验证
+            if(auth.get('allowExts') == EMPTY && allowExts !== EMPTY){
                 auth.set('allowExts',allowExts);
             }
+            //覆盖验证消息
+            var msg = self.get('authMsg');
+            if(S.isEmptyObject(msg)) return  false;
+            auth.set('msg',msg);
         }
 
     }, {ATTRS:/** @lends Theme.prototype*/{
@@ -332,4 +343,5 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
  *           - queueTarget优化
  *           - 去掉extend参数
  *           - 去掉cssUrl参数
+ *           - 修正authMsg失效的设置失效的问题
  */

@@ -241,7 +241,7 @@ KISSY.add(function (S, Node, Theme) {
                 required:'至少上传一张图片！',
                 allowExts:'不支持{ext}格式！',
                 allowRepeat:'该图片已经存在！',
-                widthHeight:'图片尺寸必须是{wh}！'
+                widthHeight:'图片尺寸不符合要求！'
             }
         },
         /**
