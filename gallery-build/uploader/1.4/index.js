@@ -1618,13 +1618,13 @@ KISSY.add('gallery/uploader/1.4/queue', function (S, Node, Base) {
          * @param {Object | Array} files 文件数据，传递数组时为批量添加
          * @example
          * //测试文件数据
- var testFile = {'name':'test.jpg',
-     'size':2000,
-     'input':{},
-     'file':{'name':'test.jpg', 'type':'image/jpeg', 'size':2000}
- };
- //向队列添加文件
- queue.add(testFile);
+             var testFile = {'name':'test.jpg',
+                 'size':2000,
+                 'input':{},
+                 'file':{'name':'test.jpg', 'type':'image/jpeg', 'size':2000}
+             };
+             //向队列添加文件
+             queue.add(testFile);
          */
         add:function (files, callback) {
             var self = this,fileData={};

@@ -1019,10 +1019,17 @@ KISSY.add(function (S, Node, ImageUploader) {
              </tr>
              <tr>
                  <td>widthHeight</td>
-                 <td>String</td>
+                 <td>Array</td>
                  <td>''</td>
                  <td>读/写</td>
-                 <td>v1.4新增的验证规则，用于限制图片尺寸，比如"160x160"，留意IE下可能不起作用 </td>
+                 <td>v1.4新增的验证规则，用于限制图片尺寸，非常特殊的验证方式：1.异步验证；2.值为一个函数数组[fnWidth,fnHeight]，比如限制宽度大于60，高度大于160，代码如下：
+
+                        widthHeight:[function(width){
+                            return width >= 160;
+                        },function(height){
+                            return height >= 160;
+                        }]
+                 </td>
              </tr>
              <tr>
                  <td>msg</td>
@@ -1080,21 +1087,6 @@ uploader.on('error',function(ev){
 ```javascript
     uploader.use('urlsInput',{target:'.J_Urls'});
 ```
-
-**什么是渲染默认数据？**
-
-即目标容器已经存在url时，组件会自动抓取url渲染到队列中，比如：
-
-```javascript
-    <input type="hidden" id="J_Urls" name="refundImageUrls" value="http://www.36ria.com/wp-content/uploads/2013/02/ant-300x140.png">
-```
-
-```javascript
-    uploader.use('urlsInput',{target:'.J_Urls',autoRestore:true});
-```
-
-<code>autoRestore</code>默认为true，如果你不希望渲染默认数据，设置为false。
-
 
 ####配置项（属性）
 

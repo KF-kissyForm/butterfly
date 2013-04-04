@@ -1,32 +1,32 @@
 /**
- * @fileoverview ÉÏ´«×é¼şÖ÷Ìâ»ùÀà
- * @author ½£Æ½£¨Ã÷ºÓ£©<minghe36@126.com>
+ * @fileoverview ä¸Šä¼ ç»„ä»¶ä¸»é¢˜åŸºç±»
+ * @author å‰‘å¹³ï¼ˆæ˜æ²³ï¼‰<minghe36@126.com>
  **/
 
 KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
     var EMPTY = '';
     var $ = Node.all;
-    //Ö÷ÌâÑùÊ½ÃûÇ°×º
+    //ä¸»é¢˜æ ·å¼åå‰ç¼€
     var classSuffix = {BUTTON:'-button', QUEUE:'-queue'};
-    //htmlÖĞÀ­È¡Ö÷ÌâÄ£°æµÄÈİÆ÷µÄtype£º<script type="text/uploader-theme"></script>
+    //htmlä¸­æ‹‰å–ä¸»é¢˜æ¨¡ç‰ˆçš„å®¹å™¨çš„typeï¼š<script type="text/uploader-theme"></script>
     var HTML_THEME = 'text/uploader-theme';
     var UPLOADER_FILES = 'text/uploader-files';
     /**
      * @name Theme
-     * @class ÉÏ´«×é¼şÖ÷Ìâ»ùÀà
+     * @class ä¸Šä¼ ç»„ä»¶ä¸»é¢˜åŸºç±»
      * @constructor
      * @extends Base
      * @requires Queue
      */
     function Theme(config) {
         var self = this;
-        //µ÷ÓÃ¸¸Àà¹¹Ôìº¯Êı
+        //è°ƒç”¨çˆ¶ç±»æ„é€ å‡½æ•°
         Theme.superclass.constructor.call(self, config);
     }
 
     S.extend(Theme, Base, /** @lends Theme.prototype*/{
         /**
-         * ÔËĞĞÖ÷Ìâ£¨¹©Ö÷ÌâÀ©Õ¹Ê¹ÓÃ£©
+         * è¿è¡Œä¸»é¢˜ï¼ˆä¾›ä¸»é¢˜æ‰©å±•ä½¿ç”¨ï¼‰
          */
         render:function(){
             var self = this;
@@ -36,56 +36,56 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             self._setAuth();
         },
         /**
-         * Ñ¡ÔñÎÄ¼şºóÖ´ĞĞµÄ·½·¨
+         * é€‰æ‹©æ–‡ä»¶åæ‰§è¡Œçš„æ–¹æ³•
          * @private
          */
         _selectHandler:function(){
 
         },
         /**
-         * ¶ÓÁĞÌí¼ÓÍêÒ»¸öÎÄ¼şºó´¥·¢
+         * é˜Ÿåˆ—æ·»åŠ å®Œä¸€ä¸ªæ–‡ä»¶åè§¦å‘
          */
         _addHandler:function (ev) {
 
         },
         /**
-         * É¾³ı¶ÓÁĞÖĞµÄÎÄ¼şºó´¥·¢µÄ¼àÌıÆ÷
+         * åˆ é™¤é˜Ÿåˆ—ä¸­çš„æ–‡ä»¶åè§¦å‘çš„ç›‘å¬å™¨
          */
         _removeHandler:function (ev) {
 
         },
         /**
-         * ÎÄ¼ş´¦ÓÚµÈ´ıÉÏ´«×´Ì¬Ê±´¥·¢
+         * æ–‡ä»¶å¤„äºç­‰å¾…ä¸Šä¼ çŠ¶æ€æ—¶è§¦å‘
          */
         _waitingHandler:function (ev) {
 
         },
         /**
-         * ÎÄ¼ş´¦ÓÚ¿ªÊ¼ÉÏ´«×´Ì¬Ê±´¥·¢
+         * æ–‡ä»¶å¤„äºå¼€å§‹ä¸Šä¼ çŠ¶æ€æ—¶è§¦å‘
          */
         _startHandler:function (ev) {
 
         },
         /**
-         * ÎÄ¼ş´¦ÓÚÕıÔÚÉÏ´«×´Ì¬Ê±´¥·¢
+         * æ–‡ä»¶å¤„äºæ­£åœ¨ä¸Šä¼ çŠ¶æ€æ—¶è§¦å‘
          */
         _progressHandler:function (ev) {
 
         },
         /**
-         * ÎÄ¼ş´¦ÓÚÉÏ´«³É¹¦×´Ì¬Ê±´¥·¢
+         * æ–‡ä»¶å¤„äºä¸Šä¼ æˆåŠŸçŠ¶æ€æ—¶è§¦å‘
          */
         _successHandler:function (ev) {
 
         },
         /**
-         * ÎÄ¼ş´¦ÓÚÉÏ´«´íÎó×´Ì¬Ê±´¥·¢
+         * æ–‡ä»¶å¤„äºä¸Šä¼ é”™è¯¯çŠ¶æ€æ—¶è§¦å‘
          */
         _errorHandler:function (ev) {
 
         },
         /**
-         * äÖÈ¾Ä¬ÈÏÊı¾İ
+         * æ¸²æŸ“é»˜è®¤æ•°æ®
          * @private
          */
         _restore:function(){
@@ -101,7 +101,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             if(!files.length) return false;
 
             S.each(files,function(file,i){
-                //½«´æÔÚµÄÎÄ¼şÊı¾İäÖÈ¾µ½¶ÓÁĞDOMÖĞ£¬×´Ì¬Îªsuccess
+                //å°†å­˜åœ¨çš„æ–‡ä»¶æ•°æ®æ¸²æŸ“åˆ°é˜Ÿåˆ—DOMä¸­ï¼ŒçŠ¶æ€ä¸ºsuccess
                 file.status = 'success';
                 uploader.fire('add',{file:file,index:i});
                 self._renderHandler('_successHandler',{file:file,result:file.result});
@@ -111,7 +111,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             return self;
         },
         /**
-         * ½«Ö÷ÌâÃûĞ´Èëµ½¶ÓÁĞºÍ°´Å¥Ä¿±êÈİÆ÷£¬×÷ÎªÖ÷ÌâcssÑùÊ½ÆğÊ¼
+         * å°†ä¸»é¢˜åå†™å…¥åˆ°é˜Ÿåˆ—å’ŒæŒ‰é’®ç›®æ ‡å®¹å™¨ï¼Œä½œä¸ºä¸»é¢˜cssæ ·å¼èµ·å§‹
          */
         _addThemeCssName:function () {
             var self = this;
@@ -120,7 +120,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             var uploader = self.get('uploader');
             var $btn = uploader.get('target');
             if(!$queueTarget.length){
-                S.log('²»´æÔÚÈİÆ÷Ä¿±ê£¡');
+                S.log('ä¸å­˜åœ¨å®¹å™¨ç›®æ ‡ï¼');
                 return false;
             }
             if (name == EMPTY) return false;
@@ -129,7 +129,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             return self;
         },
         /**
-         * ¼àÌıuploaderµÄÊÂ¼ş
+         * ç›‘å¬uploaderçš„äº‹ä»¶
          * @private
          */
         _bind:function(){
@@ -155,7 +155,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             })
         },
         /**
-         * ÔËĞĞ¼àÌıÆ÷·½·¨
+         * è¿è¡Œç›‘å¬å™¨æ–¹æ³•
          * @private
          */
         _renderHandler:function(handlerName,ev){
@@ -165,14 +165,14 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             handler && handler.call(self,ev);
         },
         /**
-         * ÉèÖÃ¸÷¸ö×´Ì¬ÏÂµÄÏûÏ¢¿É¼ûĞÔ
-         * @param {Object} file ÎÄ¼ş
+         * è®¾ç½®å„ä¸ªçŠ¶æ€ä¸‹çš„æ¶ˆæ¯å¯è§æ€§
+         * @param {Object} file æ–‡ä»¶
          */
         _setStatusVisibility:function (file) {
             var self = this;
             if(!S.isObject(file)) return self;
             self._hideStatusDiv(file);
-            //´¦ÀíÏûÏ¢²ãµÄÏÔÓ°
+            //å¤„ç†æ¶ˆæ¯å±‚çš„æ˜¾å½±
             var status = file.status;
             var $target = file.target;
             if(!$target.length) return false;
@@ -180,7 +180,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             if($status.length){
                 $status.show();
             }
-            //´¦Àí¶ÓÁĞÔªËØµÄ×´Ì¬ÑùÊ½
+            //å¤„ç†é˜Ÿåˆ—å…ƒç´ çš„çŠ¶æ€æ ·å¼
             var statuses = ['waiting','start','uploading','progress','error','success'];
             S.each(statuses,function(status){
                 $target.removeClass(status);
@@ -189,7 +189,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             return self;
         },
         /**
-         * Òş²ØÏûÏ¢²ã
+         * éšè—æ¶ˆæ¯å±‚
          * @private
          */
         _hideStatusDiv:function(file){
@@ -198,8 +198,8 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             $target.length && $target.all('.status').hide();
         },
         /**
-         * µ±¶ÓÁĞÌí¼ÓÍêÎÄ¼şÊı¾İºóÏò¶ÓÁĞÈİÆ÷²åÈëÎÄ¼şĞÅÏ¢DOM½á¹¹
-         * @param {Object} fileData ÎÄ¼şÊı¾İ
+         * å½“é˜Ÿåˆ—æ·»åŠ å®Œæ–‡ä»¶æ•°æ®åå‘é˜Ÿåˆ—å®¹å™¨æ’å…¥æ–‡ä»¶ä¿¡æ¯DOMç»“æ„
+         * @param {Object} fileData æ–‡ä»¶æ•°æ®
          * @return {KISSY.NodeList}
          */
         _appendFileDom:function (fileData) {
@@ -212,7 +212,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             return $(hFile).hide().appendTo($target).fadeIn(0.4).data('data-file', fileData);
         },
         /**
-         *  ÒÆ³ıÎÄ¼şDOM
+         *  ç§»é™¤æ–‡ä»¶DOM
          * @private
          */
         _removeFileDom:function(file){
@@ -224,7 +224,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             })
         },
         /**
-         * ´ÓhtmlÖĞÀ­È¡Ä£°æ
+         * ä»htmlä¸­æ‹‰å–æ¨¡ç‰ˆ
          * @private
          * @return {String}
          */
@@ -247,7 +247,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             return tpl;
         },
         /**
-         * ÉèÖÃÑéÖ¤
+         * è®¾ç½®éªŒè¯
          * @private
          */
         _setAuth:function(){
@@ -256,7 +256,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             if(S.isEmptyObject(msg)) return  false;
 
             var uploader = self.get('uploader');
-            //»ñÈ¡ÑéÖ¤²å¼ş
+            //è·å–éªŒè¯æ’ä»¶
             var auth = uploader.getPlugin('auth');
             if(!auth) return false;
             auth.set('msg',msg);
@@ -269,25 +269,25 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
 
     }, {ATTRS:/** @lends Theme.prototype*/{
         /**
-         *  Ö÷ÌâÃû
+         *  ä¸»é¢˜å
          * @type String
          * @default ""
          */
         name:{value:EMPTY},
         /**
-         * ĞèÒª¼ÓÔØµÄuploader²å¼ş
+         * éœ€è¦åŠ è½½çš„uploaderæ’ä»¶
          * @type String
          * @default ''
          */
         use:{value:EMPTY},
         /**
-         * Ö÷ÌâÄ£°æ
+         * ä¸»é¢˜æ¨¡ç‰ˆ
          * @type String
          * @default ""
          */
         fileTpl:{value:EMPTY },
         /**
-         * ÑéÖ¤ÏûÏ¢
+         * éªŒè¯æ¶ˆæ¯
          * @since 1.4
          * @type Object
          */
@@ -295,7 +295,7 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             value:{}
         },
         /**
-         * ¶ÓÁĞÄ¿±êÔªËØ£¨Ò»°ãÊÇul£©£¬¶ÓÁĞµÄÊµÀı»¯¹ı³ÌÔÚThemeÖĞ
+         * é˜Ÿåˆ—ç›®æ ‡å…ƒç´ ï¼ˆä¸€èˆ¬æ˜¯ulï¼‰ï¼Œé˜Ÿåˆ—çš„å®ä¾‹åŒ–è¿‡ç¨‹åœ¨Themeä¸­
          * @type NodeList
          * @default ""
          */
@@ -306,13 +306,13 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
             }
         },
         /**
-         * Queue£¨ÉÏ´«¶ÓÁĞ£©ÊµÀı
+         * Queueï¼ˆä¸Šä¼ é˜Ÿåˆ—ï¼‰å®ä¾‹
          * @type Queue
          * @default ""
          */
         queue:{value:EMPTY},
         /**
-         * Uploader ÉÏ´«×é¼şÊµÀı
+         * Uploader ä¸Šä¼ ç»„ä»¶å®ä¾‹
          * @type Uploader
          * @default ""
          */
@@ -322,14 +322,14 @@ KISSY.add('gallery/uploader/1.4/theme', function (S, Node, Base) {
 }, {requires:['node', 'base']});
 /**
  * changes:
- * Ã÷ºÓ£º1.4
- *           - È¥µô×´Ì¬²ã¸ÅÄîºÍlogÏûÏ¢
- *           - Ôö¼ÓÄ¬ÈÏäÖÈ¾Êı¾İ²Ù×÷
- *           - È¥µô²å¼ş¼ÓÔØ
- *           - Ôö¼Ó´ÓhtmlÀ­È¡Ä£°æµÄ¹¦ÄÜ
- *           - Ôö¼Ó´ÓÍâ²¿¿ìËÙ¸²¸ÇÖ÷Ìâ¼àÌıÆ÷µÄ¹¦ÄÜ
- *           - Ôö¼ÓÖ÷ÌâÅäÖÃÑéÖ¤ÏûÏ¢µÄ¹¦ÄÜ
- *           - queueTargetÓÅ»¯
- *           - È¥µôextend²ÎÊı
- *           - È¥µôcssUrl²ÎÊı
+ * æ˜æ²³ï¼š1.4
+ *           - å»æ‰çŠ¶æ€å±‚æ¦‚å¿µå’Œlogæ¶ˆæ¯
+ *           - å¢åŠ é»˜è®¤æ¸²æŸ“æ•°æ®æ“ä½œ
+ *           - å»æ‰æ’ä»¶åŠ è½½
+ *           - å¢åŠ ä»htmlæ‹‰å–æ¨¡ç‰ˆçš„åŠŸèƒ½
+ *           - å¢åŠ ä»å¤–éƒ¨å¿«é€Ÿè¦†ç›–ä¸»é¢˜ç›‘å¬å™¨çš„åŠŸèƒ½
+ *           - å¢åŠ ä¸»é¢˜é…ç½®éªŒè¯æ¶ˆæ¯çš„åŠŸèƒ½
+ *           - queueTargetä¼˜åŒ–
+ *           - å»æ‰extendå‚æ•°
+ *           - å»æ‰cssUrlå‚æ•°
  */
