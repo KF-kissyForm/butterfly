@@ -277,20 +277,23 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             return isRepeat;
         },
         /**
-         * 检验图片的宽度和高度是否符合要求
+         * 检验图片的宽度和高度是否符合要求，非常特殊的验证形式，传入的是函数数据，比如：
+         * widthHeight:[function(width){
+                return width >= 160;
+            },function(height){
+                return height >= 160;
+            }]
          * @param {Object} file 文件对象
          * @return {Boolean}
          */
         testWidthHeight:function(file){
             var self = this;
-            var wh = self.get('widthHeight');
-            if(wh === EMPTY) return true;
+            var fnWidthHeights = self.get('widthHeight');
+            if(fnWidthHeights === EMPTY) return true;
 
             var uploader = self.get('uploader');
             //禁止图片上传（图片尺寸的验证过程是异步的）
             uploader.set('isAllowUpload',false);
-            //array [width,height]
-            var widthHeight = self._formatWidthHeight(wh);
             //文件数据，IE9下不存在
             var fileData = file.data;
             if(!S.isEmptyObject(fileData)){
@@ -313,6 +316,8 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
                 //文件name中IE下是完整的图片本地路径
                 var input = uploader.get('target').all('input').getDOMNode();
                 input.select();
+                //确保IE9下，不会出现因为安全问题导致无法访问
+                input.blur();
                 var src = document.selection.createRange().text;
                 var img = $('<img style="filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=image);width:300px;visibility:hidden;"  />').appendTo('body').getDOMNode();
                 img.filters.item('DXImageTransform.Microsoft.AlphaImageLoader').src = src;
@@ -328,11 +333,22 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
              * @private
              */
             function _test(width,height){
-                if(Number(width) != Number(widthHeight[0]) || Number(height) != Number(widthHeight[1])){
+                var fnWidth = fnWidthHeights[0];
+                var fnHeight = fnWidthHeights[1];
+                var isWidthRight = true;
+                var isHeightRight = true;
+                if(S.isFunction(fnWidth)){
+                    isWidthRight = fnWidth.call(self,width);
+                }
+                if(S.isFunction(fnHeight)){
+                    isHeightRight = fnHeight.call(self,height);
+                }
+                var isPass = isWidthRight && isHeightRight;
+
+                if(!isPass){
                     //触发错误消息
                     var msg = self.msg('widthHeight');
-                    msg = S.substitute(msg,{wh:wh});
-                    self._fireUploaderError('widthHeight',[widthHeight,msg],file);
+                    self._fireUploaderError('widthHeight',[fnWidthHeights,msg],file);
                 }else{
                     //重新开始上传图片
                     uploader.set('isAllowUpload',true);
@@ -340,24 +356,6 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
                     uploader.upload(index);
                 }
             }
-        },
-        /**
-         * 将widthHeight配置转成数组
-         * @private
-         * @param {String} wh
-         * @return Array
-         */
-        _formatWidthHeight:function(wh){
-            var widthHeight = [];
-            if(!S.isString(wh)) return [];
-            var s = ['x','X','_','-'];
-            S.each(s,function(sp){
-                var reg = new RegExp(sp);
-                if(reg.test(wh)){
-                    widthHeight = wh.split(sp);
-                }
-            });
-            return widthHeight;
         },
         /**
          * 设置flash按钮的文件格式过滤
@@ -506,11 +504,11 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
          */
         allowRepeat:{value:EMPTY},
         /**
-         *  限制文件宽度高度验证规则配置，比如160x160
-         * @type Boolean
+         *  限制文件宽度高度验证规则配置，比如['<=160',"<=160"]
+         * @type Array
          * @default ''
          */
-        widthHeight:{value:''},
+        widthHeight:{value:EMPTY},
         /**
          * 验证消息配置
          * @type Object
@@ -528,7 +526,8 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             maxSize:'文件大小为{size}，超过{maxSize}！',
             required:'至少上传一个文件！',
             allowExts:'不支持{ext}格式！',
-            allowRepeat:'该文件已经存在！'
+            allowRepeat:'该文件已经存在！',
+            widthHeight:'该图片尺寸不符合要求'
         }
         }
     }});
@@ -545,6 +544,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
  *           - 去掉getAllowExts
  *           - 重写_setSwfButtonExt
  *           - 去掉getRule
+ *           - 增加widthHeight限制
  * 明河：2012.11.22
  *          - 去掉重复的代码，敲自己脑袋
  *          - 修正必须存在max的bug

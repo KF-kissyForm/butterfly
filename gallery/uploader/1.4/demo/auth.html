@@ -55,13 +55,17 @@
                 queueTarget:'#J_AuthQueue'
             }))
 
-                    //验证插件
+            //验证插件
             authUploader.plug(new Auth({
                         max:3,
                         maxSize:500,
                         required:true,
                         allowExts:'jpg',
-                        widthHeight:'160x160',
+                        widthHeight:[function(width){
+                            return width >= 160;
+                        },function(height){
+                            return height >= 160;
+                        }],
                         allowRepeat:false
                     }))
                     //可以从html的input标签上合并配置
