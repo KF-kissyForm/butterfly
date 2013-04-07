@@ -97,30 +97,6 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             return self;
         },
         /**
-         * 给uploader增加验证规则属性
-         * @private
-         */
-        _addUploaderAttrs:function(){
-            var self = this;
-            var uploader = self.get('uploader');
-            S.each(SUPPORT_RULES,function(r){
-                var hasRule = self.get(r) !== EMPTY;
-                var ruleVal = hasRule && self.get(r)  || null;
-                if(hasRule){
-                    uploader.addAttr(r,{
-                        value:ruleVal,
-                        getter:function(v){
-                            return v;
-                        },
-                        setter:function(v){
-                            self.set(r,v);
-                            return v;
-                        }
-                    });
-                }
-            });
-        },
-        /**
          * 举例：将jpg,jpeg,png,gif,bmp转成{desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"}
          * @param exts
          * @return {*}

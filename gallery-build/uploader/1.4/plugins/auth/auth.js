@@ -50,6 +50,7 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             if(!uploader) return false;
             var self = this;
             self.set('uploader',uploader);
+            self._useThemeConfig();
             var queue = uploader.get('queue');
             self._setSwfButtonExt();
             self._addUploaderAttrs();
@@ -79,28 +80,21 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
             });
         },
         /**
-         * 给uploader增加验证规则属性
+         * 使用主题的验证消息
          * @private
          */
-        _addUploaderAttrs:function(){
+        _useThemeConfig:function(){
             var self = this;
+            var msg = self.get('msg');
+            if(!S.isEmptyObject(msg)) return false;
             var uploader = self.get('uploader');
-            S.each(SUPPORT_RULES,function(r){
-                var hasRule = self.get(r) !== EMPTY;
-                var ruleVal = hasRule && self.get(r)  || null;
-                if(hasRule){
-                    uploader.addAttr(r,{
-                        value:ruleVal,
-                        getter:function(v){
-                            return v;
-                        },
-                        setter:function(v){
-                            self.set(r,v);
-                            return v;
-                        }
-                    });
-                }
-            });
+            var theme = uploader.get('theme');
+            if(!theme) return false;
+            var msg = theme.get('authMsg');
+            if(msg) self.set('msg',msg);
+            var allowExts = theme.get('allowExts');
+            self.set('allowExts',allowExts);
+            return self;
         },
         /**
          * 举例：将jpg,jpeg,png,gif,bmp转成{desc:"JPG,JPEG,PNG,GIF,BMP", ext:"*.jpg;*.jpeg;*.png;*.gif;*.bmp"}
@@ -512,23 +506,9 @@ KISSY.add('gallery/uploader/1.4/plugins/auth/auth', function (S, Node,Base) {
         /**
          * 验证消息配置
          * @type Object
-         * @default {
-            max:'每次最多上传{max}个文件！',
-            maxSize:'文件大小为{size}，超过{maxSize}！',
-            required:'至少上传一个文件！',
-            require:'至少上传一个文件！',
-            allowExts:'不支持{ext}格式！',
-            allowRepeat:'该文件已经存在！'
-        }
+         * @default { }
          */
-        msg:{value:{
-            max:'每次最多上传{max}个文件！',
-            maxSize:'文件大小为{size}，超过{maxSize}！',
-            required:'至少上传一个文件！',
-            allowExts:'不支持{ext}格式！',
-            allowRepeat:'该文件已经存在！',
-            widthHeight:'该图片尺寸不符合要求'
-        }
+        msg:{value:{}
         }
     }});
     return Auth;
